@@ -48,6 +48,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         DatDichVu = new javax.swing.JButton();
         DSDatPhong = new javax.swing.JButton();
         DSKhachHang = new javax.swing.JButton();
+        DSDatDichVu = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -102,6 +103,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DangNhap");
         setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(1277, 776));
 
         jPanel1.setBackground(new java.awt.Color(52, 152, 219));
 
@@ -173,7 +175,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
 
         HoaDonDatPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HoaDonDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
-        HoaDonDatPhong.setText("Hóa Đơn Đặt Phòng");
+        HoaDonDatPhong.setText("Hóa Đơn ");
         HoaDonDatPhong.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         DatDichVu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -191,6 +193,11 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         DSKhachHang.setText("Danh Sách Khách Hàng");
         DSKhachHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
+        DSDatDichVu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DSDatDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/document.png"))); // NOI18N
+        DSDatDichVu.setText("Danh Sách Đặt Dịch Vụ");
+        DSDatDichVu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -204,7 +211,8 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                     .addComponent(CheckOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DatDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DSDatPhong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))
+                    .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                    .addComponent(DSDatDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -224,6 +232,8 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                 .addComponent(HoaDonDatPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DSKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DSDatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -343,7 +353,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -415,6 +425,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CheckIn;
     private javax.swing.JButton CheckOut;
+    private javax.swing.JButton DSDatDichVu;
     private javax.swing.JButton DSDatPhong;
     private javax.swing.JButton DSKhachHang;
     private javax.swing.JButton DSPhong;
