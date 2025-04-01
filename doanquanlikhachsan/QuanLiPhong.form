@@ -186,7 +186,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" pref="1418" max="32767" attributes="0"/>
+                  <Component id="jPanel1" pref="1419" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jPanel3" max="32767" attributes="0"/>
@@ -235,7 +235,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="Tittle" min="-2" pref="218" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="1064" max="32767" attributes="0"/>
                   <Component id="self" min="-2" pref="54" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="home" min="-2" pref="55" max="-2" attributes="0"/>
@@ -467,30 +467,32 @@
                       <Component id="jTextField1" max="32767" attributes="0"/>
                       <Component id="jTextField2" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="LBMaLoaiPhongTrong1" min="-2" max="-2" attributes="0"/>
-                                              <Component id="LBMaLoaiPhongTrong2" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lbSoGiuongPhongTrong" min="-2" pref="95" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="TXSoGiuongPhongTrong1" pref="158" max="32767" attributes="0"/>
-                                              <Component id="TXSoGiuongPhongTrong2" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="TXSoGiuongPhongTrong1" min="-2" pref="158" max="-2" attributes="0"/>
+                                              <Component id="TXSoGiuongPhongTrong" min="-2" pref="158" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="LBPhongTrong" min="-2" max="-2" attributes="0"/>
-                                              <Component id="LBPhongTrong1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="LBPhongTrong1" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="270" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jButtonResert" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane2" alignment="1" min="-2" pref="611" max="-2" attributes="0"/>
                           </Group>
@@ -505,9 +507,9 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
-                                                  <Component id="lbSoGiuongPhongTrong" min="-2" pref="95" max="-2" attributes="0"/>
-                                                  <EmptySpace pref="86" max="32767" attributes="0"/>
-                                                  <Component id="TXSoGiuongPhongTrong" min="-2" pref="158" max="-2" attributes="0"/>
+                                                  <Component id="LBMaLoaiPhongTrong2" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Component id="TXSoGiuongPhongTrong2" min="-2" pref="158" max="-2" attributes="0"/>
                                               </Group>
                                               <Group type="102" attributes="0">
                                                   <Component id="LBMaLoaiPhongTrong" min="-2" max="-2" attributes="0"/>
@@ -549,7 +551,7 @@
                               <Component id="TXMaPhong" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
                               <Component id="TXTenLP" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lbMaLoaiPhong" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
                               <Component id="lbGiaThue" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
@@ -629,31 +631,41 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="LBPhongTrong1" min="-2" pref="27" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="LBMaLoaiPhongTrong1" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="TXSoGiuongPhongTrong1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="LBMaLoaiPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="CBMaLoaiPhongTrong" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="LBMaLoaiPhongTrong2" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="TXSoGiuongPhongTrong2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lbSoGiuongPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="TXSoGiuongPhongTrong" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ButtonTim" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="LBPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="LBPhongTrong2" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
-                      <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="LBMaLoaiPhongTrong1" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="TXSoGiuongPhongTrong1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="LBMaLoaiPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="CBMaLoaiPhongTrong" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="TXSoGiuongPhongTrong" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lbSoGiuongPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                                  <Component id="ButtonTim" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LBMaLoaiPhongTrong2" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                                  <Component id="TXSoGiuongPhongTrong2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="LBPhongTrong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="LBPhongTrong2" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane3" pref="255" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="jButtonResert" min="-2" pref="71" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -1008,6 +1020,14 @@
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch lo&#x1ea1;i ph&#xf2;ng :"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonResert">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/reset_12366642 (1).png"/>
+            </Property>
+            <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
