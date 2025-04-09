@@ -434,14 +434,6 @@ public class ChonDichVu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TXTenDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTenDVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTenDVActionPerformed
-
-    private void TXDGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDGActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXDGActionPerformed
-
     private void TXSoGiuong1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXSoGiuong1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TXSoGiuong1ActionPerformed
@@ -470,17 +462,25 @@ public class ChonDichVu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_RBNamActionPerformed
 
-    private void TXDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDVActionPerformed
+    private void ButtonChonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXDVActionPerformed
+    }//GEN-LAST:event_ButtonChonActionPerformed
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonTimActionPerformed
 
-    private void ButtonChonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonActionPerformed
+    private void TXDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDVActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonChonActionPerformed
+    }//GEN-LAST:event_TXDVActionPerformed
+
+    private void TXDGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDGActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXDGActionPerformed
+
+    private void TXTenDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTenDVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTenDVActionPerformed
 
     /**
      * @param args the command line arguments
