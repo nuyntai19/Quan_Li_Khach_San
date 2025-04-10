@@ -1,4 +1,4 @@
-﻿CREATE DATABASE QUANLIKHACHSAN;
+CREATE DATABASE QUANLIKHACHSAN;
 GO
 
 USE QUANLIKHACHSAN;
@@ -6,9 +6,9 @@ GO
 
 -- Bảng Nhân viên
 CREATE TABLE NhanVien (
-    MaNhanVien BIGINT PRIMARY KEY,
-    Ho NVARCHAR(50),
-    Ten NVARCHAR(50),
+    MaNhanVien INT PRIMARY KEY,
+    Ho NVARCHAR(50) NOT NULL,
+    Ten NVARCHAR(50) NOT NULL,
     NgaySinh DATE,
     GioiTinh VARCHAR(10),
     Email VARCHAR(100),
@@ -19,10 +19,10 @@ CREATE TABLE NhanVien (
 
 -- Bảng Tài khoản (dành cho nhân viên đăng nhập)
 CREATE TABLE TaiKhoan (
-    MaTaiKhoan BIGINT PRIMARY KEY IDENTITY(1,1),
+    MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
     TenDangNhap VARCHAR(50) UNIQUE NOT NULL,
     MatKhau VARCHAR(255) NOT NULL,
-    MaNhanVien BIGINT UNIQUE,
+    MaNhanVien INT UNIQUE,
     VaiTro VARCHAR(50), -- admin / nhanvien
     TrangThai VARCHAR(20), -- active / inactive
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
@@ -30,9 +30,9 @@ CREATE TABLE TaiKhoan (
 
 -- Bảng Khách hàng
 CREATE TABLE KhachHang (
-    MaKhachHang BIGINT PRIMARY KEY,
-    Ho NVARCHAR(50),
-    Ten NVARCHAR(50),
+    MaKhachHang INT PRIMARY KEY,
+    Ho NVARCHAR(50) NOT NULL,
+    Ten NVARCHAR(50) NOT NULL,
     NgaySinh DATE,
     GioiTinh VARCHAR(10),
     Email VARCHAR(100),
@@ -42,16 +42,16 @@ CREATE TABLE KhachHang (
 
 -- Bảng Loại phòng
 CREATE TABLE LoaiPhong (
-    MaLoaiPhong BIGINT PRIMARY KEY,
+    MaLoaiPhong INT PRIMARY KEY,
     TenLoaiPhong NVARCHAR(50),
     MoTa TEXT
 );
 
 -- Bảng Phòng
 CREATE TABLE Phong (
-    MaPhong BIGINT PRIMARY KEY,
-    MaLoaiPhong BIGINT,
-    SoGiuong BIGINT,
+    MaPhong INT PRIMARY KEY,
+    MaLoaiPhong INT,
+    SoGiuong INT,
     DonGia DECIMAL(18,2),
     TrangThai VARCHAR(50),
     FOREIGN KEY (MaLoaiPhong) REFERENCES LoaiPhong(MaLoaiPhong)
@@ -59,9 +59,9 @@ CREATE TABLE Phong (
 
 -- Bảng Phiếu thuê phòng
 CREATE TABLE PhieuThuePhong (
-    MaThuePhong BIGINT PRIMARY KEY,
-    MaKhachHang BIGINT,
-    MaNhanVien BIGINT,
+    MaThuePhong INT PRIMARY KEY,
+    MaKhachHang INT,
+    MaNhanVien INT,
     NgayDatPhong DATE,
     NgayTraPhong DATE,
     TongTien DECIMAL(18,2),
@@ -71,9 +71,9 @@ CREATE TABLE PhieuThuePhong (
 
 -- Bảng Chi tiết phiếu thuê phòng
 CREATE TABLE ChiTietPhieuThue (
-    MaThuePhong BIGINT,
-    MaPhong BIGINT,
-    MaDichVu BIGINT,
+    MaThuePhong INT,
+    MaPhong INT,
+    MaDichVu INT,
     GiaPhong DECIMAL(18,2),
     SoNgayO INT,
     ThanhTien DECIMAL(18,2),
@@ -84,9 +84,9 @@ CREATE TABLE ChiTietPhieuThue (
 
 -- Bảng Kiểm tra tình trạng phòng
 CREATE TABLE KiemTraTinhTrang (
-    MaKiemTra BIGINT PRIMARY KEY,
-    MaNhanVien BIGINT,
-    MaThuePhong BIGINT,
+    MaKiemTra INT PRIMARY KEY,
+    MaNhanVien INT,
+    MaThuePhong INT,
     NgayKiemTra DATE,
     MoTaThietHai TEXT,
     ChiPhiDenBu DECIMAL(18,2),
@@ -96,7 +96,7 @@ CREATE TABLE KiemTraTinhTrang (
 
 -- Bảng Dịch vụ
 CREATE TABLE DichVu (
-    MaDichVu BIGINT PRIMARY KEY,
+    MaDichVu INT PRIMARY KEY,
     TenDichVu NVARCHAR(100),
     MoTa TEXT,
     DonGia DECIMAL(18,2),
@@ -105,9 +105,9 @@ CREATE TABLE DichVu (
 
 -- Bảng Hóa đơn
 CREATE TABLE HoaDon (
-    MaHoaDon BIGINT PRIMARY KEY,
-    MaKhachHang BIGINT,
-    MaNhanVien BIGINT,
+    MaHoaDon INT PRIMARY KEY,
+    MaKhachHang INT,
+    MaNhanVien INT,
     NgayThanhToan DATE,
     HinhThucThanhToan VARCHAR(50),
     TongTien DECIMAL(18,2),
@@ -117,8 +117,8 @@ CREATE TABLE HoaDon (
 
 -- Bảng Chi tiết hóa đơn
 CREATE TABLE ChiTietHoaDon (
-    MaHoaDon BIGINT,
-    MaDichVu BIGINT,
+    MaHoaDon INT,
+    MaDichVu INT,
     DonGia DECIMAL(18,2),
     ThanhTien DECIMAL(18,2),
     PRIMARY KEY (MaHoaDon, MaDichVu),
@@ -128,17 +128,17 @@ CREATE TABLE ChiTietHoaDon (
 
 -- Bảng Nhà cung cấp
 CREATE TABLE NhaCungCap (
-    MaNhaCungCap BIGINT PRIMARY KEY,
+    MaNhaCungCap INT PRIMARY KEY,
     TenNhaCungCap NVARCHAR(100),
-    SoDienThoai BIGINT,
+    SoDienThoai VARCHAR(15),
     DiaChi NVARCHAR(255)
 );
 
 -- Bảng Phiếu nhập hàng
 CREATE TABLE PhieuNhapHang (
-    MaPhieuNhapHang BIGINT PRIMARY KEY,
-    MaNhanVienXacNhan BIGINT,
-    MaNhaCungCap BIGINT,
+    MaPhieuNhapHang INT PRIMARY KEY,
+    MaNhanVienXacNhan INT,
+    MaNhaCungCap INT,
     NgayNhap DATE,
     TongTien DECIMAL(18,2),
     FOREIGN KEY (MaNhanVienXacNhan) REFERENCES NhanVien(MaNhanVien),
@@ -147,7 +147,7 @@ CREATE TABLE PhieuNhapHang (
 
 -- Bảng Hàng hóa
 CREATE TABLE HangHoa (
-    MaHang BIGINT PRIMARY KEY,
+    MaHang INT PRIMARY KEY,
     TenHang NVARCHAR(100),
     DonViTinh VARCHAR(50),
     GiaNhap DECIMAL(18,2)
@@ -155,9 +155,9 @@ CREATE TABLE HangHoa (
 
 -- Bảng Chi tiết phiếu nhập hàng
 CREATE TABLE ChiTietPhieuNhapHang (
-    MaPhieuNhapHang BIGINT,
-    MaHang BIGINT,
-    SoLuong BIGINT,
+    MaPhieuNhapHang INT,
+    MaHang INT,
+    SoLuong INT,
     DonGia DECIMAL(18,2),
     ThanhTien DECIMAL(18,2),
     PRIMARY KEY (MaPhieuNhapHang, MaHang),
