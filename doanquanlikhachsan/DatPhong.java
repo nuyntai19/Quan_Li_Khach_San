@@ -106,7 +106,7 @@ public class DatPhong extends javax.swing.JFrame {
         ButtonChonPhong = new javax.swing.JButton();
         ButtonDatPhong = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableDP = new javax.swing.JTable();
         TXMoTa = new javax.swing.JTextField();
         lbNgayDP = new javax.swing.JLabel();
         lbNgayTP = new javax.swing.JLabel();
@@ -530,7 +530,7 @@ public class DatPhong extends javax.swing.JFrame {
         ButtonDatPhong.setForeground(new java.awt.Color(255, 255, 255));
         ButtonDatPhong.setText("Đặt phòng");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableDP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -549,7 +549,7 @@ public class DatPhong extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tableDP);
 
         TXMoTa.setEditable(false);
         TXMoTa.addActionListener(new java.awt.event.ActionListener() {
@@ -1083,7 +1083,6 @@ public class DatPhong extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelMK;
@@ -1115,5 +1114,6 @@ public class DatPhong extends javax.swing.JFrame {
     private java.awt.MenuBar menuBar2;
     private java.awt.MenuBar menuBar3;
     private javax.swing.JButton self;
+    private javax.swing.JTable tableDP;
     // End of variables declaration//GEN-END:variables
 }
