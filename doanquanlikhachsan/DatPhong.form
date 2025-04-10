@@ -185,8 +185,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jPanel3" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel5" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -201,16 +201,16 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel3" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPanel4" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -229,7 +229,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="Tittle" min="-2" pref="218" max="-2" attributes="0"/>
-                  <EmptySpace pref="1063" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="self" min="-2" pref="54" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="home" min="-2" pref="55" max="-2" attributes="0"/>
@@ -325,6 +325,7 @@
                       <Component id="DSDatPhong" alignment="0" max="32767" attributes="0"/>
                       <Component id="DSKhachHang" alignment="0" pref="247" max="32767" attributes="0"/>
                       <Component id="DSDatDichVu" alignment="0" max="32767" attributes="0"/>
+                      <Component id="DatDichVu" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -347,7 +348,9 @@
                   <Component id="DSKhachHang" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DSDatDichVu" min="-2" pref="47" max="-2" attributes="0"/>
-                  <EmptySpace pref="254" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DatDichVu" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace pref="201" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -440,6 +443,18 @@
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="DatDichVu">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/desk-bell.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t D&#x1ecb;ch V&#x1ee5;"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel4">
@@ -499,10 +514,8 @@
                                   <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lbMaDichVu" min="-2" max="-2" attributes="0"/>
-                              <Component id="lbGioiTinh" min="-2" pref="64" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="lbGioiTinh" min="-2" pref="64" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
@@ -523,12 +536,12 @@
                               <Group type="102" attributes="0">
                                   <Component id="lbNgayTP" min="-2" pref="103" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="DCNgayTP" pref="142" max="32767" attributes="0"/>
+                                  <Component id="DCNgayTP" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="lbNgayDP" min="-2" pref="103" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="DCNgayDP" pref="142" max="32767" attributes="0"/>
+                                  <Component id="DCNgayDP" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="BTThem" min="-2" max="-2" attributes="0"/>
@@ -537,18 +550,14 @@
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="RBNam" alignment="1" min="-2" pref="98" max="-2" attributes="0"/>
-                          <Component id="RBNu" alignment="1" min="-2" pref="98" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="TXMaDichVu" min="-2" pref="119" max="-2" attributes="0"/>
-                      <Component id="BTChonDichVu" min="-2" max="-2" attributes="0"/>
+                      <Component id="RBNam" alignment="1" min="-2" pref="98" max="-2" attributes="0"/>
+                      <Component id="RBNu" alignment="1" min="-2" pref="98" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
@@ -558,7 +567,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Component id="LBPhongTrong1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="970" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
@@ -644,8 +653,6 @@
                                               <Component id="TXKhachHang1" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="lbHo1" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                               <Component id="TXKhachHang2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lbMaDichVu" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                                              <Component id="TXMaDichVu" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
@@ -655,7 +662,6 @@
                                                       <Component id="TXMaLoaiPhong" alignment="3" min="-2" max="-2" attributes="0"/>
                                                       <Component id="lbKH1" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                                       <Component id="TXKhachHang3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="BTChonDichVu" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="3" attributes="0">
@@ -1155,40 +1161,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXMoTaActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lbMaDichVu">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Times New Roman" size="14" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="M&#xe3; d&#x1ecb;ch v&#x1ee5;:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="TXMaDichVu">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXMaDichVuActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="BTChonDichVu">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="db" green="98" red="34" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Ch&#x1ecd;n d&#x1ecb;ch v&#x1ee5;"/>
-            <Property name="iconTextGap" type="int" value="5"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTChonDichVuActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lbNgayDP">
