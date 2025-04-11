@@ -169,7 +169,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="Tittle" min="-2" pref="218" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="1063" max="32767" attributes="0"/>
                   <Component id="self" min="-2" pref="54" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="home" min="-2" pref="55" max="-2" attributes="0"/>
@@ -184,7 +184,7 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="self" max="32767" attributes="0"/>
                       <Component id="Tittle" alignment="0" pref="66" max="32767" attributes="0"/>
-                      <Component id="home" alignment="1" max="32767" attributes="0"/>
+                      <Component id="home" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -235,6 +235,9 @@
               <Border info="null"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="homeActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -397,6 +400,9 @@
             <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t D&#x1ecb;ch V&#x1ee5;"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVuActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -423,16 +429,16 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="418" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnDangNhap" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="LBTenDN" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="LBMK" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="TXMK" min="-2" pref="296" max="-2" attributes="0"/>
-                              <Component id="TXTenDN" min="-2" pref="296" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="TXTenDN" pref="296" max="32767" attributes="0"/>
+                              <Component id="TXMK" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -452,13 +458,16 @@
                       <Component id="LBTenDN" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                       <Component id="TXTenDN" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="LBMK" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                      <Component id="TXMK" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="LBMK" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="TXMK" pref="37" max="32767" attributes="0"/>
+                          <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton1" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="btnDangNhap" min="-2" pref="32" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -514,9 +523,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTenDNActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="TXMK">
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="btnDangNhap">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="db" green="98" red="34" type="rgb"/>
@@ -529,6 +536,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng Nh&#x1ead;p"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDangNhapActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="TXMK">
         </Component>
       </SubComponents>
     </Container>

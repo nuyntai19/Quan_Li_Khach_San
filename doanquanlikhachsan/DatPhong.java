@@ -214,6 +214,11 @@ public class DatPhong extends javax.swing.JFrame {
         home.setBackground(new java.awt.Color(52, 152, 219));
         home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/home (1).png"))); // NOI18N
         home.setBorder(null);
+        home.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -890,7 +895,8 @@ public class DatPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
-        // TODO add your handling code here:
+        ThongTinNhanVien thongTin = new ThongTinNhanVien(null, true);
+        thongTin.setVisible(true);
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
@@ -980,6 +986,10 @@ public class DatPhong extends javax.swing.JFrame {
     private void BTTongCongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTTongCongActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BTTongCongActionPerformed
+
+    private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_homeActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,11 +1,14 @@
 
 package doanquanlikhachsan;
 
-public class ThongTinNhanVien extends javax.swing.JDialog {
+import java.awt.event.ActionEvent;
+
+public final class ThongTinNhanVien extends javax.swing.JDialog {
 
     public ThongTinNhanVien(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        hienThiThongTin();
     }
 
    
@@ -17,12 +20,11 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
         TieuDe = new java.awt.Label();
         lbTenDangNhap = new java.awt.Label();
         lbMaNV = new java.awt.Label();
-        lbsdt = new java.awt.Label();
         lbVaiTro = new java.awt.Label();
         TXTenDangNhap = new java.awt.TextField();
         TXMaNV = new java.awt.TextField();
-        TXsdt = new java.awt.TextField();
         TXVaiTro = new java.awt.TextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thông Tin Nhân Viên");
@@ -41,42 +43,58 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
         lbMaNV.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lbMaNV.setText("Mã Nhân Viên :");
 
-        lbsdt.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        lbsdt.setText("Số điện thoại :");
-
         lbVaiTro.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lbVaiTro.setText("Vai Trò :");
 
-        TXTenDangNhap.setEnabled(false);
+        TXTenDangNhap.setEditable(false);
+        TXTenDangNhap.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        TXTenDangNhap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTenDangNhapActionPerformed(evt);
+            }
+        });
 
-        TXMaNV.setEnabled(false);
+        TXMaNV.setEditable(false);
+        TXMaNV.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
 
-        TXsdt.setEnabled(false);
+        TXVaiTro.setEditable(false);
+        TXVaiTro.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
 
-        TXVaiTro.setEnabled(false);
+        jButton1.setBackground(new java.awt.Color(52, 152, 219));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Đăng xuất");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbTenDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbsdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TXMaNV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TXTenDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TXsdt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TXVaiTro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(94, 94, 94)
                 .addComponent(TieuDe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 89, Short.MAX_VALUE))
+                .addGap(0, 120, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbTenDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TXVaiTro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TXMaNV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TXTenDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,22 +102,20 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(TieuDe, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TXTenDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbTenDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbTenDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TXTenDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TXMaNV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbMaNV, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TXMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TXsdt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbsdt, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbVaiTro, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(TXVaiTro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TXVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -121,6 +137,33 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+            TaiKhoanBLL tkBLL = new TaiKhoanBLL();
+            tkBLL.xoaTatCaDangNhapBangTam(); 
+            for (java.awt.Window window : java.awt.Window.getWindows()) {
+                window.dispose();
+            }
+            new GiaoDienDangNhap().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void TXTenDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTenDangNhapActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTenDangNhapActionPerformed
+
+    public void hienThiThongTin() {
+        TaiKhoanDAO tkDAO = new TaiKhoanDAO();
+        TaiKhoanDTO tk = tkDAO.layTaiKhoanDangNhapTuBangNhanVienDangNhap(); 
+
+        if (tk != null) {
+            TXTenDangNhap.setText(tk.getTenDangNhap());
+            TXMaNV.setText(String.valueOf(tk.getMaNhanVien()));
+            TXVaiTro.setText(tk.getVaiTro());
+        } else {
+            System.out.println("Không có thông tin đăng nhập nào!");
+        }
+    }
+
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -146,7 +189,6 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 ThongTinNhanVien dialog = new ThongTinNhanVien(new javax.swing.JFrame(), true);
@@ -165,12 +207,11 @@ public class ThongTinNhanVien extends javax.swing.JDialog {
     private java.awt.TextField TXMaNV;
     private java.awt.TextField TXTenDangNhap;
     private java.awt.TextField TXVaiTro;
-    private java.awt.TextField TXsdt;
     private java.awt.Label TieuDe;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private java.awt.Label lbMaNV;
     private java.awt.Label lbTenDangNhap;
     private java.awt.Label lbVaiTro;
-    private java.awt.Label lbsdt;
     // End of variables declaration//GEN-END:variables
 }
