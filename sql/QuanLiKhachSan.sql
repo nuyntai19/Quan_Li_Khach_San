@@ -28,6 +28,15 @@ CREATE TABLE TaiKhoan (
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
 
+CREATE TABLE NhanVienDangNhap (
+    MaTaiKhoan INT PRIMARY KEY,
+    TenDangNhap NVARCHAR(50),
+    MaNhanVien INT,
+    VaiTro NVARCHAR(50),
+    ThoiGianDangNhap DATETIME
+);
+
+
 -- Bảng Khách hàng
 CREATE TABLE KhachHang (
     MaKhachHang INT PRIMARY KEY,
@@ -65,6 +74,7 @@ CREATE TABLE PhieuThuePhong (
     NgayDatPhong DATE,
     NgayTraPhong DATE,
     TongTien DECIMAL(18,2),
+	TrangThai VARCHAR(50) -- ví dụ: 'DangThue', 'DaTraHet', 'DaHuy',
     FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
@@ -73,10 +83,10 @@ CREATE TABLE PhieuThuePhong (
 CREATE TABLE ChiTietPhieuThue (
     MaThuePhong INT,
     MaPhong INT,
-    MaDichVu INT,
     GiaPhong DECIMAL(18,2),
     SoNgayO INT,
     ThanhTien DECIMAL(18,2),
+	TrangThai VARCHAR(50) -- ví dụ: 'DangSuDung', 'DaTra',
     PRIMARY KEY (MaThuePhong, MaPhong),
     FOREIGN KEY (MaThuePhong) REFERENCES PhieuThuePhong(MaThuePhong),
     FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
@@ -101,6 +111,20 @@ CREATE TABLE DichVu (
     MoTa TEXT,
     DonGia DECIMAL(18,2),
     SoLuong INT
+);
+
+-- Bảng Dịch vụ thuê
+CREATE TABLE DatDichVu (
+    MaThuePhong INT,
+	MaPhong INT,
+    MaDichVu INT,
+    SoLuong INT,
+    DonGia DECIMAL(18,2),
+    ThanhTien DECIMAL(18,2),
+    PRIMARY KEY (MaThuePhong, MaDichVu),
+	FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong),
+    FOREIGN KEY (MaThuePhong) REFERENCES PhieuThuePhong(MaThuePhong),
+    FOREIGN KEY (MaDichVu) REFERENCES DichVu(MaDichVu)
 );
 
 -- Bảng Hóa đơn
@@ -164,3 +188,17 @@ CREATE TABLE ChiTietPhieuNhapHang (
     FOREIGN KEY (MaPhieuNhapHang) REFERENCES PhieuNhapHang(MaPhieuNhapHang),
     FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang)
 );
+
+INSERT INTO NhanVien (MaNhanVien, Ho, Ten, NgaySinh, GioiTinh, Email, SoDienThoai, ChucVu, Luong)
+VALUES 
+(1, N'Nguyễn', N'Tuấn Tài', '2005-01-19', 'Nam', 'tuantai1915@gmail.com', '0707666999', N'Admin', 15000000),
+(2, N'Vũ', N'Thị B', '2000-05-05', N'Nữ', 'nhanvien@example.com', '0987654321', N'Nhân Viên', 8000000);
+
+
+INSERT INTO TaiKhoan (TenDangNhap, MatKhau, MaNhanVien, VaiTro, TrangThai)
+VALUES 
+('ntt', '1', 1, 'Admin', 'active'),
+('vtb', '2', 2, 'Nhanvien', 'active');
+
+select * from NhanVienDangNhap
+
