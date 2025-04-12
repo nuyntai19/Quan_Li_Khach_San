@@ -838,6 +838,11 @@ public class DatPhong extends javax.swing.JFrame {
 
         QuanLi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         QuanLi.setText("Quản Lí");
+        QuanLi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QuanLiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -900,7 +905,8 @@ public class DatPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DatPhong().setVisible(true);        
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void TXDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDPActionPerformed
@@ -988,8 +994,13 @@ public class DatPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_BTTongCongActionPerformed
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DatPhong().setVisible(true);
     }//GEN-LAST:event_homeActionPerformed
+
+    private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
+       
+    }//GEN-LAST:event_QuanLiActionPerformed
 
     /**
      * @param args the command line arguments

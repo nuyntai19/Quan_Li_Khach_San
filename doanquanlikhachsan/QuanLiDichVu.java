@@ -748,7 +748,8 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonQLPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
-        // TODO add your handling code here:
+        ThongTinNhanVien thongTin = new ThongTinNhanVien(null, true);
+        thongTin.setVisible(true);
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed

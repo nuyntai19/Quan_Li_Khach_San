@@ -698,7 +698,8 @@ public class DatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
-
+        ThongTinNhanVien thongTin = new ThongTinNhanVien(null, true);
+        thongTin.setVisible(true);
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed

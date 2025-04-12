@@ -628,7 +628,6 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_DatDichVuActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
-
         String tenDangNhap = TXTenDN.getText();
         String matKhau = new String(TXMK.getPassword());
 
