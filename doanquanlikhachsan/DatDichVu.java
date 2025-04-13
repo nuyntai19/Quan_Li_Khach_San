@@ -2,6 +2,7 @@ package doanquanlikhachsan;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class DatDichVu extends javax.swing.JFrame {
     public DatDichVu() {
@@ -217,6 +218,11 @@ public class DatDichVu extends javax.swing.JFrame {
         DatDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/desk-bell.png"))); // NOI18N
         DatDichVu.setText("Đặt Dịch Vụ");
         DatDichVu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -419,6 +425,11 @@ public class DatDichVu extends javax.swing.JFrame {
 
         jButtonResert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reset_12366642 (1).png"))); // NOI18N
         jButtonResert.setBorderPainted(false);
+        jButtonResert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResertActionPerformed(evt);
+            }
+        });
 
         tableCTDatPhong.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -665,7 +676,7 @@ public class DatDichVu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1449, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1418, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -694,7 +705,8 @@ public class DatDichVu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
-       
+       dispose();
+        new DatPhong().setVisible(true);
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -703,11 +715,19 @@ public class DatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
-        
+        dispose();
+        new DatPhong().setVisible(true);         
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
-        
+        ThongTinNhanVienBLL bll = new ThongTinNhanVienBLL();
+        if (bll.laAdminDangNhap()) {
+            // Mở giao diện quản lý
+            new QuanLiPhong().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        } 
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void TXDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXDPActionPerformed
@@ -761,6 +781,16 @@ public class DatDichVu extends javax.swing.JFrame {
     private void TXMaPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaPhongActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TXMaPhongActionPerformed
+
+    private void DatDichVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVuActionPerformed
+        dispose();
+        new DatDichVu().setVisible(true);
+    }//GEN-LAST:event_DatDichVuActionPerformed
+
+    private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
+        dispose();
+        new DatDichVu().setVisible(true);
+    }//GEN-LAST:event_jButtonResertActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

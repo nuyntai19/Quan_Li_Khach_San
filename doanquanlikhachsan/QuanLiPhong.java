@@ -79,7 +79,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonThem = new javax.swing.JButton();
         ButtonSua = new javax.swing.JButton();
         ButtonXoa = new javax.swing.JButton();
-        ButtonCapNhat = new javax.swing.JButton();
         LBMaLoaiPhongTrong1 = new javax.swing.JLabel();
         LBMaLoaiPhongTrong2 = new javax.swing.JLabel();
         TXSoGiuongPhongTrong1 = new javax.swing.JTextField();
@@ -380,16 +379,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
             }
         });
 
-        ButtonCapNhat.setBackground(new java.awt.Color(52, 152, 219));
-        ButtonCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        ButtonCapNhat.setForeground(new java.awt.Color(255, 255, 255));
-        ButtonCapNhat.setText("Cập Nhật");
-        ButtonCapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonCapNhatActionPerformed(evt);
-            }
-        });
-
         LBMaLoaiPhongTrong1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         LBMaLoaiPhongTrong1.setText("Mã phòng:");
 
@@ -435,6 +424,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
 
         jButtonResert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reset_12366642 (1).png"))); // NOI18N
         jButtonResert.setBorderPainted(false);
+        jButtonResert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResertActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -521,8 +515,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ButtonThem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonXoa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonSua, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonCapNhat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ButtonSua, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(85, 85, 85))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -565,8 +558,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TXTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonCapNhat))
+                    .addComponent(TXTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -593,7 +585,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                             .addComponent(LBPhongTrong2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -614,6 +606,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
 
         QuanLi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         QuanLi.setText("Quản Lí");
+        QuanLi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QuanLiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -651,6 +648,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonQLDV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLDV.png"))); // NOI18N
         ButtonQLDV.setText("Quản lí Dịch Vụ");
         ButtonQLDV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLDV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonQLDVActionPerformed(evt);
+            }
+        });
 
         ButtonQLNV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNV.png"))); // NOI18N
@@ -752,7 +754,8 @@ public class QuanLiPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_selfActionPerformed
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DatPhong().setVisible(true); 
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void TXMaPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaPhongActionPerformed
@@ -807,10 +810,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonXoaActionPerformed
 
-    private void ButtonCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCapNhatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonCapNhatActionPerformed
-
     private void TXSoGiuongPhongTrong1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXSoGiuongPhongTrong1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TXSoGiuongPhongTrong1ActionPerformed
@@ -824,8 +823,24 @@ public class QuanLiPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTrangThaiActionPerformed
 
     private void ButtonQLPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLPhongActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new QuanLiPhong().setVisible(true);
     }//GEN-LAST:event_ButtonQLPhongActionPerformed
+
+    private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
+        dispose();
+        new QuanLiPhong().setVisible(true);
+    }//GEN-LAST:event_QuanLiActionPerformed
+
+    private void ButtonQLDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLDVActionPerformed
+        dispose();
+        new QuanLiDichVu().setVisible(true);
+    }//GEN-LAST:event_ButtonQLDVActionPerformed
+
+    private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
+        dispose();
+        new QuanLiPhong().setVisible(true);
+    }//GEN-LAST:event_jButtonResertActionPerformed
 
     /**
      * @param args the command line arguments
@@ -870,7 +885,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ButtonCapNhat;
     private javax.swing.JButton ButtonKhoHang;
     private javax.swing.JButton ButtonQLDV;
     private javax.swing.JButton ButtonQLNV;

@@ -2,9 +2,87 @@
 package doanquanlikhachsan;
 
 import java.awt.event.ActionEvent;
+import java.sql.*;
+import java.util.logging.Logger;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import com.toedter.calendar.JDateChooser;
+import java.text.SimpleDateFormat;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+
+
+
+class ThongTinNhanVienDTO {
+    private int maTaiKhoan;
+    private String tenDangNhap;
+    private int maNhanVien;
+    private String vaiTro;
+    private java.sql.Timestamp thoiGianDangNhap;
+
+    // Constructor
+    public ThongTinNhanVienDTO() {}
+
+    // Getters & Setters
+    public int getMaTaiKhoan() { return maTaiKhoan; }
+    public void setMaTaiKhoan(int maTaiKhoan) { this.maTaiKhoan = maTaiKhoan; }
+
+    public String getTenDangNhap() { return tenDangNhap; }
+    public void setTenDangNhap(String tenDangNhap) { this.tenDangNhap = tenDangNhap; }
+
+    public int getMaNhanVien() { return maNhanVien; }
+    public void setMaNhanVien(int maNhanVien) { this.maNhanVien = maNhanVien; }
+
+    public String getVaiTro() { return vaiTro; }
+    public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
+
+    public java.sql.Timestamp getThoiGianDangNhap() { return thoiGianDangNhap; }
+    public void setThoiGianDangNhap(java.sql.Timestamp thoiGianDangNhap) { this.thoiGianDangNhap = thoiGianDangNhap; }
+}
+
+class ThongTinNhanVienDAO {
+    public ThongTinNhanVienDTO layTaiKhoanDangNhapGanNhat() {
+        ThongTinNhanVienDTO dto = null;
+        try (Connection conn = sql.DatabaseQLKS.getConnection()) {
+            String sql = "SELECT TOP 1 * FROM NhanVienDangNhap ORDER BY ThoiGianDangNhap DESC";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                dto = new ThongTinNhanVienDTO();
+                dto.setMaTaiKhoan(rs.getInt("MaTaiKhoan"));
+                dto.setTenDangNhap(rs.getString("TenDangNhap"));
+                dto.setMaNhanVien(rs.getInt("MaNhanVien"));
+                dto.setVaiTro(rs.getString("VaiTro"));
+                dto.setThoiGianDangNhap(rs.getTimestamp("ThoiGianDangNhap"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dto;
+    }
+}
+
+class ThongTinNhanVienBLL {
+    private ThongTinNhanVienDAO dao = new ThongTinNhanVienDAO();
+
+    public boolean laAdminDangNhap() {
+        ThongTinNhanVienDTO dto = dao.layTaiKhoanDangNhapGanNhat();
+        if (dto != null && dto.getVaiTro().equalsIgnoreCase("admin")) {
+            return true;
+        }
+        return false;
+    }
+}
+
 
 public final class ThongTinNhanVien extends javax.swing.JDialog {
-
     public ThongTinNhanVien(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
