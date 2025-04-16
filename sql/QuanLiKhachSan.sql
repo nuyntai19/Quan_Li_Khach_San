@@ -51,18 +51,18 @@ CREATE TABLE KhachHang (
 
 -- Bảng Loại phòng
 CREATE TABLE LoaiPhong (
-    MaLoaiPhong INT PRIMARY KEY,
+    MaLoaiPhong VARCHAR(10) PRIMARY KEY,
     TenLoaiPhong NVARCHAR(50),
-    MoTa TEXT
+    MoTa NVARCHAR(50)
 );
 
--- Bảng Phòng
+-- Tạo bảng Phong 
 CREATE TABLE Phong (
     MaPhong INT PRIMARY KEY,
-    MaLoaiPhong INT,
+    MaLoaiPhong VARCHAR(10),
     SoGiuong INT,
     DonGia DECIMAL(18,2),
-    TrangThai VARCHAR(50),
+    TrangThai NVARCHAR(20),
     FOREIGN KEY (MaLoaiPhong) REFERENCES LoaiPhong(MaLoaiPhong)
 );
 
@@ -194,6 +194,7 @@ VALUES
 (1, N'Nguyễn', N'Tuấn Tài', '2005-01-19', 'Nam', 'tuantai1915@gmail.com', '0707666999', N'Admin', 15000000),
 (2, N'Vũ', N'Thị B', '2000-05-05', N'Nữ', 'nhanvien@example.com', '0987654321', N'Nhân Viên', 8000000);
 
+select * from NhanVien
 
 INSERT INTO TaiKhoan (TenDangNhap, MatKhau, MaNhanVien, VaiTro, TrangThai)
 VALUES 
@@ -201,4 +202,21 @@ VALUES
 ('vtb', '2', 2, 'Nhanvien', 'active');
 
 select * from NhanVienDangNhap
+
+INSERT INTO LoaiPhong (MaLoaiPhong, TenLoaiPhong, MoTa) 
+VALUES
+('LP01', 'Single', N'Phòng đơn dành cho một người, thiết kế hiện đại.'),
+('LP02', 'Double', N'Phòng đôi thoải mái, phù hợp cho cặp đôi.'),
+('LP03', 'Single-VIP', N'Phòng đơn cao cấp với nội thất sang trọng, view đẹp.'),
+('LP04', 'Double-VIP', N'Phòng đôi VIP rộng rãi, tiện nghi cao cấp.'),
+('LP05', 'Group', N'Phòng dành cho 5 người, thích hợp đi nhóm.');
+
+DELETE FROM Phong;
+DELETE FROM LoaiPhong;
+
+select * from LoaiPhong
+
+
+
+
 
