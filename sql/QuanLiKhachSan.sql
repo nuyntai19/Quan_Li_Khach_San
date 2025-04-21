@@ -97,7 +97,7 @@ CREATE TABLE KiemTraTinhTrang (
     MaKiemTra INT PRIMARY KEY,
     MaNhanVien INT,
     MaThuePhong INT,
-    NgayKiemTra DATE,
+    NgayKiemTra DATETIME,
     MoTaThietHai TEXT,
     ChiPhiDenBu DECIMAL(18,2),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
