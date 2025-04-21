@@ -1,307 +1,20 @@
-package doanquanlikhachsan;
+package UI;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
-// Removed unused and unresolved import
-import java.text.SimpleDateFormat;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import sql.DatabaseQLKS;
 import java.util.ArrayList;
-
-
-class LoaiPhongDTO {
-    private String maLoaiPhong;
-    private String tenLoaiPhong;
-    private String moTa;
-
-    public LoaiPhongDTO() {
-    }
-
-    public LoaiPhongDTO(String maLoaiPhong, String tenLoaiPhong, String moTa) {
-        this.maLoaiPhong = maLoaiPhong;
-        this.tenLoaiPhong = tenLoaiPhong;
-        this.moTa = moTa;
-    }
-
-    public String getMaLoaiPhong() {
-        return maLoaiPhong;
-    }
-
-    public void setMaLoaiPhong(String maLoaiPhong) {
-        this.maLoaiPhong = maLoaiPhong;
-    }
-
-    public String getTenLoaiPhong() {
-        return tenLoaiPhong;
-    }
-
-    public void setTenLoaiPhong(String tenLoaiPhong) {
-        this.tenLoaiPhong = tenLoaiPhong;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
-}
-
-class QuanLiPhongDTO {
-    private int maPhong;
-    private String maLoaiPhong;
-    private int soGiuong;
-    private double donGia;
-    private String trangThai;
-
-    public QuanLiPhongDTO() {
-    }
-
-    public QuanLiPhongDTO(int maPhong, String maLoaiPhong,int soGiuong, double donGia, String trangThai) {
-        this.maPhong = maPhong;
-        this.maLoaiPhong = maLoaiPhong;
-        this.soGiuong = soGiuong;
-        this.donGia = donGia;
-        this.trangThai = trangThai;
-    }
-
-    public int getMaPhong() {
-        return maPhong;
-    }
-
-    public void setMaPhong(int maPhong) {
-        this.maPhong = maPhong;
-    }
-
-    public String getMaLoaiPhong() {
-        return maLoaiPhong;
-    }
-
-    public void setMaLoaiPhong(String maLoaiPhong) {
-        this.maLoaiPhong = maLoaiPhong;
-    }
-
-    public int getSoGiuong() {
-        return soGiuong;
-    }
-
-    public void setSoGiuong(int soGiuong) {
-        this.soGiuong = soGiuong;
-    }
-
-    public double getDonGia() {
-        return donGia;
-    }
-
-    public void setDonGia(double donGia) {
-        this.donGia = donGia;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
-}
-
-class LoaiPhongDAO {
-    public ArrayList<LoaiPhongDTO> layDanhSachLoaiPhong() throws SQLException {
-        ArrayList<LoaiPhongDTO> dslp = new ArrayList<>();
-        String sql = "SELECT * FROM LoaiPhong";
-        try (Connection conn = DatabaseQLKS.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                dslp.add(new LoaiPhongDTO(
-                    rs.getString("MaLoaiPhong"),
-                    rs.getString("TenLoaiPhong"),
-                    rs.getString("MoTa")
-                ));
-            }
-        }
-        return dslp;
-    }
-}
-
-class LoaiPhongBLL {
-    private final LoaiPhongDAO loaiPhongDAO;
-
-    public LoaiPhongBLL() {
-        loaiPhongDAO = new LoaiPhongDAO();
-    }
-    
-    public ArrayList<LoaiPhongDTO> layDanhSachLoaiPhong() throws SQLException {
-        return loaiPhongDAO.layDanhSachLoaiPhong();
-    }
-    
-}
-
-class QuanLiPhongDAO {
-    public boolean kiemTraTonTai(int maPhong) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM Phong WHERE MaPhong = ?";
-        try (Connection conn = DatabaseQLKS.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, maPhong);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next() && rs.getInt(1) > 0;
-        }
-    }
-    
-    public void themPhong(QuanLiPhongDTO phong) throws SQLException {
-        String sql = "INSERT INTO Phong (MaPhong, MaLoaiPhong, SoGiuong, DonGia, TrangThai) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseQLKS.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, phong.getMaPhong());
-            stmt.setString(2, phong.getMaLoaiPhong());
-            stmt.setInt(3, phong.getSoGiuong());
-            stmt.setDouble(4, phong.getDonGia());
-            stmt.setString(5, phong.getTrangThai());
-            stmt.executeUpdate();
-        }
-    }
-    
-    public void suaPhong(QuanLiPhongDTO phong) throws SQLException {
-        String sql = "UPDATE Phong SET MaLoaiPhong = ?, SoGiuong = ?, DonGia = ?, TrangThai = ? WHERE MaPhong = ?";
-        try (Connection connection = DatabaseQLKS.getConnection(); 
-            PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, phong.getMaLoaiPhong());
-            stmt.setInt(2, phong.getSoGiuong());
-            stmt.setDouble(3, phong.getDonGia());
-            stmt.setString(4, phong.getTrangThai());
-            stmt.setInt(5, phong.getMaPhong()); 
-
-            int rowsAffected = stmt.executeUpdate(); 
-            if (rowsAffected == 0) {
-                throw new SQLException("Không tìm thấy phòng với mã: " + phong.getMaPhong());
-            }
-        }
-    }
-    
-    public ArrayList<QuanLiPhongDTO> layDanhSachPhong() throws SQLException {
-        ArrayList<QuanLiPhongDTO> dsp = new ArrayList<>();
-        String sql = "SELECT * FROM Phong";
-        try (Connection conn = DatabaseQLKS.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                dsp.add(new QuanLiPhongDTO(
-                    rs.getInt("MaPhong"),
-                    rs.getString("MaLoaiPhong"),
-                    rs.getInt("SoGiuong"),
-                    rs.getDouble("DonGia"),
-                    rs.getString("TrangThai")
-                ));
-            }
-        }
-        return dsp;
-    }
-    
-//                                                  TÌM KIẾM BẰNG SQL (NẾU CẦN)
-//    public ArrayList<QuanLiPhongDTO> timKiemPhong(Integer maPhong, Integer soGiuong, Integer maLoaiPhong, String tenLoaiPhong) throws SQLException {
-//        ArrayList<QuanLiPhongDTO> danhSach = new ArrayList<>();
-//
-//        StringBuilder sql = new StringBuilder("SELECT p.MaPhong, p.MaLoaiPhong, p.SoGiuong, p.DonGia, p.TrangThai " +
-//                                              "FROM Phong p " +
-//                                              "JOIN LoaiPhong lp ON p.MaLoaiPhong = lp.MaLoaiPhong " +
-//                                              "WHERE 1=1");
-//
-//        if (maPhong != null) {
-//            sql.append(" AND p.MaPhong = ?");
-//        }
-//        if (soGiuong != null) {
-//            sql.append(" AND p.SoGiuong = ?");
-//        }
-//        if (maLoaiPhong != null) {
-//            sql.append(" AND p.MaLoaiPhong = ?");
-//        }
-//        if (tenLoaiPhong != null && !tenLoaiPhong.isEmpty()) {
-//            sql.append(" AND lp.TenLoaiPhong LIKE ?");
-//        }
-//
-//        try (Connection conn = DatabaseQLKS.getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
-//
-//            int index = 1;
-//            if (maPhong != null) {
-//                stmt.setInt(index++, maPhong);
-//            }
-//            if (soGiuong != null) {
-//                stmt.setInt(index++, soGiuong);
-//            }
-//            if (maLoaiPhong != null) {
-//                stmt.setInt(index++, maLoaiPhong);
-//            }
-//            if (tenLoaiPhong != null && !tenLoaiPhong.isEmpty()) {
-//                stmt.setString(index++, "%" + tenLoaiPhong + "%");
-//            }
-//
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                danhSach.add(new QuanLiPhongDTO(
-//                    rs.getInt("MaPhong"),
-//                    rs.getString("MaLoaiPhong"),
-//                    rs.getInt("SoGiuong"),
-//                    rs.getDouble("DonGia"),
-//                    rs.getString("TrangThai")
-//                ));
-//            }
-//        }
-//
-//        return danhSach;
-//    }
-    
-    // Xóa phòng
-    public void xoaPhong(int maPhong) throws SQLException {
-        String sql = "DELETE FROM Phong WHERE MaPhong = ?";
-        try (Connection conn = DatabaseQLKS.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, maPhong);
-            stmt.executeUpdate();
-        }
-    }
-}
-
-// Business Logic Layer (BLL)
-class QuanLiPhongBLL {
-    private final QuanLiPhongDAO phongDAO;
-
-    public QuanLiPhongBLL() {
-        phongDAO = new QuanLiPhongDAO();
-    }
-
-    public void themPhong(QuanLiPhongDTO phong) throws Exception {
-        if (phongDAO.kiemTraTonTai(phong.getMaPhong())) {
-            throw new Exception("Mã phòng đã tồn tại!");
-        }
-        phongDAO.themPhong(phong);
-    }
-
-    
-    public void suaPhong(QuanLiPhongDTO phong) throws SQLException {
-        if (!phongDAO.kiemTraTonTai(phong.getMaPhong())) {
-            throw new SQLException("Không tìm thấy phòng với mã: " + phong.getMaPhong());
-        }
-        phongDAO.suaPhong(phong);  // Gọi phương thức sửa trong DAO
-    }
-
-    public ArrayList<QuanLiPhongDTO> layDanhSachPhong() throws SQLException {
-        return phongDAO.layDanhSachPhong();
-    }
-
-    public void xoaPhong(int maPhong) throws SQLException {
-        phongDAO.xoaPhong(maPhong);
-    }
-}
+import DTO.LoaiPhongDTO;
+import DTO.QuanLiPhongDTO;
+import BLL.LoaiPhongBLL;
+import BLL.QuanLiPhongBLL;
 
 
 public class QuanLiPhong extends javax.swing.JFrame {
@@ -316,26 +29,26 @@ public class QuanLiPhong extends javax.swing.JFrame {
         
         loadData();
         loadDataLoaiPhongToTable();
+        loadComboBoxLoaiPhong();
         
         tblDSPHONG.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = tblDSPHONG.getSelectedRow();
                 if (selectedRow != -1) {
+                    String maPhong = getValue(tblDSPHONG, selectedRow, 0);
+                    String maLoaiPhong = getValue(tblDSPHONG, selectedRow, 1);
+                    String soGiuong = getValue(tblDSPHONG, selectedRow, 2);
+                    String donGia = getValue(tblDSPHONG, selectedRow, 3);
+                    String trangThai = getValue(tblDSPHONG, selectedRow, 4);
 
-                    String maPhong = (tblDSPHONG.getValueAt(selectedRow, 0) != null) ? tblDSPHONG.getValueAt(selectedRow, 0).toString() : "";
-                    String maLoaiPhong = (tblDSPHONG.getValueAt(selectedRow, 1) != null) ? tblDSPHONG.getValueAt(selectedRow, 1).toString() : "";
-                    String soGiuong = (tblDSPHONG.getValueAt(selectedRow, 2) != null) ? tblDSPHONG.getValueAt(selectedRow, 2).toString() : "";
-                    String donGia = (tblDSPHONG.getValueAt(selectedRow, 3) != null) ? tblDSPHONG.getValueAt(selectedRow, 3).toString() : "";
-                    String trangThai = (tblDSPHONG.getValueAt(selectedRow, 4) != null) ? tblDSPHONG.getValueAt(selectedRow, 4).toString() : "";
-
-                    // Gán dữ liệu vào TextField
+                    // Gán dữ liệu vào các ô nhập
                     TXMaPhong.setText(maPhong);
                     TXSoGiuong.setText(soGiuong);
                     TXGiaThue.setText(donGia);
                     TXTrangThai.setText(trangThai);
 
-                    // Tự động chọn lại loại phòng trong ComboBox
+                    // Chọn loại phòng trong ComboBox
                     for (int i = 0; i < CBMaLoaiPhong.getItemCount(); i++) {
                         String phong = CBMaLoaiPhong.getItemAt(i);
                         if (phong.equals(maLoaiPhong)) {
@@ -344,9 +57,48 @@ public class QuanLiPhong extends javax.swing.JFrame {
                         }
                     }
 
+                    // Đồng bộ chọn dòng trong bảng LoaiPhong
+                    for (int i = 0; i < tblDSLOAIPHONG.getRowCount(); i++) {
+                        String maLP = getValue(tblDSLOAIPHONG, i, 0); // Giả sử cột 0 là MaLoaiPhong
+                        if (maLoaiPhong.equals(maLP)) {
+                            tblDSLOAIPHONG.setRowSelectionInterval(i, i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Hàm tiện ích để lấy giá trị có kiểm null
+            private String getValue(JTable table, int row, int col) {
+                Object value = table.getValueAt(row, col);
+                return value != null ? value.toString() : "";
+            }
+        });
+        
+        tblDSLOAIPHONG.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = tblDSLOAIPHONG.getSelectedRow();
+                if (selectedRow != -1) {
+                    String selectedMaLoaiPhong = getValue(tblDSLOAIPHONG, selectedRow, 0);
+
+                    // Tìm và chọn tất cả dòng trong tblDSPHONG có cùng MaLoaiPhong
+                    tblDSPHONG.clearSelection();
+                    for (int i = 0; i < tblDSPHONG.getRowCount(); i++) {
+                        String maLP = getValue(tblDSPHONG, i, 1); // Cột 1 là MaLoaiPhong
+                        if (selectedMaLoaiPhong.equals(maLP)) {
+                            tblDSPHONG.addRowSelectionInterval(i, i); // Chọn dòng đó
+                        }
+                    }
                 }
             }
         });
+
+    }
+    
+    private String getValue(JTable table, int row, int col) {
+        Object value = table.getValueAt(row, col);
+        return value != null ? value.toString() : "";
     }
     
     private void loadData() {
@@ -389,6 +141,21 @@ public class QuanLiPhong extends javax.swing.JFrame {
         }
     }
     
+    private void loadComboBoxLoaiPhong() {
+        try {
+            CBMaLoaiPhong.removeAllItems();
+            CBMaLoaiPhong.addItem("_");
+            LoaiPhongBLL loaiPhongBLL = new LoaiPhongBLL();
+            ArrayList<String> danhSachMaLoaiPhong = loaiPhongBLL.layDanhSachMaLoaiPhong();
+            for (String maLoaiPhong : danhSachMaLoaiPhong) {
+                CBMaLoaiPhong.addItem(maLoaiPhong);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi load danh sách mã loại phòng!");
+        }
+    }
+    
     
 
 
@@ -424,7 +191,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         Tittle = new javax.swing.JLabel();
         self = new javax.swing.JButton();
-        home = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -562,10 +328,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
             }
         });
 
-        home.setBackground(new java.awt.Color(52, 152, 219));
-        home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/home (1).png"))); // NOI18N
-        home.setBorder(null);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -573,10 +335,8 @@ public class QuanLiPhong extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(Tittle, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1064, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(self, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -585,8 +345,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(self, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Tittle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Tittle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -765,7 +524,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
             }
         });
 
-        CBMaLoaiPhong.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "_", "LP01", "LP02", "LP03", "LP04", "LP05" }));
         CBMaLoaiPhong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CBMaLoaiPhongActionPerformed(evt);
@@ -1208,7 +966,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
             }
                  
             if(!TXTrangThai.getText().equals("Trống")) {
-                     JOptionPane.showMessageDialog(this, "Vui lòng nhập trạng thái là trống khi thêm Phòng.");
+                     JOptionPane.showMessageDialog(this, "Vui lòng nhập trạng thái là trống khi sửa Phòng.");
                      return;
             }
 
@@ -1370,7 +1128,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
     private javax.swing.JLabel Tittle;
     private javax.swing.ButtonGroup bGNam_Nu;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton home;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonResert;
     private javax.swing.JLabel jLabel1;

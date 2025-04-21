@@ -1,5 +1,5 @@
 
-package doanquanlikhachsan;
+package UI;
 
 import java.awt.event.ActionEvent;
 import java.sql.*;

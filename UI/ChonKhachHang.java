@@ -1,4 +1,4 @@
-package doanquanlikhachsan;
+package UI;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -413,8 +413,7 @@ public class ChonKhachHang extends javax.swing.JFrame {
                                                 .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jButtonResert)
-                                        .addGap(20, 20, 20)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGap(20, 20, 20)))))))
                 .addGap(29, 29, 29))
         );
         jPanel4Layout.setVerticalGroup(

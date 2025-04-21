@@ -108,7 +108,7 @@ CREATE TABLE KiemTraTinhTrang (
 CREATE TABLE DichVu (
     MaDichVu INT PRIMARY KEY,
     TenDichVu NVARCHAR(100),
-    MoTa TEXT,
+    MoTa NVARCHAR(50),
     DonGia DECIMAL(18,2),
     SoLuong INT
 );
@@ -214,7 +214,7 @@ VALUES
 DELETE FROM Phong;
 DELETE FROM LoaiPhong;
 
-select * from LoaiPhong
+select * from Phong
 
 
 
