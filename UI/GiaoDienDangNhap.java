@@ -596,7 +596,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
             bll.themDangNhapVaoBangTam(tk);
 
             // Mở form chính (DatPhong)
-            UI.DatPhong datPhong = new UI.DatPhong();
+            UI.PhieuThuePhong datPhong = new UI.PhieuThuePhong();
             datPhong.setVisible(true);
 
             // Đóng form đăng nhập

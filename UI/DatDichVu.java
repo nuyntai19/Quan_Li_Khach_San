@@ -680,7 +680,7 @@ public class DatDichVu extends javax.swing.JFrame {
 
     private void DatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
        dispose();
-        new DatPhong().setVisible(true);
+        new PhieuThuePhong().setVisible(true);
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -690,7 +690,7 @@ public class DatDichVu extends javax.swing.JFrame {
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
         dispose();
-        new DatPhong().setVisible(true);         
+        new PhieuThuePhong().setVisible(true);         
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed

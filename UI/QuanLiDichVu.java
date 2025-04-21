@@ -647,8 +647,8 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                             .addComponent(ButtonTim)))
                     .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -818,7 +818,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
 
     private void KhachSanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
         dispose();
-        new DatPhong().setVisible(true);
+        new PhieuThuePhong().setVisible(true);
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void TXTimDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTimDVActionPerformed
@@ -878,7 +878,30 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTimTenDVActionPerformed
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
-        // TODO add your handling code here:
+        try {
+            String maDichVuStr = TXTimDV.getText().trim();
+            String tenDichVuStr = TXTimTenDV.getText().trim().toLowerCase();
+
+            Integer maDichVu = maDichVuStr.isEmpty() ? null : Integer.parseInt(maDichVuStr);
+
+            model.setRowCount(0); // Xóa bảng hiện tại
+
+            for (QuanLiDichVuDTO dv : danhSachDichVuGoc) {
+                boolean match = true;
+
+                if (maDichVu != null && dv.getMaDichVu() != maDichVu) match = false;
+                if (!tenDichVuStr.isEmpty() && !dv.getTenDichVu().toLowerCase().contains(tenDichVuStr)) match = false;
+
+                if (match) {
+                    model.addRow(new Object[] {
+                        dv.getMaDichVu(), dv.getTenDichVu(), dv.getMoTa(),
+                        dv.getDonGia(), dv.getSoLuong()
+                    });
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + e.getMessage());
+        }
     }//GEN-LAST:event_ButtonTimActionPerformed
 
     private void ButtonThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThemActionPerformed
@@ -911,10 +934,6 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonThemActionPerformed
 
     private void ButtonSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSuaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonSuaActionPerformed
-
-    private void ButtonSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSua1ActionPerformed
         try {
             int selectedRow = tblDSDICHVU.getSelectedRow();
             if (selectedRow == -1) {
@@ -923,41 +942,55 @@ public class QuanLiDichVu extends javax.swing.JFrame {
             }
 
             // Lấy dữ liệu từ các TextFields và ComboBox
-            int maPhong = Integer.parseInt(TXMaDichVu.getText());
-            String tenLoaiPhong = TXTenDV.getText();
-            int soGiuong = Integer.parseInt(TXSoGiuong.getText());
-            double donGia = Double.parseDouble(TXGiaThue.getText());
-            String trangThai = TXTrangThai.getText();  
+            int maDichVu = Integer.parseInt(TXMaDV.getText());
+            String tenDichVu = TXTenDV.getText();
+            String moTa =TXMoTa.getText();
+            double donGia = Double.parseDouble(TXDG.getText());
+            int soLuong = Integer.parseInt(TXSoLuong.getText());
            
 
 
-            if (CBMaLoaiPhong.getSelectedItem().toString().equals("_")) {
-                     JOptionPane.showMessageDialog(this, "Vui lòng chọn mã loại phòng");
-                     return;
-            }
-            if (TXSoGiuong.getText().isEmpty() || TXTrangThai.getText().isEmpty() || TXGiaThue.getText().isEmpty()) {
+            if (TXMaDV.getText().isEmpty() || TXTenDV.getText().isEmpty() || TXMoTa.getText().isEmpty() || TXDG.getText().isEmpty() || TXSoLuong.getText().isEmpty()) {
                      JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
                      return;
-            }
-                 
-            if(!TXTrangThai.getText().equals("Trống")) {
-                     JOptionPane.showMessageDialog(this, "Vui lòng nhập trạng thái là trống khi sửa Phòng.");
-                     return;
-            }
+                 }
 
-            QuanLiPhongDTO phong = new QuanLiPhongDTO(maPhong, maLoaiPhong, soGiuong, donGia, trangThai);
-            QuanLiPhongBLL qlPhongBLL = new QuanLiPhongBLL();
-            qlPhongBLL.suaPhong(phong);  
+            QuanLiDichVuDTO dv = new QuanLiDichVuDTO(maDichVu, tenDichVu, moTa, donGia, soLuong);
+            QuanLiDichVuBLL qlDichVuBLL = new QuanLiDichVuBLL();
+            qlDichVuBLL.suaDichVu(dv);  
 
             // Cập nhật bảng
-            model.setValueAt(maPhong, selectedRow, 0);
-            model.setValueAt(maLoaiPhong, selectedRow, 1);
-            model.setValueAt(soGiuong, selectedRow, 2);
+            model.setValueAt(maDichVu, selectedRow, 0);
+            model.setValueAt(tenDichVu, selectedRow, 1);
+            model.setValueAt(moTa, selectedRow, 2);
             model.setValueAt(donGia, selectedRow, 3);
-            model.setValueAt(trangThai, selectedRow, 4);
+            model.setValueAt(soLuong, selectedRow, 4);
             
 
-            JOptionPane.showMessageDialog(this, "Cập nhật phòng thành công!");
+            JOptionPane.showMessageDialog(this, "Cập nhật dịch vụ thành công!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        }
+    }//GEN-LAST:event_ButtonSuaActionPerformed
+
+    private void ButtonSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSua1ActionPerformed
+        try {
+            int selectedRow = tblDSDICHVU.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dịch vụ cần xóa.");
+                return;
+            }
+
+            int maDichVu = (int) model.getValueAt(selectedRow, 0);
+
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa dịch vụ có mã dịch vụ: " + maDichVu + "?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Thực hiện xóa phòng
+                QuanLiDichVuBLL qlDichVuBLL = new QuanLiDichVuBLL();
+                qlDichVuBLL.xoaDichVu(maDichVu);  
+                JOptionPane.showMessageDialog(this, "Xóa dịch vụ thành công!");
+                loadData();
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
@@ -978,8 +1011,20 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonQLDVActionPerformed
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
-        dispose();
-        new QuanLiDichVu().setVisible(true);
+        // Xóa nội dung trong các ô tìm kiếm
+        TXTimDV.setText("");
+        TXTimTenDV.setText("");
+
+        // Xóa toàn bộ dữ liệu bảng
+        model.setRowCount(0);
+
+        // Đổ lại toàn bộ dữ liệu từ danh sách gốc
+        for (QuanLiDichVuDTO dv : danhSachDichVuGoc) {
+            model.addRow(new Object[] {
+                dv.getMaDichVu(), dv.getTenDichVu(), dv.getMoTa(),
+                dv.getDonGia(), dv.getSoLuong()
+            });
+        }
     }//GEN-LAST:event_jButtonResertActionPerformed
 
     /**

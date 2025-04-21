@@ -36,16 +36,17 @@ public class QuanLiDichVuDAO {
     public void suaDichVu(QuanLiDichVuDTO dv) throws SQLException {
         String sql = "UPDATE DichVu SET TenDichVu = ?, MoTa = ?, DonGia = ?, SoLuong = ? WHERE MaDichVu = ?";
         try (Connection connection = DatabaseQLKS.getConnection(); 
-            PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, dv.getMaDichVu());
-            stmt.setString(2, dv.getTenDichVu());
-            stmt.setString(3, dv.getMoTa());
-            stmt.setDouble(4, dv.getDonGia());
-            stmt.setInt(5, dv.getSoLuong());
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, dv.getTenDichVu());   
+            stmt.setString(2, dv.getMoTa());       
+            stmt.setDouble(3, dv.getDonGia());
+            stmt.setInt(4, dv.getSoLuong());        
+            stmt.setInt(5, dv.getMaDichVu());      
 
             int rowsAffected = stmt.executeUpdate(); 
             if (rowsAffected == 0) {
-                throw new SQLException("Không tìm thấy phòng với mã: " + dv.getMaDichVu());
+                throw new SQLException("Không tìm thấy dịch vụ với mã: " + dv.getMaDichVu());
             }
         }
     }
@@ -77,6 +78,22 @@ public class QuanLiDichVuDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, maDichVu);
             stmt.executeUpdate();
+        }
+    }
+    
+    public void giamSoLuongDichVu(int maDichVu, int soLuongGiam) throws SQLException {
+        String sql = "UPDATE DichVu SET SoLuong = SoLuong - ? WHERE MaDichVu = ? AND SoLuong >= ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, soLuongGiam);
+            stmt.setInt(2, maDichVu);    
+            stmt.setInt(3, soLuongGiam);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Không đủ số lượng dịch vụ hoặc mã dịch vụ không tồn tại.");
+            }
         }
     }
 }

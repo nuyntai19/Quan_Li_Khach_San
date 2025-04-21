@@ -35,5 +35,12 @@ public class QuanLiDichVuBLL {
     public void xoaDichVu(int maDichVu) throws SQLException {
         dichVuDAO.xoaDichVu(maDichVu);
     }
+    
+    public void giamSoLuongDichVu(int maDichVu, int soLuongGiam) throws SQLException {
+        if (soLuongGiam <= 0) {
+            throw new IllegalArgumentException("Số lượng đặt phải lớn hơn 0.");
+        }
+        dichVuDAO.giamSoLuongDichVu(maDichVu, soLuongGiam);
+    }
 }
 
