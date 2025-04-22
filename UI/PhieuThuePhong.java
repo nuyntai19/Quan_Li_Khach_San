@@ -19,6 +19,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.util.List;
+import DTO.KhachHangDTO;
+import BLL.KhachHangBLL;
+import DTO.PhieuThuePhongDTO;
+import BLL.PhieuThuePhongManager;
+import BLL.ChiTietPhieuThuePhongBLL;
 
 
 public class PhieuThuePhong extends javax.swing.JFrame {
@@ -561,6 +566,11 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         ButtonDatPhong.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         ButtonDatPhong.setForeground(new java.awt.Color(255, 255, 255));
         ButtonDatPhong.setText("Đặt phòng");
+        ButtonDatPhong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonDatPhongActionPerformed(evt);
+            }
+        });
 
         tblDSPHONGTRONG.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -808,7 +818,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                                             .addComponent(TXKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(BTKH)
                                             .addComponent(lbGioiTinh, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(lbMaPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(TXMaPhong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1124,8 +1134,19 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             int maDatPhong = Integer.parseInt(maDatPhongStr);
             int maPhong = Integer.parseInt(maPhongStr);
 
-            // Kiểm tra xem đã chọn phòng này với ngày trùng chưa
+            // Lấy danh sách tạm
             List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+
+            // ✅ Kiểm tra nếu danh sách tạm đã có dữ liệu
+            if (!danhSachTam.isEmpty()) {
+                int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
+                if (maDatPhongCu != maDatPhong) {
+                    JOptionPane.showMessageDialog(this, "Đây là danh sách phòng muốn đặt của mã đặt phòng " + maDatPhongCu + ". Không nên thay đổi mã đặt phòng khác.");
+                    return;
+                }
+            }
+
+            // Kiểm tra xem đã chọn phòng này với ngày trùng chưa
             for (ChiTietPhieuThuePhongDTO ct : danhSachTam) {
                 if (ct.getMaPhong() == maPhong) {
                     // Kiểm tra khoảng thời gian bị trùng (giao nhau)
@@ -1178,8 +1199,74 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     }//GEN-LAST:event_TXMaLoaiPhongTimActionPerformed
 
     private void ButtonChonNhieuPhongDat1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonNhieuPhongDat1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            double tongTien = 0.0;
+
+            List<ChiTietPhieuThuePhongDTO> ds = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            for (ChiTietPhieuThuePhongDTO chiTiet : ds) {
+                tongTien += chiTiet.getThanhTien();
+            }
+
+            // Hiển thị kết quả tổng tiền lên TextField
+            TXTongTien.setText(String.format("%.2f", tongTien));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tính tổng tiền: " + e.getMessage());
+        }
     }//GEN-LAST:event_ButtonChonNhieuPhongDat1ActionPerformed
+
+    private void ButtonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDatPhongActionPerformed
+        try {
+            // 1. Lưu thông tin khách hàng
+            String maKhachHangStr = TXKhachHang.getText().trim();
+            int maKhachHang = Integer.parseInt(maKhachHangStr);
+            String ho = TXHo.getText().trim();
+            String ten = TXTen.getText().trim();
+            java.util.Date ngaySinh = DCNgaySinh.getDate();
+            String gioiTinh = RBNam.isSelected() ? "Nam" : "Nu";
+            String email = TXEmail.getText().trim();
+            String sdt = TXSDT.getText().trim();
+
+            KhachHangDTO khach = new KhachHangDTO(maKhachHang, ho, ten, new java.sql.Date(ngaySinh.getTime()), gioiTinh, email, sdt);
+            KhachHangBLL khBLL = new KhachHangBLL();
+            // Kiểm tra khách hàng đã tồn tại
+            if (!khBLL.kiemTraTonTai(maKhachHang)) {
+                khBLL.themKhachHang(khach);
+            }
+
+            // 2. Lấy mã nhân viên từ tài khoản đăng nhập
+            TaiKhoanDAO tkDAO = new TaiKhoanDAO();
+            TaiKhoanDTO tk = tkDAO.layTaiKhoanDangNhapTuBangNhanVienDangNhap();
+            int maNhanVien = tk.getMaNhanVien();
+
+            // 3. Lưu phiếu thuê phòng
+            int maThuePhong = Integer.parseInt(TXDP.getText().trim());
+            java.util.Date ngayLapPhieu = new java.util.Date(); // Ngày hiện tại
+            double tongTien = Double.parseDouble(TXTongTien.getText().trim());
+            String trangThai = "Dang thue";
+
+            PhieuThuePhongDTO phieu = new PhieuThuePhongDTO(maThuePhong, maKhachHang, maNhanVien, ngayLapPhieu, tongTien, trangThai);
+            PhieuThuePhongBLL phieuBLL = new PhieuThuePhongBLL();
+            phieuBLL.themPhieuThue(phieu); // Lưu phiếu thuê
+
+            // 4. Lưu các chi tiết phiếu thuê từ danh sách tạm
+            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+                ct.setTrangThai("Dang Su Dung");
+            }
+            ChiTietPhieuThuePhongBLL chiTietBLL = new ChiTietPhieuThuePhongBLL();
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+                chiTietBLL.themChiTiet(ct); // Lưu từng dòng
+            }
+
+            JOptionPane.showMessageDialog(this, "Đặt phòng thành công!");
+            // Sau khi đặt có thể reset giao diện hoặc clear danh sách tạm
+            PhieuThuePhongManager.clearDanhSach();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi đặt phòng: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_ButtonDatPhongActionPerformed
 
     /**
      * @param args the command line arguments

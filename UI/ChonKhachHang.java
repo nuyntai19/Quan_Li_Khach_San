@@ -115,6 +115,7 @@ public class ChonKhachHang extends javax.swing.JFrame {
         TXSDT = new javax.swing.JTextField();
         TXEmailKH = new javax.swing.JTextField();
         jButtonResert = new javax.swing.JButton();
+        ButtonThoat = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -395,6 +396,16 @@ public class ChonKhachHang extends javax.swing.JFrame {
             }
         });
 
+        ButtonThoat.setBackground(new java.awt.Color(52, 152, 219));
+        ButtonThoat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ButtonThoat.setForeground(new java.awt.Color(255, 255, 255));
+        ButtonThoat.setText("Thoát");
+        ButtonThoat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonThoatActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -451,7 +462,8 @@ public class ChonKhachHang extends javax.swing.JFrame {
                                                     .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(jButtonResert)
-                                            .addGap(20, 20, 20))))))
+                                            .addGap(20, 20, 20)))))
+                            .addComponent(ButtonThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(29, 29, 29))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -492,7 +504,9 @@ public class ChonKhachHang extends javax.swing.JFrame {
                 .addComponent(ButtonChon)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(ButtonThoat)
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -651,6 +665,13 @@ public class ChonKhachHang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonResertActionPerformed
 
+    private void ButtonThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThoatActionPerformed
+       int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn thoát?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.dispose(); // Đóng cửa sổ hiện tại
+        }
+    }//GEN-LAST:event_ButtonThoatActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -720,6 +741,7 @@ public class ChonKhachHang extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonChon;
+    private javax.swing.JButton ButtonThoat;
     private javax.swing.JButton ButtonTim;
     private com.toedter.calendar.JDateChooser DCNgaySinh;
     private javax.swing.JButton DSPhong;

@@ -603,7 +603,7 @@
                                               <Component id="BTKH" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="lbGioiTinh" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="lbMaPhong" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                               <Component id="TXMaPhong" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1016,6 +1016,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t ph&#xf2;ng"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonDatPhongActionPerformed"/>
+          </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane2">
           <AuxValues>

@@ -404,7 +404,31 @@ public class ChiTietPhieuThuePhong extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonThoatActionPerformed
 
     private void ButtonXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonXoaActionPerformed
-        // TODO add your handling code here:
+        try {
+        int selectedRow = tblDSCHIPHIETPHIEUTHUEPHONGTA.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng muốn đặt cần xóa.");
+            return;
+        }
+
+        int maPhong = (int) tblDSCHIPHIETPHIEUTHUEPHONGTA.getValueAt(selectedRow, 1); 
+        int maDatPhong = (int) tblDSCHIPHIETPHIEUTHUEPHONGTA.getValueAt(selectedRow, 0); 
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa phòng cần đặt có mã phòng: " + maPhong + "?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Xóa khỏi danh sách tạm
+            List<ChiTietPhieuThuePhongDTO> ds = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            ds.removeIf(ct -> ct.getMaPhong() == maPhong && ct.getMaThuePhong() == maDatPhong);
+
+            // Xóa khỏi bảng giao diện
+            DefaultTableModel model = (DefaultTableModel) tblDSCHIPHIETPHIEUTHUEPHONGTA.getModel();
+            model.removeRow(selectedRow);
+
+            JOptionPane.showMessageDialog(this, "Đã xóa phòng cần đặt khỏi danh sách tạm.");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+    }
     }//GEN-LAST:event_ButtonXoaActionPerformed
 
     /**
