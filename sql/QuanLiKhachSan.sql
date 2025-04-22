@@ -46,7 +46,6 @@ CREATE TABLE KhachHang (
     GioiTinh VARCHAR(10),
     Email VARCHAR(100),
     SoDienThoai VARCHAR(15),
-    VaiTro VARCHAR(50)
 );
 
 -- Bảng Loại phòng
@@ -71,20 +70,21 @@ CREATE TABLE PhieuThuePhong (
     MaThuePhong INT PRIMARY KEY,
     MaKhachHang INT,
     MaNhanVien INT,
-    NgayDatPhong DATE,
-    NgayTraPhong DATE,
+    NgayLapPhieu Date,
     TongTien DECIMAL(18,2),
 	TrangThai VARCHAR(50) -- ví dụ: 'DangThue', 'DaTraHet', 'DaHuy',
     FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
 
+delete from PhieuThuePhong
 -- Bảng Chi tiết phiếu thuê phòng
 CREATE TABLE ChiTietPhieuThue (
     MaThuePhong INT,
     MaPhong INT,
+	NgayDatPhong DATE,
+    NgayTraPhong DATE,
     GiaPhong DECIMAL(18,2),
-    SoNgayO INT,
     ThanhTien DECIMAL(18,2),
 	TrangThai VARCHAR(50) -- ví dụ: 'DangSuDung', 'DaTra',
     PRIMARY KEY (MaThuePhong, MaPhong),
