@@ -1,5 +1,4 @@
-package doan.quanlykhachsan.dto;
-
+package DTO;
 public class DoGiaDung_DTO extends HangHoa {
     private String tinhTrang;
     private static final String LOAI_HANG = "DoGiaDung";
