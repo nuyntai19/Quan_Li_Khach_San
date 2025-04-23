@@ -1,4 +1,4 @@
-package doan.quanlykhachsan.dao;
+package DAO;
 
 import DTO.NhaCungCap_DTO;
 import java.sql.*;
