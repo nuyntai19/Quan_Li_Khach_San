@@ -4,7 +4,8 @@ import DTO.PhieuNhapHang_DTO;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List
+import sql.DatabaseQLKS;
 
 public class PhieuNhapHang_DAO {
     private Connection conn;
@@ -14,7 +15,6 @@ public class PhieuNhapHang_DAO {
         this.conn = conn;
     }
     
-    // Lấy danh sách phiếu nhập hàng
     public List<PhieuNhapHang_DTO> getAll() throws SQLException {
         List<PhieuNhapHang_DTO> danhSach = new ArrayList<>();
         String sql = "SELECT MaPhieuNhapHang, MaNhanVienXacNhan, MaNhaCungCap, NgayNhap, TongTien FROM PhieuNhapHang";
@@ -42,7 +42,6 @@ public class PhieuNhapHang_DAO {
         return danhSach;
     }
     
-    // Tìm phiếu nhập hàng theo mã
     public PhieuNhapHang_DTO getByMa(String maPhieuNhap) throws SQLException {
         String sql = "SELECT MaPhieuNhapHang, MaNhanVienXacNhan, MaNhaCungCap, NgayNhap, TongTien " +
                      "FROM PhieuNhapHang WHERE MaPhieuNhapHang = ?";
@@ -77,7 +76,6 @@ public class PhieuNhapHang_DAO {
                      "VALUES (?, ?, ?, ?, ?)";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            // Nếu mã phiếu nhập trống, tạo mã mới
             int maPhieuNhap = phieu.getMaPhieuNhap().isEmpty() ? 
                               taoMaPhieuTuDong() : 
                               Integer.parseInt(phieu.getMaPhieuNhap());
@@ -93,7 +91,6 @@ public class PhieuNhapHang_DAO {
         }
     }
     
-    // Cập nhật phiếu nhập hàng
     public boolean capNhat(PhieuNhapHang_DTO phieu) throws SQLException {
         String sql = "UPDATE PhieuNhapHang SET MaNhanVienXacNhan = ?, MaNhaCungCap = ?, " +
                      "NgayNhap = ?, TongTien = ? WHERE MaPhieuNhapHang = ?";
@@ -110,12 +107,9 @@ public class PhieuNhapHang_DAO {
         }
     }
     
-    // Xóa phiếu nhập hàng
     public boolean xoa(String maPhieuNhap) throws SQLException {
-        // Trước tiên, phải xóa các chi tiết phiếu nhập liên quan vì có ràng buộc khóa ngoại
         xoaChiTietPhieu(maPhieuNhap);
         
-        // Sau đó xóa phiếu nhập
         String sql = "DELETE FROM PhieuNhapHang WHERE MaPhieuNhapHang = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -126,7 +120,6 @@ public class PhieuNhapHang_DAO {
         }
     }
     
-    // Xóa chi tiết phiếu nhập hàng
     private void xoaChiTietPhieu(String maPhieuNhap) throws SQLException {
         String sql = "DELETE FROM ChiTietPhieuNhapHang WHERE MaPhieuNhapHang = ?";
         
@@ -136,7 +129,6 @@ public class PhieuNhapHang_DAO {
         }
     }
     
-    // Tạo mã phiếu nhập tự động (đảm bảo mã duy nhất)
     private int taoMaPhieuTuDong() throws SQLException {
         String sql = "SELECT MAX(MaPhieuNhapHang) AS MaxMa FROM PhieuNhapHang";
         
@@ -146,12 +138,11 @@ public class PhieuNhapHang_DAO {
                 int maxMa = rs.getInt("MaxMa");
                 return maxMa + 1;
             } else {
-                return 1; // Trường hợp bảng chưa có dữ liệu
+                return 1; 
             }
         }
     }
     
-    // Tìm kiếm phiếu nhập theo nhiều tiêu chí
     public List<PhieuNhapHang_DTO> timKiem(String maNCC, LocalDate tuNgay, LocalDate denNgay) throws SQLException {
         List<PhieuNhapHang_DTO> danhSach = new ArrayList<>();
         
@@ -209,7 +200,6 @@ public class PhieuNhapHang_DAO {
         return danhSach;
     }
     
-    // Tính tổng giá trị nhập hàng trong khoảng thời gian
     public double tinhTongNhapHang(LocalDate tuNgay, LocalDate denNgay) throws SQLException {
         String sql = "SELECT SUM(TongTien) AS TongNhapHang FROM PhieuNhapHang " +
                      "WHERE NgayNhap BETWEEN ? AND ?";
