@@ -1,4 +1,4 @@
-package doan.quanlykhachsan.dto;
+package DTO;
 import java.time.LocalDate;
 
 public class ChiTietPhieuNhap_DTO extends PhieuNhapHang_DTO{
