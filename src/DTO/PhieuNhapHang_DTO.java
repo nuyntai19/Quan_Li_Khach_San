@@ -65,25 +65,5 @@ public class PhieuNhapHang_DTO {
     public void setTongTien(double tongTien) {
         this.tongTien = tongTien;
     }
-
-    // Phương thức nhập thông tin từ bàn phím
-    public void nhapThongTin() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Nhập mã nhà cung cấp: ");
-        this.maNhaCungCap = scanner.nextLine();
-
-        System.out.print("Nhập tổng tiền nhập: ");
-        this.tongTien = Double.parseDouble(scanner.nextLine());
-
-        this.ngayNhap = LocalDate.now(); // Mặc định lấy ngày hiện tại
-    }
-
-    // Phương thức hiển thị thông tin
-    public void hienThiThongTin() {
-        System.out.println("Mã phiếu nhập: " + this.maPhieuNhap);
-        System.out.println("Mã nhà cung cấp: " + this.maNhaCungCap);
-        System.out.println("Ngày nhập: " + this.ngayNhap);
-        System.out.println("Tổng tiền: " + this.tongTien);
-    }
 }
 
