@@ -1,5 +1,5 @@
 package DTO;
-public class DoGiaDung_DTO extends HangHoa {
+public class DoGiaDung_DTO extends HangHoa_DTO {
     private String tinhTrang;
     private static final String LOAI_HANG = "DoGiaDung";
     
