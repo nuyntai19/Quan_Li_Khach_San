@@ -1,6 +1,6 @@
 package DTO;
 
-public class HangHoa {
+public class HangHoa_DTO {
     protected int maHang; 
     protected String tenHang; 
     protected String donViTinh;
@@ -8,7 +8,7 @@ public class HangHoa {
     protected String loaiHang; // Loại hàng
 
     // Constructor mặc định
-    public HangHoa() {
+    public HangHoa_DTO() {
         maHang = 0;
         tenHang = "";
         donViTinh = "";
@@ -17,7 +17,7 @@ public class HangHoa {
     }
 
     // Constructor đầy đủ thông tin
-    public HangHoa(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang) {
+    public HangHoa_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang) {
         this.maHang = maHang;
         this.tenHang = tenHang;
         this.donViTinh = donViTinh;
@@ -26,7 +26,7 @@ public class HangHoa {
     }
 
     // Constructor sao chép
-    public HangHoa(HangHoa tmp) {
+    public HangHoa_DTO(HangHoa_DTO tmp) {
         this.maHang = tmp.maHang;
         this.tenHang = tmp.tenHang;
         this.donViTinh = tmp.donViTinh;
