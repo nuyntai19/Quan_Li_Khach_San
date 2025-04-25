@@ -1,14 +1,13 @@
-
 package DAO;
 
 
+import DTO.PhieuThuePhongDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import sql.DatabaseQLKS;
-import DTO.PhieuThuePhongDTO;
 
 
 public class PhieuThuePhongDAO {
@@ -18,8 +17,11 @@ public class PhieuThuePhongDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, maDatPhong);
             ResultSet rs = stmt.executeQuery();
-            return rs.next() && rs.getInt(1) > 0;
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu tìm thấy mã thuê phòng
+            }
         }
+        return false; // Trả về false nếu không tìm thấy
     }
     
     public ArrayList<PhieuThuePhongDTO> layDanhSachPhieuThue() throws SQLException {
@@ -47,6 +49,7 @@ public class PhieuThuePhongDAO {
         String sql = "INSERT INTO PhieuThuePhong (MaThuePhong, MaKhachHang, MaNhanVien, NgayLapPhieu, TongTien, TrangThai) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            conn.setAutoCommit(false); // Bắt đầu giao dịch
             stmt.setInt(1, p.getMaThuePhong());
             stmt.setInt(2, p.getMaKhachHang());
             stmt.setInt(3, p.getMaNhanVien());
@@ -54,6 +57,9 @@ public class PhieuThuePhongDAO {
             stmt.setDouble(5, p.getTongTien());
             stmt.setString(6, p.getTrangThai());
             stmt.executeUpdate();
+            conn.commit(); // Commit giao dịch
+        } catch (SQLException e) {
+            throw e;
         }
     }
 

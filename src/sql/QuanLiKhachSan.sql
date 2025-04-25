@@ -76,21 +76,24 @@ CREATE TABLE PhieuThuePhong (
     FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
-
+select * from PhieuThuePhong
+select * from ChiTietPhieuThue
+delete from ChiTietPhieuThue
 delete from PhieuThuePhong
 -- Bảng Chi tiết phiếu thuê phòng
 CREATE TABLE ChiTietPhieuThue (
+    ID INT IDENTITY(1,1) PRIMARY KEY, -- Khóa chính mới
     MaThuePhong INT,
     MaPhong INT,
-	NgayDatPhong DATE,
+    NgayDatPhong DATE,
     NgayTraPhong DATE,
     GiaPhong DECIMAL(18,2),
     ThanhTien DECIMAL(18,2),
-	TrangThai VARCHAR(50) -- ví dụ: 'DangSuDung', 'DaTra',
-    PRIMARY KEY (MaThuePhong, MaPhong),
     FOREIGN KEY (MaThuePhong) REFERENCES PhieuThuePhong(MaThuePhong),
     FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
 );
+
+
 
 -- Bảng Kiểm tra tình trạng phòng
 CREATE TABLE KiemTraTinhTrang (
@@ -170,28 +173,11 @@ CREATE TABLE PhieuNhapHang (
 );
 
 -- Bảng Hàng hóa
--- Giữ nguyên bảng HangHoa làm bảng cha
 CREATE TABLE HangHoa (
     MaHang INT PRIMARY KEY,
     TenHang NVARCHAR(100),
     DonViTinh VARCHAR(50),
-    GiaNhap DECIMAL(18,2),
-    LoaiHang VARCHAR(20)
-);
-
--- Bảng cho DoGiaDung
-CREATE TABLE DoGiaDung (
-    MaHang INT PRIMARY KEY,
-    TinhTrang NVARCHAR(50),
-    FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang) ON DELETE CASCADE
-);
-
--- Bảng cho NhuYeuPham
-CREATE TABLE NhuYeuPham (
-    MaHang INT PRIMARY KEY, -- Tham chiếu từ bảng HangHoa
-    HanSuDung DATE NOT NULL, -- Hạn sử dụng (ngày)
-    NhaCungCap NVARCHAR(100) NOT NULL, -- Nhà cung cấp
-    FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang) ON DELETE CASCADE
+    GiaNhap DECIMAL(18,2)
 );
 
 -- Bảng Chi tiết phiếu nhập hàng

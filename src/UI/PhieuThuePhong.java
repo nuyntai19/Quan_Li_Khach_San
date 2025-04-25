@@ -39,7 +39,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         phongBLL = new QuanLiPhongBLL();
         model = (DefaultTableModel) tblDSPHONGTRONG.getModel(); 
         
-        loadDataPhongTrong();
+        loadDataPhong();
         
         tblDSPHONGTRONG.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,7 +68,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         });
     }
     
-    private void loadDataPhongTrong() {
+    private void loadDataPhong() {
         try {
             model.setRowCount(0); // Xóa dữ liệu cũ
 
@@ -81,12 +81,10 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
             // chỉ hiển thị phòng có trạng thái là "Trống"
             for (QuanLiPhongDTO phong : danhSachPhongGoc) {
-                if ("Trống".equalsIgnoreCase(phong.getTrangThai())) {
                     model.addRow(new Object[] {
                         phong.getMaPhong(), phong.getMaLoaiPhong(), phong.getSoGiuong(),
                         phong.getDonGia(), phong.getTrangThai()
                     });
-                }
             }
 
         } catch (SQLException e) {
@@ -535,7 +533,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         jTextField2.setEnabled(false);
 
         LBPhongTrong.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        LBPhongTrong.setText("Danh sách phòng trống:");
+        LBPhongTrong.setText("Danh sách phòng :");
 
         LBPhongTrong1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         LBPhongTrong1.setText("TÌM PHÒNG TRỐNG:");
@@ -1117,27 +1115,58 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
     private void ButtonChonNhieuPhongDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonNhieuPhongDatActionPerformed
         try {
-            // Lấy dữ liệu từ các TextField
+             // Lấy dữ liệu từ các TextField
             String maDatPhongStr = TXDP.getText().trim();
             String maPhongStr = TXMaPhong.getText().trim();
             java.util.Date ngayDatPhong = DCNgayDP.getDate();
             java.util.Date ngayTraPhong = DCNgayTP.getDate();
-            double giaPhong = Double.parseDouble(TXGiaThue.getText().trim());
-            String trangThai = "Đang chọn";
+            String giaPhongStr = TXGiaThue.getText().trim();
 
             // Kiểm tra dữ liệu hợp lệ
-            if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null) {
+            if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null || giaPhongStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
                 return;
             }
 
+            // Kiểm tra ngày đặt và ngày trả
+            java.util.Date ngayHienTai = new java.util.Date();
+            if (ngayDatPhong.after(ngayTraPhong)) {
+                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải nhỏ hơn hoặc bằng ngày trả phòng.");
+                return;
+            }
+            if (ngayDatPhong.before(ngayHienTai)) {
+                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải lớn hơn hoặc bằng ngày hiện tại.");
+                return;
+            }
             int maDatPhong = Integer.parseInt(maDatPhongStr);
             int maPhong = Integer.parseInt(maPhongStr);
+            double giaPhong = Double.parseDouble(giaPhongStr);
 
-            // Lấy danh sách tạm
+
+            // Kiểm tra nếu mã phòng có trạng thái là "Dang su dung" mà trùng thì kiểm tra dữ liệu lưu trong ChiTietPhieuThue có cùng mã phòng xem có trùng ngày chưa
             List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
+            ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
+            for (QuanLiPhongDTO p : dsp) {
+                if (p.getMaPhong() == maPhong && "Dang su dung".equals(p.getTrangThai())) {
+                    ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
+                    ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
+                    for (ChiTietPhieuThuePhongDTO ct : dsct) {
+                        if (ct.getMaPhong() == maPhong) {
+                            // Kiểm tra khoảng thời gian bị trùng (giao nhau)
+                            java.util.Date daDatTuNgay = ct.getNgayDatPhong();
+                            java.util.Date daDatDenNgay = ct.getNgayTraPhong();
+                            boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
+                            if (isOverlapping) {
+                                JOptionPane.showMessageDialog(this, "Phòng này đang sử dụng và bạn đã trùng lịch đặt tiếp theo.");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
-            // ✅ Kiểm tra nếu danh sách tạm đã có dữ liệu
+            // Kiểm tra nếu danh sách tạm đã có dữ liệu
             if (!danhSachTam.isEmpty()) {
                 int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
                 if (maDatPhongCu != maDatPhong) {
@@ -1146,7 +1175,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 }
             }
 
-            // Kiểm tra xem đã chọn phòng này với ngày trùng chưa
+            // Kiểm tra xem đã chọn phòng trong danh sách tạm trùng ngày chưa
             for (ChiTietPhieuThuePhongDTO ct : danhSachTam) {
                 if (ct.getMaPhong() == maPhong) {
                     // Kiểm tra khoảng thời gian bị trùng (giao nhau)
@@ -1159,15 +1188,15 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     }
                 }
             }
-
-            // Tính Thành Tiền: Giá phòng * số ngày thuê
+            
+             // Tính Thành Tiền: Giá phòng * số ngày thuê
             long diffInMillies = Math.abs(ngayTraPhong.getTime() - ngayDatPhong.getTime());
             long diffInDays = diffInMillies / (24 * 60 * 60 * 1000);
             double thanhTien = giaPhong * diffInDays;
 
             // Lưu vào danh sách tạm
             ChiTietPhieuThuePhongDTO chiTiet = new ChiTietPhieuThuePhongDTO(
-                maDatPhong, maPhong, ngayDatPhong, ngayTraPhong, giaPhong, thanhTien, trangThai
+                maDatPhong, maPhong, ngayDatPhong, ngayTraPhong, giaPhong, thanhTien
             );
             BLL.PhieuThuePhongManager.addChiTiet(chiTiet);
 
@@ -1216,6 +1245,20 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
     private void ButtonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDatPhongActionPerformed
         try {
+            // 0. Kiểm tra các trường không được để trống
+            if (TXKhachHang.getText().trim().isEmpty() ||
+                TXHo.getText().trim().isEmpty() ||
+                TXTen.getText().trim().isEmpty() ||
+                DCNgaySinh.getDate() == null ||
+                TXEmail.getText().trim().isEmpty() ||
+                TXSDT.getText().trim().isEmpty() ||
+                TXDP.getText().trim().isEmpty() ||
+                TXTongTien.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin trước khi đặt phòng!");
+                return;
+            }
+
             // 1. Lưu thông tin khách hàng
             String maKhachHangStr = TXKhachHang.getText().trim();
             int maKhachHang = Integer.parseInt(maKhachHangStr);
@@ -1228,7 +1271,6 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
             KhachHangDTO khach = new KhachHangDTO(maKhachHang, ho, ten, new java.sql.Date(ngaySinh.getTime()), gioiTinh, email, sdt);
             KhachHangBLL khBLL = new KhachHangBLL();
-            // Kiểm tra khách hàng đã tồn tại
             if (!khBLL.kiemTraTonTai(maKhachHang)) {
                 khBLL.themKhachHang(khach);
             }
@@ -1238,29 +1280,50 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             TaiKhoanDTO tk = tkDAO.layTaiKhoanDangNhapTuBangNhanVienDangNhap();
             int maNhanVien = tk.getMaNhanVien();
 
+            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
+
+            if (danhSachChiTiet.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Danh sách phòng muốn đặt đang rỗng. Vui lòng chọn phòng trước khi đặt.");
+                return;
+            }
+
+            System.out.println("Danh sách tạm trước khi lưu:");
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+                System.out.println(ct);
+            }
+
             // 3. Lưu phiếu thuê phòng
             int maThuePhong = Integer.parseInt(TXDP.getText().trim());
             java.util.Date ngayLapPhieu = new java.util.Date(); // Ngày hiện tại
             double tongTien = Double.parseDouble(TXTongTien.getText().trim());
             String trangThai = "Dang thue";
+            // Kiểm tra xem mã thuê phòng có trùng với mã thuê phòng trong danh sách tạm không
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+               if(ct.getMaThuePhong() != maThuePhong) {
+                   JOptionPane.showMessageDialog(this, "Mã thuê phòng không trùng với mã thuê phòng trong danh tạm đang lưu");
+                   return;
+                }
+            }
 
             PhieuThuePhongDTO phieu = new PhieuThuePhongDTO(maThuePhong, maKhachHang, maNhanVien, ngayLapPhieu, tongTien, trangThai);
             PhieuThuePhongBLL phieuBLL = new PhieuThuePhongBLL();
             phieuBLL.themPhieuThue(phieu); // Lưu phiếu thuê
 
-            // 4. Lưu các chi tiết phiếu thuê từ danh sách tạm
-            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
-            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
-                ct.setTrangThai("Dang Su Dung");
-            }
+            // 4. Lưu chi tiết phiếu thuê + cập nhật trạng thái phòng
             ChiTietPhieuThuePhongBLL chiTietBLL = new ChiTietPhieuThuePhongBLL();
+            QuanLiPhongBLL phongBLL = new QuanLiPhongBLL();
             for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
-                chiTietBLL.themChiTiet(ct); // Lưu từng dòng
+                try {
+                    chiTietBLL.themChiTiet(ct); // Lưu chi tiết
+                    phongBLL.capNhatTrangThai(ct.getMaPhong(), "Dang su dung"); // Cập nhật trạng thái phòng
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu chi tiết phòng: " + e.getMessage());
+                }
             }
 
             JOptionPane.showMessageDialog(this, "Đặt phòng thành công!");
-            // Sau khi đặt có thể reset giao diện hoặc clear danh sách tạm
-            PhieuThuePhongManager.clearDanhSach();
+            PhieuThuePhongManager.clearDanhSach(); // Xóa danh sách tạm sau khi lưu
+            loadDataPhong();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi đặt phòng: " + e.getMessage());
@@ -1284,22 +1347,9 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) { // Gộp tất cả các ngoại lệ vào một catch
             java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

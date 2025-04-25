@@ -79,4 +79,15 @@ public class QuanLiPhongDAO {
             stmt.executeUpdate();
         }
     }
+    
+    // Cập nhật trạng thái của phòng
+    public void capNhatTrangThaiPhong(int maPhong, String trangThaiMoi) throws SQLException {
+        String sql = "UPDATE Phong SET TrangThai = ? WHERE MaPhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, trangThaiMoi);
+            stmt.setInt(2, maPhong);
+            stmt.executeUpdate();
+        }
+    }
 }

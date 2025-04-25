@@ -954,7 +954,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch ph&#xf2;ng tr&#x1ed1;ng:"/>
+            <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch ph&#xf2;ng :"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="LBPhongTrong1">

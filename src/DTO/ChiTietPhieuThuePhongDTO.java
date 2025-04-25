@@ -1,28 +1,47 @@
-
 package DTO;
 
 import java.util.Date;
 
-
 public class ChiTietPhieuThuePhongDTO {
-     private int maThuePhong;
+    private int id; // Thêm thuộc tính ID
+    private int maThuePhong;
     private int maPhong;
     private Date ngayDatPhong;
     private Date ngayTraPhong;
     private double giaPhong;
     private double thanhTien;
-    private String trangThai;
 
-    public ChiTietPhieuThuePhongDTO(int maThuePhong, int maPhong, Date ngayDatPhong, Date ngayTraPhong, double giaPhong, double thanhTien, String trangThai) {
+    // Constructor có ID
+    public ChiTietPhieuThuePhongDTO(int id, int maThuePhong, int maPhong, Date ngayDatPhong, Date ngayTraPhong, double giaPhong, double thanhTien) {
+        this.id = id;
         this.maThuePhong = maThuePhong;
         this.maPhong = maPhong;
         this.ngayDatPhong = ngayDatPhong;
         this.ngayTraPhong = ngayTraPhong;
         this.giaPhong = giaPhong;
         this.thanhTien = thanhTien;
-        this.trangThai = trangThai;
     }
 
+    // Constructor không có ID (dùng khi thêm mới)
+    public ChiTietPhieuThuePhongDTO(int maThuePhong, int maPhong, Date ngayDatPhong, Date ngayTraPhong, double giaPhong, double thanhTien) {
+        this.maThuePhong = maThuePhong;
+        this.maPhong = maPhong;
+        this.ngayDatPhong = ngayDatPhong;
+        this.ngayTraPhong = ngayTraPhong;
+        this.giaPhong = giaPhong;
+        this.thanhTien = thanhTien;
+    }
+
+    // Getter và Setter cho ID
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    // Getter và Setter cho các thuộc tính khác
     public int getMaThuePhong() {
         return maThuePhong;
     }
@@ -69,13 +88,5 @@ public class ChiTietPhieuThuePhongDTO {
 
     public void setThanhTien(double thanhTien) {
         this.thanhTien = thanhTien;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
     }
 }
