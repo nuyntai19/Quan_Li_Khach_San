@@ -170,11 +170,28 @@ CREATE TABLE PhieuNhapHang (
 );
 
 -- Bảng Hàng hóa
+-- Giữ nguyên bảng HangHoa làm bảng cha
 CREATE TABLE HangHoa (
     MaHang INT PRIMARY KEY,
     TenHang NVARCHAR(100),
     DonViTinh VARCHAR(50),
-    GiaNhap DECIMAL(18,2)
+    GiaNhap DECIMAL(18,2),
+    LoaiHang VARCHAR(20)
+);
+
+-- Bảng cho DoGiaDung
+CREATE TABLE DoGiaDung (
+    MaHang INT PRIMARY KEY,
+    TinhTrang NVARCHAR(50),
+    FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang) ON DELETE CASCADE
+);
+
+-- Bảng cho NhuYeuPham
+CREATE TABLE NhuYeuPham (
+    MaHang INT PRIMARY KEY,
+    HanSuDung DATE,
+    NhaCungCap NVARCHAR(100),
+    FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang) ON DELETE CASCADE
 );
 
 -- Bảng Chi tiết phiếu nhập hàng
