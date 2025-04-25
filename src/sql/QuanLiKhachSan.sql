@@ -188,9 +188,9 @@ CREATE TABLE DoGiaDung (
 
 -- Bảng cho NhuYeuPham
 CREATE TABLE NhuYeuPham (
-    MaHang INT PRIMARY KEY,
-    HanSuDung DATE,
-    NhaCungCap NVARCHAR(100),
+    MaHang INT PRIMARY KEY, -- Tham chiếu từ bảng HangHoa
+    HanSuDung DATE NOT NULL, -- Hạn sử dụng (ngày)
+    NhaCungCap NVARCHAR(100) NOT NULL, -- Nhà cung cấp
     FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang) ON DELETE CASCADE
 );
 
