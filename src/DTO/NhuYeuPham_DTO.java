@@ -2,7 +2,7 @@ package DTO;
 
 import java.sql.Date;
 
-public class NhuYeuPham_DTO extends HangHoa {
+public class NhuYeuPham_DTO extends HangHoa_DTO {
     private Date hanSuDung; 
     private String nhaCungCap;
     private static final String LOAI_HANG = "NhuYeuPham"; 
