@@ -1,49 +1,50 @@
 package DTO;
 
+import java.sql.Date;
+
 public class NhuYeuPham_DTO extends HangHoa {
-    private String hanSuDung;
+    private Date hanSuDung; 
     private String nhaCungCap;
-    private static final String LOAI_HANG = "NhuYeuPham";
-    
-    // Constructor mặc định
+    private static final String LOAI_HANG = "NhuYeuPham"; 
+
     public NhuYeuPham_DTO() {
         super();
-        this.hanSuDung = "";
+        this.hanSuDung = null;
         this.nhaCungCap = "";
     }
-    
+
     // Constructor có tham số
-    public NhuYeuPham_DTO(String mh, String th, String dvt, int gn, String hsd, String ncc) {
-        super(mh, th, dvt, gn);
-        this.hanSuDung = hsd;
-        this.nhaCungCap = ncc;
+    public NhuYeuPham_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, Date hanSuDung, String nhaCungCap) {
+        super(maHang, tenHang, donViTinh, giaNhap);
+        this.hanSuDung = hanSuDung;
+        this.nhaCungCap = nhaCungCap;
     }
-    
+
     // Constructor sao chép
     public NhuYeuPham_DTO(NhuYeuPham_DTO tmp) {
         super(tmp);
         this.hanSuDung = tmp.hanSuDung;
         this.nhaCungCap = tmp.nhaCungCap;
     }
-    
+
     // Setter
-    public void setHanSuDung(String tmp) {
-        this.hanSuDung = tmp;
+    public void setHanSuDung(Date hanSuDung) {
+        this.hanSuDung = hanSuDung;
     }
-    
-    public void setNhaCungCap(String tmp) {
-        this.nhaCungCap = tmp;
+
+    public void setNhaCungCap(String nhaCungCap) {
+        this.nhaCungCap = nhaCungCap;
     }
-    
+
     // Getter
-    public String getHanSuDung() {
+    public Date getHanSuDung() {
         return this.hanSuDung;
     }
-    
+
     public String getNhaCungCap() {
         return this.nhaCungCap;
     }
-    
+
     public static String getLoaiHang() {
         return LOAI_HANG;
     }
