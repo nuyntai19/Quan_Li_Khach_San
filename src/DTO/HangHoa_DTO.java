@@ -1,65 +1,78 @@
 package DTO;
 
-
-public class HangHoa{
-    protected String maHang;
-    protected String tenHang;
+public class HangHoa {
+    protected int maHang; 
+    protected String tenHang; 
     protected String donViTinh;
-    protected int giaNhap;
-    
-    public HangHoa(){
-        maHang = "";
+    protected double giaNhap;
+    protected String loaiHang; // Loại hàng
+
+    // Constructor mặc định
+    public HangHoa() {
+        maHang = 0;
         tenHang = "";
         donViTinh = "";
-        giaNhap = 0;
+        giaNhap = 0.0;
+        loaiHang = "";
     }
-    
-    public HangHoa(String mh, String th, String dvt, int gn){
-        maHang = mh;
-        tenHang = th;
-        donViTinh = dvt;
-        giaNhap = gn;
+
+    // Constructor đầy đủ thông tin
+    public HangHoa(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang) {
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.donViTinh = donViTinh;
+        this.giaNhap = giaNhap;
+        this.loaiHang = loaiHang;
     }
-    
-    public HangHoa(HangHoa tmp){
+
+    // Constructor sao chép
+    public HangHoa(HangHoa tmp) {
         this.maHang = tmp.maHang;
         this.tenHang = tmp.tenHang;
         this.donViTinh = tmp.donViTinh;
         this.giaNhap = tmp.giaNhap;
+        this.loaiHang = tmp.loaiHang;
     }
-    
-    //setter
-    public void setMaHang(String tmp){
-        this.maHang = tmp;
+
+    // Setter
+    public void setMaHang(int maHang) {
+        this.maHang = maHang;
     }
-    
-    public void setTenHang(String tmp){
-        this.tenHang = tmp;
+
+    public void setTenHang(String tenHang) {
+        this.tenHang = tenHang;
     }
-    
-    public void setDonViTinh(String tmp){
-        this.donViTinh = tmp;
+
+    public void setDonViTinh(String donViTinh) {
+        this.donViTinh = donViTinh;
     }
-    
-    public void setGiaNhap(int tmp){
-        this.giaNhap = tmp;
+
+    public void setGiaNhap(double giaNhap) {
+        this.giaNhap = giaNhap;
     }
-     
-    //getter
-    public String getMaHang(){
+
+    public void setLoaiHang(String loaiHang) {
+        this.loaiHang = loaiHang;
+    }
+
+    // Getter
+    public int getMaHang() {
         return this.maHang;
     }
-    
-    public String getTenHang(){
+
+    public String getTenHang() {
         return this.tenHang;
     }
-    
-    public String getDonViTinh(){
+
+    public String getDonViTinh() {
         return this.donViTinh;
     }
-    
-    public int getGiaNhap(){
+
+    public double getGiaNhap() {
         return this.giaNhap;
     }
 
+    public String getLoaiHang() {
+        return this.loaiHang;
+    }
 }
