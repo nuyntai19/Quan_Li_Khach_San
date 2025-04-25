@@ -16,7 +16,7 @@ public class DoGiaDung_DTO extends HangHoa_DTO {
     }
     
     // Constructor sao chép
-    public DoGiaDung_DTO(DoGiaDung tmp) {
+    public DoGiaDung_DTO(DoGiaDung_DTO tmp) {
         super(tmp);
         this.tinhTrang = tmp.tinhTrang;
     }
