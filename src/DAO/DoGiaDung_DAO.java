@@ -1,193 +1,139 @@
 package DAO;
 
 import DTO.DoGiaDung_DTO;
-import sql.DatabaseQLKS;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+import sql.DatabaseQLKS;
 
 public class DoGiaDung_DAO {
-
-    // Kiểm tra xem mã hàng đã tồn tại chưa
-    public boolean isMaDoGiaDungExist(String maDoGiaDung) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT 1 FROM DoGiaDung WHERE MaDoGiaDung = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, maDoGiaDung);
-            rs = stmt.executeQuery();
-
-            return rs.next(); // Nếu có bản ghi, tức là mã hàng đã tồn tại
+    private static final String TABLE_NAME = "DoGiaDung";
+    private static final String[] COLUMNS = {"MaDoGiaDung", "TenDoGiaDung", "DonViTinh", "GiaNhap", "TinhTrang"};
+    
+    // Phương thức helper để tạo đối tượng DoGiaDung_DTO từ ResultSet
+    private DoGiaDung_DTO createFromResultSet(ResultSet rs) throws SQLException {
+        return new DoGiaDung_DTO(
+            rs.getInt(COLUMNS[0]),
+            rs.getString(COLUMNS[1]),
+            rs.getString(COLUMNS[2]),
+            rs.getDouble(COLUMNS[3]),
+            rs.getString(COLUMNS[4])
+        );
+    }
+    
+    // Phương thức helper để thực thi truy vấn và trả về danh sách
+    private ArrayList<DoGiaDung_DTO> executeQuery(String sql, Object... params) {
+        ArrayList<DoGiaDung_DTO> list = new ArrayList<>();
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof Integer) {
+                    stmt.setInt(i + 1, (Integer) params[i]);
+                } else {
+                    stmt.setString(i + 1, String.valueOf(params[i]));
+                }
+            }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(createFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    // Kiểm tra mã đồ gia dụng đã tồn tại chưa
+    public boolean isMaDoGiaDungExists(int maDoGiaDung) {
+        String sql = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + COLUMNS[0] + " = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maDoGiaDung);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
         }
     }
-
-    // Thêm mặt hàng DoGiaDung mới
+    
+    // Thêm đồ gia dụng mới
     public boolean insert(DoGiaDung_DTO doGiaDung) {
-        if (isMaDoGiaDungExist(doGiaDung.getMaDoGiaDung())) {
-            System.out.println("Mã hàng đã tồn tại.");
+        if (isMaDoGiaDungExists(doGiaDung.getMaDoGiaDung())) {
             return false;
         }
-
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "INSERT INTO DoGiaDung (MaDoGiaDung, TenDoGiaDung, DonViTinh, GiaNhap) VALUES (?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, doGiaDung.getMaDoGiaDung());
+        
+        String sql = "INSERT INTO " + TABLE_NAME + " (" + String.join(", ", COLUMNS) + ") VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, doGiaDung.getMaDoGiaDung());
             stmt.setString(2, doGiaDung.getTenDoGiaDung());
             stmt.setString(3, doGiaDung.getDonViTinh());
             stmt.setDouble(4, doGiaDung.getGiaNhap());
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            stmt.setString(5, doGiaDung.getTinhTrang());
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
         }
     }
-
-    // Cập nhật thông tin mặt hàng DoGiaDung
+    
+    // Cập nhật thông tin đồ gia dụng
     public boolean update(DoGiaDung_DTO doGiaDung) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "UPDATE DoGiaDung SET TenDoGiaDung = ?, DonViTinh = ?, GiaNhap = ? WHERE MaDoGiaDung = ?";
-            stmt = conn.prepareStatement(sql);
-
+        String sql = "UPDATE " + TABLE_NAME + " SET " + 
+                    COLUMNS[1] + " = ?, " + COLUMNS[2] + " = ?, " + 
+                    COLUMNS[3] + " = ?, " + COLUMNS[4] + " = ? WHERE " + 
+                    COLUMNS[0] + " = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, doGiaDung.getTenDoGiaDung());
             stmt.setString(2, doGiaDung.getDonViTinh());
             stmt.setDouble(3, doGiaDung.getGiaNhap());
-            stmt.setString(4, doGiaDung.getMaDoGiaDung());
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            stmt.setString(4, doGiaDung.getTinhTrang());
+            stmt.setInt(5, doGiaDung.getMaDoGiaDung());
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
         }
     }
-
-    // Xóa mặt hàng DoGiaDung theo mã
-    public boolean delete(String maDoGiaDung) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "DELETE FROM DoGiaDung WHERE MaDoGiaDung = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, maDoGiaDung);
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+    
+    // Xóa đồ gia dụng
+    public boolean delete(int maDoGiaDung) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMNS[0] + " = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maDoGiaDung);
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
         }
     }
-
-    // Lấy thông tin mặt hàng DoGiaDung theo mã
-    public DoGiaDung_DTO getById(String maDoGiaDung) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM DoGiaDung WHERE MaDoGiaDung = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, maDoGiaDung);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new DoGiaDung_DTO(
-                        rs.getString("MaDoGiaDung"),
-                        rs.getString("TenDoGiaDung"),
-                        rs.getString("DonViTinh"),
-                        rs.getDouble("GiaNhap")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
-        }
-        return null;
+    
+    // Lấy thông tin đồ gia dụng theo mã
+    public DoGiaDung_DTO getById(int maDoGiaDung) {
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMNS[0] + " = ?";
+        ArrayList<DoGiaDung_DTO> result = executeQuery(sql, maDoGiaDung);
+        return result.isEmpty() ? null : result.get(0);
     }
-
-    // Lấy danh sách tất cả mặt hàng DoGiaDung
-    public List<DoGiaDung_DTO> getAll() {
-        List<DoGiaDung_DTO> list = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM DoGiaDung";
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                list.add(new DoGiaDung_DTO(
-                        rs.getString("MaDoGiaDung"),
-                        rs.getString("TenDoGiaDung"),
-                        rs.getString("DonViTinh"),
-                        rs.getDouble("GiaNhap")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
-        }
-        return list;
+    
+    // Lấy danh sách tất cả đồ gia dụng
+    public ArrayList<DoGiaDung_DTO> getAll() {
+        return executeQuery("SELECT * FROM " + TABLE_NAME);
     }
-
-    // Tìm kiếm mặt hàng DoGiaDung theo tên
-    public List<DoGiaDung_DTO> searchByName(String tenDoGiaDung) {
-        List<DoGiaDung_DTO> list = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM DoGiaDung WHERE TenDoGiaDung LIKE ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, "%" + tenDoGiaDung + "%");
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                list.add(new DoGiaDung_DTO(
-                        rs.getString("MaDoGiaDung"),
-                        rs.getString("TenDoGiaDung"),
-                        rs.getString("DonViTinh"),
-                        rs.getDouble("GiaNhap")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
-        }
-        return list;
+    
+    // Tìm kiếm đồ gia dụng theo tên
+    public ArrayList<DoGiaDung_DTO> searchByName(String tenDoGiaDung) {
+        return executeQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMNS[1] + " LIKE ?", "%" + tenDoGiaDung + "%");
+    }
+    
+    // Tìm kiếm đồ gia dụng theo mã
+    public ArrayList<DoGiaDung_DTO> searchByCode(int maDoGiaDung) {
+        return executeQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMNS[0] + " LIKE ?", "%" + maDoGiaDung + "%");
+    }
+    
+    // Tìm kiếm đồ gia dụng theo tình trạng
+    public ArrayList<DoGiaDung_DTO> searchByStatus(String tinhTrang) {
+        return executeQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMNS[4] + " = ?", tinhTrang);
     }
 }
