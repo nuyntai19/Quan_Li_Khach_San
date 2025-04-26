@@ -9,7 +9,7 @@ import java.util.List;
 
 public class NhuYeuPham_DAO {
 
-    // Kiểm tra xem mã hàng đã tồn tại chưa
+    // Kiểm tra xem mã nhu yếu phẩm đã tồn tại chưa
     public boolean isMaNhuYeuPhamExist(String maNhuYeuPham) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -33,22 +33,25 @@ public class NhuYeuPham_DAO {
 
     // Thêm mặt hàng NhuYeuPham mới
     public boolean insert(NhuYeuPham_DTO nhuYeuPham) {
-        if (isMaNhuYeuPhamExist(nhuYeuPham.getMaNhuYeuPham())) {
-            System.out.println("Mã hàng đã tồn tại.");
-            return false;
-        }
-
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = DatabaseQLKS.getConnection();
-            String sql = "INSERT INTO NhuYeuPham (MaNhuYeuPham, TenNhuYeuPham, DonViTinh, GiaNhap) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO NhuYeuPham (MaNhuYeuPham, TenNhuYeuPham, DonViTinh, GiaNhap, NhaCungCap, HanSuDung) " +
+                         "VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, nhuYeuPham.getMaNhuYeuPham());
             stmt.setString(2, nhuYeuPham.getTenNhuYeuPham());
             stmt.setString(3, nhuYeuPham.getDonViTinh());
             stmt.setDouble(4, nhuYeuPham.getGiaNhap());
+            stmt.setString(5, nhuYeuPham.getNhaCungCap());
+            
+            if (nhuYeuPham.getHanSuDung() != null) {
+                stmt.setDate(6, nhuYeuPham.getHanSuDung());
+            } else {
+                stmt.setNull(6, java.sql.Types.DATE);
+            }
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -66,13 +69,22 @@ public class NhuYeuPham_DAO {
         PreparedStatement stmt = null;
         try {
             conn = DatabaseQLKS.getConnection();
-            String sql = "UPDATE NhuYeuPham SET TenNhuYeuPham = ?, DonViTinh = ?, GiaNhap = ? WHERE MaNhuYeuPham = ?";
+            String sql = "UPDATE NhuYeuPham SET TenNhuYeuPham = ?, DonViTinh = ?, GiaNhap = ?, " +
+                         "NhaCungCap = ?, HanSuDung = ? WHERE MaNhuYeuPham = ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, nhuYeuPham.getTenNhuYeuPham());
             stmt.setString(2, nhuYeuPham.getDonViTinh());
             stmt.setDouble(3, nhuYeuPham.getGiaNhap());
-            stmt.setString(4, nhuYeuPham.getMaNhuYeuPham());
+            stmt.setString(4, nhuYeuPham.getNhaCungCap());
+            
+            if (nhuYeuPham.getHanSuDung() != null) {
+                stmt.setDate(5, nhuYeuPham.getHanSuDung());
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE);
+            }
+            
+            stmt.setString(6, nhuYeuPham.getMaNhuYeuPham());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -121,7 +133,9 @@ public class NhuYeuPham_DAO {
                         rs.getString("MaNhuYeuPham"),
                         rs.getString("TenNhuYeuPham"),
                         rs.getString("DonViTinh"),
-                        rs.getDouble("GiaNhap")
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
                 );
             }
         } catch (SQLException e) {
@@ -150,7 +164,9 @@ public class NhuYeuPham_DAO {
                         rs.getString("MaNhuYeuPham"),
                         rs.getString("TenNhuYeuPham"),
                         rs.getString("DonViTinh"),
-                        rs.getDouble("GiaNhap")
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
                 ));
             }
         } catch (SQLException e) {
@@ -162,4 +178,131 @@ public class NhuYeuPham_DAO {
     }
 
     // Tìm kiếm mặt hàng NhuYeuPham theo tên
-    public List<NhuYeuPham_DTO> searchByName(String tenNhuY
+    public List<NhuYeuPham_DTO> searchByName(String tenNhuYeuPham) {
+        List<NhuYeuPham_DTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseQLKS.getConnection();
+            String sql = "SELECT * FROM NhuYeuPham WHERE TenNhuYeuPham LIKE ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" + tenNhuYeuPham + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new NhuYeuPham_DTO(
+                        rs.getString("MaNhuYeuPham"),
+                        rs.getString("TenNhuYeuPham"),
+                        rs.getString("DonViTinh"),
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseQLKS.close(conn, stmt, rs);
+        }
+        return list;
+    }
+    
+    // Tìm kiếm mặt hàng NhuYeuPham theo nhà cung cấp
+    public List<NhuYeuPham_DTO> searchBySupplier(String nhaCungCap) {
+        List<NhuYeuPham_DTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseQLKS.getConnection();
+            String sql = "SELECT * FROM NhuYeuPham WHERE NhaCungCap LIKE ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" + nhaCungCap + "%");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new NhuYeuPham_DTO(
+                        rs.getString("MaNhuYeuPham"),
+                        rs.getString("TenNhuYeuPham"),
+                        rs.getString("DonViTinh"),
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseQLKS.close(conn, stmt, rs);
+        }
+        return list;
+    }
+    
+    // Lấy danh sách hàng có hạn sử dụng trước ngày xác định
+    public List<NhuYeuPham_DTO> getItemsExpiringBefore(Date expiryDate) {
+        List<NhuYeuPham_DTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseQLKS.getConnection();
+            String sql = "SELECT * FROM NhuYeuPham WHERE HanSuDung <= ? AND HanSuDung IS NOT NULL ORDER BY HanSuDung";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, expiryDate);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new NhuYeuPham_DTO(
+                        rs.getString("MaNhuYeuPham"),
+                        rs.getString("TenNhuYeuPham"),
+                        rs.getString("DonViTinh"),
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseQLKS.close(conn, stmt, rs);
+        }
+        return list;
+    }
+    
+    // Lấy danh sách hàng có hạn sử dụng trong khoảng thời gian
+    public List<NhuYeuPham_DTO> getItemsExpiringBetween(Date startDate, Date endDate) {
+        List<NhuYeuPham_DTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseQLKS.getConnection();
+            String sql = "SELECT * FROM NhuYeuPham WHERE HanSuDung BETWEEN ? AND ? ORDER BY HanSuDung";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, startDate);
+            stmt.setDate(2, endDate);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new NhuYeuPham_DTO(
+                        rs.getString("MaNhuYeuPham"),
+                        rs.getString("TenNhuYeuPham"),
+                        rs.getString("DonViTinh"),
+                        rs.getDouble("GiaNhap"),
+                        rs.getString("NhaCungCap"),
+                        rs.getDate("HanSuDung")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseQLKS.close(conn, stmt, rs);
+        }
+        return list;
+    }
+}
