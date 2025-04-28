@@ -180,6 +180,49 @@ CREATE TABLE HangHoa (
     GiaNhap DECIMAL(18,2)
 );
 
+-- Tạo bảng NhuYeuPham
+CREATE TABLE NhuYeuPham (
+    MaNhuYeuPham INT PRIMARY KEY,
+    TenNhuYeuPham NVARCHAR(100) NOT NULL,
+    DonViTinh NVARCHAR(20) NOT NULL,
+    GiaNhap DECIMAL(18,2) NOT NULL,
+    HanSuDung DATE NOT NULL,
+    NhaCungCap NVARCHAR(100) NOT NULL
+);
+
+-- Tạo bảng DoGiaDung
+CREATE TABLE DoGiaDung (
+    MaDoGiaDung INT PRIMARY KEY,
+    TenDoGiaDung NVARCHAR(100) NOT NULL,
+    DonViTinh NVARCHAR(20) NOT NULL,
+    GiaNhap DECIMAL(18,2) NOT NULL,
+    TinhTrang NVARCHAR(50) NOT NULL
+);
+
+-- Thêm ràng buộc khóa ngoại cho bảng NhuYeuPham
+ALTER TABLE NhuYeuPham
+ADD CONSTRAINT FK_NhuYeuPham_HangHoa
+FOREIGN KEY (MaNhuYeuPham) REFERENCES HangHoa(MaHang);
+
+-- Thêm ràng buộc khóa ngoại cho bảng DoGiaDung
+ALTER TABLE DoGiaDung
+ADD CONSTRAINT FK_DoGiaDung_HangHoa
+FOREIGN KEY (MaDoGiaDung) REFERENCES HangHoa(MaHang);
+
+-- Thêm dữ liệu mẫu cho bảng NhuYeuPham
+INSERT INTO NhuYeuPham (MaNhuYeuPham, TenNhuYeuPham, DonViTinh, GiaNhap, HanSuDung, NhaCungCap)
+VALUES 
+(1, N'Nước khoáng Lavie', N'Chai', 5000, '2024-12-31', N'Công ty TNHH Lavie'),
+(2, N'Bánh mì', N'Cái', 10000, '2024-04-30', N'Công ty TNHH ABC'),
+(3, N'Sữa tươi Vinamilk', N'Hộp', 8000, '2024-05-15', N'Công ty Vinamilk');
+
+-- Thêm dữ liệu mẫu cho bảng DoGiaDung
+INSERT INTO DoGiaDung (MaDoGiaDung, TenDoGiaDung, DonViTinh, GiaNhap, TinhTrang)
+VALUES 
+(4, N'Bàn ủi', N'Cái', 250000, N'Mới'),
+(5, N'Quạt điện', N'Cái', 350000, N'Đã qua sử dụng'),
+(6, N'Bếp điện', N'Cái', 500000, N'Mới'); 
+
 -- Bảng Chi tiết phiếu nhập hàng
 CREATE TABLE ChiTietPhieuNhapHang (
     MaPhieuNhapHang INT,
