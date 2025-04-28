@@ -134,7 +134,7 @@ CREATE TABLE HoaDon (
     NgayLap DATE,
     TongTien DECIMAL(18,2),
     FOREIGN KEY (MaPTP) REFERENCES PhieuThuePhong(MaPTP),
-    FOREIGN KEY (MaDatDichVu) REFERENCES DatDichVu(MaDatDichVu)
+   
 );
 
 CREATE TABLE ChiTietHoaDon (
