@@ -837,57 +837,21 @@ public class DatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTimDichVuActionPerformed
 
     private void btnTimDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimDatPhongActionPerformed
-         try {
-        Integer maDatPhong = null;
-        Integer maPhong = null;
-        String ngayDatPhong = "";
-        String ngayTraPhong = "";
+        String loaiTim = cbTimChiTietPhieuThue.getSelectedItem().toString(); // Lấy tiêu chí
+    String tuKhoa = txtTimChiTietPhieuThue.getText().trim(); // Lấy từ khóa tìm
 
-        // Kiểm tra tiêu chí tìm kiếm trong ComboBox
-        String selectedCriteria = cbTimChiTietPhieuThue.getSelectedItem().toString();
-
-        // Nếu tìm theo mã phòng, ngày đặt phòng, ngày trả phòng thì lấy giá trị từ các ô nhập liệu tương ứng
-        switch (selectedCriteria) {
-            case "Mã Đặt Phòng":
-                String maDatPhongStr = txtTimChiTietPhieuThue.getText().trim();
-                if (!isNumeric(maDatPhongStr)) {
-                    throw new IllegalArgumentException("Mã Đặt Phòng phải là số!");
-                }
-                maDatPhong = Integer.parseInt(maDatPhongStr);
-                break;
-            case "Mã Phòng":
-                String maPhongStr = txtTimChiTietPhieuThue.getText().trim();
-                if (!isNumeric(maPhongStr)) {
-                    throw new IllegalArgumentException("Mã Phòng phải là số!");
-                }
-                maPhong = Integer.parseInt(maPhongStr);
-                break;
-            case "Ngày Đặt Phòng":
-                ngayDatPhong = txtTimChiTietPhieuThue.getText().trim();
-                break;
-            case "Ngày Trả Phòng":
-                ngayTraPhong = txtTimChiTietPhieuThue.getText().trim();
-                break;
-        }
-
-        // Chuyển đổi ngày (nếu có) thành kiểu Date
-        if (!ngayDatPhong.isEmpty() && !isValidDate(ngayDatPhong)) {
-            throw new IllegalArgumentException("Ngày Đặt Phòng không hợp lệ!");
-        }
-        if (!ngayTraPhong.isEmpty() && !isValidDate(ngayTraPhong)) {
-            throw new IllegalArgumentException("Ngày Trả Phòng không hợp lệ!");
-        }
-
-        // Gọi hàm tìm kiếm từ BLL
+    try {
         ChiTietPhieuThuePhongBLL bll = new ChiTietPhieuThuePhongBLL();
-        ArrayList<ChiTietPhieuThuePhongDTO> ketQua = bll.timChiTietPhieuThue(maDatPhong, maPhong, ngayDatPhong, ngayTraPhong);
+        ArrayList<ChiTietPhieuThuePhongDTO> ketQua = bll.timChiTiet(loaiTim, tuKhoa);
 
-        // Hiển thị kết quả trong bảng hoặc danh sách
+        // Sau khi có danh sách kết quả, bạn cần đổ lại lên table
+        // Giả sử bạn có 1 JTable tên là tableChiTietThue
+
         DefaultTableModel model = (DefaultTableModel) tblDSCHITIETPHIEUTHUE.getModel();
-        model.setRowCount(0);  // Xóa dữ liệu cũ trong bảng
+        model.setRowCount(0); // Xóa bảng cũ
 
         for (ChiTietPhieuThuePhongDTO ct : ketQua) {
-            Object[] row = new Object[]{
+            model.addRow(new Object[]{
                 ct.getId(),
                 ct.getMaThuePhong(),
                 ct.getMaPhong(),
@@ -895,37 +859,15 @@ public class DatDichVu extends javax.swing.JFrame {
                 ct.getNgayTraPhong(),
                 ct.getGiaPhong(),
                 ct.getThanhTien()
-            };
-            model.addRow(row);
+            });
         }
 
-        if (ketQua.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy chi tiết phiếu thuê phù hợp!");
-        }
     } catch (Exception ex) {
-    ex.printStackTrace();  // In lỗi chi tiết ra console
-    JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
-}
-    }//GEN-LAST:event_btnTimDatPhongActionPerformed
-
-    // Hàm kiểm tra định dạng ngày
-    private boolean isValidDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);  // Không cho phép ngày sai lệch (như 2025-02-30)
-        try {
-            sdf.parse(date);  // Cố gắng phân tích chuỗi ngày
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
-    }  
-    
-    // Hàm kiểm tra chuỗi có phải toàn số không
-    private boolean isNumeric(String str) {
-        return str.matches("\\d+"); // regex kiểm tra toàn bộ là chữ số
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
     }
-
-    
+    }//GEN-LAST:event_btnTimDatPhongActionPerformed
+ 
     private void txtTimChiTietPhieuThueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimChiTietPhieuThueActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTimChiTietPhieuThueActionPerformed

@@ -35,11 +35,37 @@ public class ChiTietPhieuThuePhongBLL {
         chiTietDAO.xoaChiTiet(id);
     }
     
-    // Hàm tìm kiếm chi tiết phiếu thuê
-    public ArrayList<ChiTietPhieuThuePhongDTO> timChiTietPhieuThue(String maDatPhong, String maPhong, String ngayDatPhong, String ngayTraPhong) throws SQLException {
-         ArrayList<ChiTietPhieuThuePhongDTO> ketQua = chiTietDAO.timChiTietPhieuThue(maDatPhong, maPhong, ngayDatPhong, ngayTraPhong);
-         return ketQua;
-     }
+    public ArrayList<ChiTietPhieuThuePhongDTO> timChiTiet(String loaiTimKiem, String tuKhoa) throws SQLException {
+        ArrayList<ChiTietPhieuThuePhongDTO> ketQua = new ArrayList<>();
+        ArrayList<ChiTietPhieuThuePhongDTO> danhSach = layDanhSachChiTiet();
+
+        for (ChiTietPhieuThuePhongDTO ct : danhSach) {
+            switch (loaiTimKiem) {
+                case "Mã đặt phòng":
+                    if (String.valueOf(ct.getMaThuePhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Mã phòng":
+                    if (String.valueOf(ct.getMaPhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày Đặt Phòng":
+                    if (ct.getNgayDatPhong().toString().contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày Trả Phòng":
+                    if (ct.getNgayTraPhong().toString().contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+            }
+        }
+        return ketQua;
+    }
+
 
     
 }
