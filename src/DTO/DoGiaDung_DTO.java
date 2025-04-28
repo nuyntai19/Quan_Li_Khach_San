@@ -10,8 +10,8 @@ public class DoGiaDung_DTO extends HangHoa_DTO {
     }
     
     // Constructor có tham số
-    public DoGiaDung_DTO (String mh, String th, String dvt, int gn, String tt) {
-        super(mh, th, dvt, gn);
+    public DoGiaDung_DTO (int mh, String th, String dvt, double gn, String tt) {
+        super(mh, th, dvt, gn, LOAI_HANG);
         this.tinhTrang = tt;
     }
     
@@ -31,7 +31,8 @@ public class DoGiaDung_DTO extends HangHoa_DTO {
         return this.tinhTrang;
     }
     
-    public static String getLoaiHang() {
+    @Override
+    public String getLoaiHang() {
         return LOAI_HANG;
     }
 }
