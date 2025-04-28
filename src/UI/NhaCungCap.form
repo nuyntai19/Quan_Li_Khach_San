@@ -123,7 +123,7 @@
                   <Component id="jPanel1" pref="1418" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jPanel3" pref="249" max="32767" attributes="0"/>
+                          <Component id="jPanel3" max="32767" attributes="0"/>
                           <Component id="jPanel5" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -245,23 +245,16 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="DatPhong" max="32767" attributes="0"/>
-                              <Component id="CheckIn" alignment="1" max="32767" attributes="0"/>
-                              <Component id="HoaDonDatPhong" alignment="1" max="32767" attributes="0"/>
-                              <Component id="CheckOut" alignment="1" max="32767" attributes="0"/>
-                              <Component id="DSKhachHang" alignment="0" max="32767" attributes="0"/>
-                              <Component id="DSDatDichVu" alignment="0" max="32767" attributes="0"/>
-                              <Component id="DatDichVu" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="DSDatPhong1" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="DatPhong" max="32767" attributes="0"/>
+                      <Component id="CheckIn" alignment="1" max="32767" attributes="0"/>
+                      <Component id="HoaDonDatPhong" alignment="1" max="32767" attributes="0"/>
+                      <Component id="CheckOut" alignment="1" max="32767" attributes="0"/>
+                      <Component id="DSKhachHang" alignment="0" pref="222" max="32767" attributes="0"/>
+                      <Component id="DSDatDichVu" alignment="0" pref="222" max="32767" attributes="0"/>
+                      <Component id="DSDatPhong1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="DatDichVu" alignment="0" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -274,9 +267,9 @@
                   <Component id="CheckIn" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="CheckOut" min="-2" pref="47" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                  <Component id="DSDatPhong1" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DSDatPhong1" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Component id="HoaDonDatPhong" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DSKhachHang" min="-2" pref="47" max="-2" attributes="0"/>
@@ -410,26 +403,27 @@
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="530" max="32767" attributes="0"/>
+                  <EmptySpace pref="535" max="32767" attributes="0"/>
                   <Component id="jLabel1" min="-2" pref="132" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="501" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="341" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="557" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="btnDangNhap" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="LBMK" min="-2" pref="97" max="-2" attributes="0"/>
-                              <Component id="LBTenDN" min="-2" max="-2" attributes="0"/>
+                              <Component id="LBTenDN" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="LBMK" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="TXTenDN" min="-2" pref="296" max="-2" attributes="0"/>
-                              <Component id="TXMK" min="-2" pref="296" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="TXTenDN" pref="296" max="32767" attributes="0"/>
+                              <Component id="TXMK" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -446,11 +440,13 @@
                       <Component id="TXTenDN" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="TXMK" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                      <Component id="LBMK" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="LBMK" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="TXMK" pref="37" max="32767" attributes="0"/>
+                          <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                   <Component id="btnDangNhap" min="-2" pref="32" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
