@@ -15,7 +15,7 @@ public class NhuYeuPham_DTO extends HangHoa_DTO {
 
     // Constructor có tham số
     public NhuYeuPham_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, Date hanSuDung, String nhaCungCap) {
-        super(maHang, tenHang, donViTinh, giaNhap);
+        super(maHang, tenHang, donViTinh, giaNhap, LOAI_HANG);
         this.hanSuDung = hanSuDung;
         this.nhaCungCap = nhaCungCap;
     }
@@ -45,7 +45,8 @@ public class NhuYeuPham_DTO extends HangHoa_DTO {
         return this.nhaCungCap;
     }
 
-    public static String getLoaiHang() {
+    @Override
+    public String getLoaiHang() {
         return LOAI_HANG;
     }
 }
