@@ -58,15 +58,15 @@ public class DoGiaDung_DAO {
     
     // Thêm đồ gia dụng mới
     public boolean insert(DoGiaDung_DTO doGiaDung) {
-        if (isMaDoGiaDungExists(doGiaDung.getMaDoGiaDung())) {
+        if (isMaDoGiaDungExists(doGiaDung.getMaHang())) {
             return false;
         }
         
         String sql = "INSERT INTO " + TABLE_NAME + " (" + String.join(", ", COLUMNS) + ") VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, doGiaDung.getMaDoGiaDung());
-            stmt.setString(2, doGiaDung.getTenDoGiaDung());
+            stmt.setInt(1, doGiaDung.getMaHang());
+            stmt.setString(2, doGiaDung.getTenHang());
             stmt.setString(3, doGiaDung.getDonViTinh());
             stmt.setDouble(4, doGiaDung.getGiaNhap());
             stmt.setString(5, doGiaDung.getTinhTrang());
@@ -85,11 +85,11 @@ public class DoGiaDung_DAO {
                     COLUMNS[0] + " = ?";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, doGiaDung.getTenDoGiaDung());
+            stmt.setString(1, doGiaDung.getTenHang());
             stmt.setString(2, doGiaDung.getDonViTinh());
             stmt.setDouble(3, doGiaDung.getGiaNhap());
             stmt.setString(4, doGiaDung.getTinhTrang());
-            stmt.setInt(5, doGiaDung.getMaDoGiaDung());
+            stmt.setInt(5, doGiaDung.getMaHang());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
