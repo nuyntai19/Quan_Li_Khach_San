@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class NhanVienBLL {
     private final NhanVienDAO dao;
 
-    public NhanVienBLL() {
+    public NhanVienBLL() throws SQLException {
         dao = new NhanVienDAO();
     }
 

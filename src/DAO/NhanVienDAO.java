@@ -25,7 +25,7 @@ public class NhanVienDAO {
                 rs.getString("NgaySinh"),
                 rs.getString("GioiTinh"),
                 rs.getString("Email"),
-                rs.getString("SDT"),
+                rs.getString("SoDienThoai"),
                 rs.getString("ChucVu"),
                 rs.getDouble("Luong")
             ));
@@ -49,7 +49,7 @@ public class NhanVienDAO {
     }
 
     public void suaNhanVien(NhanVienDTO nv) throws SQLException {
-        String sql = "UPDATE NhanVien SET Ten=?, Ho=?, NgaySinh=?, GioiTinh=?, Email=?, SDT=?, ChucVu=?, Luong=? WHERE MaNhanVien=?";
+        String sql = "UPDATE NhanVien SET Ten=?, Ho=?, NgaySinh=?, GioiTinh=?, Email=?, SoDienThoai=?, ChucVu=?, Luong=? WHERE MaNhanVien=?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, nv.getTen());
         ps.setString(2, nv.getHo());
