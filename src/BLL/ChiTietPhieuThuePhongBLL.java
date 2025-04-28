@@ -3,6 +3,7 @@ package BLL;
 import DAO.ChiTietPhieuThuePhongDAO;
 import DTO.ChiTietPhieuThuePhongDTO;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ChiTietPhieuThuePhongBLL {
@@ -33,6 +34,12 @@ public class ChiTietPhieuThuePhongBLL {
     public void xoaChiTiet(int id) throws SQLException {
         chiTietDAO.xoaChiTiet(id);
     }
+    
+    // Hàm tìm kiếm chi tiết phiếu thuê
+    public ArrayList<ChiTietPhieuThuePhongDTO> timChiTietPhieuThue(String maDatPhong, String maPhong, String ngayDatPhong, String ngayTraPhong) throws SQLException {
+         ArrayList<ChiTietPhieuThuePhongDTO> ketQua = chiTietDAO.timChiTietPhieuThue(maDatPhong, maPhong, ngayDatPhong, ngayTraPhong);
+         return ketQua;
+     }
 
     
 }

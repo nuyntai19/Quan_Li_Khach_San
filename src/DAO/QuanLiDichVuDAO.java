@@ -81,19 +81,5 @@ public class QuanLiDichVuDAO {
         }
     }
     
-    public void giamSoLuongDichVu(int maDichVu, int soLuongGiam) throws SQLException {
-        String sql = "UPDATE DichVu SET SoLuong = SoLuong - ? WHERE MaDichVu = ? AND SoLuong >= ?";
-        try (Connection conn = DatabaseQLKS.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, soLuongGiam);
-            stmt.setInt(2, maDichVu);    
-            stmt.setInt(3, soLuongGiam);
-
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new SQLException("Không đủ số lượng dịch vụ hoặc mã dịch vụ không tồn tại.");
-            }
-        }
-    }
+    
 }

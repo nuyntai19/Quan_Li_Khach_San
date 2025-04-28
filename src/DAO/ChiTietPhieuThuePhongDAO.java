@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import sql.DatabaseQLKS;
 
 
@@ -20,6 +22,7 @@ public class ChiTietPhieuThuePhongDAO {
 
             while (rs.next()) {
                 ds.add(new ChiTietPhieuThuePhongDTO(
+                    rs.getInt("ID"),
                     rs.getInt("maThuePhong"),
                     rs.getInt("maPhong"),
                     rs.getDate("ngayDatPhong"),
@@ -89,4 +92,65 @@ public class ChiTietPhieuThuePhongDAO {
         }
         return false; // Không trùng lặp
     }
+    
+   public ArrayList<ChiTietPhieuThuePhongDTO> timChiTietPhieuThue(String maDatPhongStr, String maPhongStr, String ngayDatPhong, String ngayTraPhong) throws SQLException {
+    ArrayList<ChiTietPhieuThuePhongDTO> ketQua = new ArrayList<>();
+    String sql = "SELECT * FROM ChiTietPhieuThue WHERE 1=1";
+    
+    List<Object> params = new ArrayList<>();
+    
+    if (maDatPhongStr != null && !maDatPhongStr.trim().isEmpty()) {
+        sql += " AND MaThuePhong = ?";
+        params.add(Integer.parseInt(maDatPhongStr));  // BỔ SUNG
+    }
+    if (maPhongStr != null && !maPhongStr.trim().isEmpty()) {
+        sql += " AND MaPhong = ?";
+        params.add(Integer.parseInt(maPhongStr));     // BỔ SUNG
+    }
+    if (ngayDatPhong != null && !ngayDatPhong.isEmpty()) {
+        sql += " AND NgayDatPhong = ?";
+        params.add(java.sql.Date.valueOf(ngayDatPhong));
+    }
+    if (ngayTraPhong != null && !ngayTraPhong.isEmpty()) {
+        sql += " AND NgayTraPhong = ?";
+        params.add(java.sql.Date.valueOf(ngayTraPhong));
+    }
+
+    System.out.println("SQL query: " + sql);
+
+    try (Connection conn = DatabaseQLKS.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        int index = 1;
+        for (Object param : params) {
+            if (param instanceof Integer) {
+                stmt.setInt(index++, (Integer) param);
+            } else if (param instanceof java.sql.Date) {
+                stmt.setDate(index++, (java.sql.Date) param);
+            }
+        }
+
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            ChiTietPhieuThuePhongDTO ct = new ChiTietPhieuThuePhongDTO(
+                    rs.getInt("ID"),
+                    rs.getInt("MaThuePhong"),
+                    rs.getInt("MaPhong"),
+                    rs.getDate("NgayDatPhong"),
+                    rs.getDate("NgayTraPhong"),
+                    rs.getDouble("GiaPhong"),
+                    rs.getDouble("ThanhTien")
+            );
+            ketQua.add(ct);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new SQLException("Lỗi khi truy vấn chi tiết phiếu thuê.", e);
+    }
+    return ketQua;
 }
+
+
+}
+

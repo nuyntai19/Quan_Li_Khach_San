@@ -36,11 +36,45 @@ public class QuanLiDichVuBLL {
         dichVuDAO.xoaDichVu(maDichVu);
     }
     
-    public void giamSoLuongDichVu(int maDichVu, int soLuongGiam) throws SQLException {
-        if (soLuongGiam <= 0) {
-            throw new IllegalArgumentException("Số lượng đặt phải lớn hơn 0.");
+    // Hàm kiểm tra số lượng còn lại của dịch vụ
+    public int laySoLuongDangCo(int maDichVu) throws SQLException {
+        ArrayList<QuanLiDichVuDTO> danhSachDichVu = dichVuDAO.layDanhSachDichVu();
+        for (QuanLiDichVuDTO dv : danhSachDichVu) {
+            if (dv.getMaDichVu() == maDichVu) {
+                return dv.getSoLuong();
+            }
         }
-        dichVuDAO.giamSoLuongDichVu(maDichVu, soLuongGiam);
+        return 0; 
+    }
+    
+    // Hàm giảm số lượng dịch vụ và cập nhật lại dịch vụ
+    public void giamSoLuong(int maDichVu, int soLuong) throws SQLException {
+        // Lấy thông tin dịch vụ
+        ArrayList<QuanLiDichVuDTO> danhSachDichVu = dichVuDAO.layDanhSachDichVu();
+        for (QuanLiDichVuDTO dv : danhSachDichVu) {
+            if (dv.getMaDichVu() == maDichVu) {
+                // Cập nhật số lượng mới
+                dv.setSoLuong(dv.getSoLuong() - soLuong);
+                // Gọi phương thức `suaDichVu` để cập nhật dịch vụ trong cơ sở dữ liệu
+                dichVuDAO.suaDichVu(dv);
+                break;
+            }
+        }
+    }
+    
+     // Hàm tìm dịch vụ theo mã hoặc tên
+    public ArrayList<QuanLiDichVuDTO> timDichVu(String maDichVu, String tenDichVu) throws SQLException {
+        ArrayList<QuanLiDichVuDTO> danhSachDichVu = dichVuDAO.layDanhSachDichVu();
+        ArrayList<QuanLiDichVuDTO> ketQua = new ArrayList<>();
+
+        for (QuanLiDichVuDTO dv : danhSachDichVu) {
+            if ((maDichVu.isEmpty() || Integer.toString(dv.getMaDichVu()).contains(maDichVu)) && 
+                (tenDichVu.isEmpty() || dv.getTenDichVu().toLowerCase().contains(tenDichVu.toLowerCase()))) {
+                ketQua.add(dv);
+            }
+        }
+
+        return ketQua;
     }
 }
 

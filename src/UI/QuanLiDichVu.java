@@ -471,9 +471,24 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Mã dịch vụ", "Tên dịch vụ", "Số lượng", "Đơn giá", "Mô tả"
+                "Mã dịch vụ", "Tên dịch vụ", "Mô tả", "Đơn giá", "Số lượng"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane4.setViewportView(tblDSDICHVU);
 
         ButtonThem.setBackground(new java.awt.Color(52, 152, 219));
