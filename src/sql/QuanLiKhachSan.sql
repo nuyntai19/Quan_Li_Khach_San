@@ -17,6 +17,8 @@ CREATE TABLE NhanVien (
     Luong DECIMAL(18,2)
 );
 
+select * from NhanVien
+
 -- Bảng Tài khoản (dành cho nhân viên đăng nhập)
 CREATE TABLE TaiKhoan (
     MaTaiKhoan INT PRIMARY KEY IDENTITY(1,1),
@@ -93,8 +95,6 @@ CREATE TABLE ChiTietPhieuThue (
     FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
 );
 
-
-
 -- Bảng Kiểm tra tình trạng phòng
 CREATE TABLE KiemTraTinhTrang (
     MaKiemTra INT PRIMARY KEY,
@@ -118,39 +118,37 @@ CREATE TABLE DichVu (
 
 -- Bảng Dịch vụ thuê
 CREATE TABLE DatDichVu (
-    MaThuePhong INT,
-	MaPhong INT,
-    MaDichVu INT,
-    SoLuong INT,
-    DonGia DECIMAL(18,2),
-    ThanhTien DECIMAL(18,2),
-    PRIMARY KEY (MaThuePhong, MaDichVu),
-	FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong),
-    FOREIGN KEY (MaThuePhong) REFERENCES PhieuThuePhong(MaThuePhong),
+    IDChiTietPhieuThue INT NOT NULL,
+    MaDichVu INT NOT NULL,
+    SoLuong INT NOT NULL,
+    DonGia DECIMAL(18,2) NOT NULL,
+    ThanhTien DECIMAL(18,2) NOT NULL,
+    PRIMARY KEY (IDChiTietPhieuThue, MaDichVu),
+    FOREIGN KEY (IDChiTietPhieuThue) REFERENCES ChiTietPhieuThue(ID),
     FOREIGN KEY (MaDichVu) REFERENCES DichVu(MaDichVu)
 );
 
--- Bảng Hóa đơn
 CREATE TABLE HoaDon (
-    MaHoaDon INT PRIMARY KEY,
-    MaKhachHang INT,
-    MaNhanVien INT,
-    NgayThanhToan DATE,
-    HinhThucThanhToan VARCHAR(50),
+    MaHD INT PRIMARY KEY,
+    MaPTP INT,           
+    NgayLap DATE,
     TongTien DECIMAL(18,2),
-    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
-    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
+    FOREIGN KEY (MaPTP) REFERENCES PhieuThuePhong(MaPTP),
+    FOREIGN KEY (MaDatDichVu) REFERENCES DatDichVu(MaDatDichVu)
 );
 
--- Bảng Chi tiết hóa đơn
 CREATE TABLE ChiTietHoaDon (
-    MaHoaDon INT,
-    MaDichVu INT,
-    DonGia DECIMAL(18,2),
-    ThanhTien DECIMAL(18,2),
-    PRIMARY KEY (MaHoaDon, MaDichVu),
-    FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon),
-    FOREIGN KEY (MaDichVu) REFERENCES DichVu(MaDichVu)
+    MaCTHD INT PRIMARY KEY,  -- Mã chi tiết hóa đơn
+    MaHD INT,                -- Mã hóa đơn
+    MaPhong INT,             -- Mã phòng
+    MaDV INT,                -- Mã dịch vụ
+    LoaiChiTiet VARCHAR(50), -- Loại chi tiết (Phòng hoặc Dịch vụ)
+    SoLuong INT,             -- Số lượng
+    DonGia DECIMAL(18,2),    -- Đơn giá
+    ThanhTien DECIMAL(18,2), -- Thành tiền
+    FOREIGN KEY (MaHD) REFERENCES HoaDon(MaHD),
+    FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong),
+    FOREIGN KEY (MaDV) REFERENCES DichVu(MaDichVu)
 );
 
 -- Bảng Nhà cung cấp
@@ -235,6 +233,7 @@ CREATE TABLE ChiTietPhieuNhapHang (
     FOREIGN KEY (MaHang) REFERENCES HangHoa(MaHang)
 );
 
+
 INSERT INTO NhanVien (MaNhanVien, Ho, Ten, NgaySinh, GioiTinh, Email, SoDienThoai, ChucVu, Luong)
 VALUES 
 (1, N'Nguyễn', N'Tuấn Tài', '2005-01-19', 'Nam', 'tuantai1915@gmail.com', '0707666999', N'Admin', 15000000),
@@ -262,6 +261,54 @@ DELETE FROM LoaiPhong;
 
 select * from Phong
 
+
+
+--Cách in thứ 1 
+--------------------------------------
+--          KHÁCH SẠN ABC
+--        HÓA ĐƠN THANH TOÁN
+--------------------------------------
+--Mã Hóa Đơn: 1
+--Ngày Lập: 27/04/2025
+--Khách hàng: Nguyễn Văn A
+--Nhân viên lập: Trần Thị B
+
+--*** Tiền thuê phòng ***
+--Phòng 101 | 2 ngày | 500k/ngày | 1.000k
+--Phòng 102 | 2 ngày | 400k/ngày | 800k
+
+--*** Dịch vụ đã sử dụng ***
+--Phòng 101 | Ăn sáng | 2 suất x 100k = 200k
+--Phòng 101 | Giặt đồ | 1 lần x 50k = 50k
+
+--------------------------------------
+--Tổng tiền phòng: 1.800k
+--Tổng tiền dịch vụ: 250k
+--Tổng cộng thanh toán: 2.050k
+--------------------------------------
+--Xin cảm ơn Quý khách!
+
+
+--Cách in thứ 2
+--       KHÁCH SẠN XYZ
+--    HÓA ĐƠN THANH TOÁN SỐ 1
+--Ngày lập: 28/04/2025
+
+--Phòng 101:
+--  - Tiền phòng: 1 x 300.000 đ     300.000 đ
+--  - Dịch vụ Giặt đồ: 1 x 50.000 đ  50.000 đ
+--  - Dịch vụ Đồ ăn:    2 x 100.000 đ 200.000 đ
+
+--Phòng 102:
+--  - Tiền phòng: 1 x 400.000 đ     400.000 đ
+
+------------------------------------------------
+--Tổng tiền phòng: 300.000 + 400.000 = 700.000 đ
+--Tổng tiền dịch vụ: 50.000 + 200.000 = 250.000 đ
+--TỔNG CỘNG: 950.000 đ
+------------------------------------------------
+
+--Cảm ơn Quý khách và hẹn gặp lại!
 
 
 
