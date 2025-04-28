@@ -16,7 +16,7 @@ public class NhuYeuPham_BLL {
     public boolean themNhuYeuPham(NhuYeuPham_DTO nhuYeuPham) {
         // Kiểm tra dữ liệu đầu vào
         if (nhuYeuPham == null) return false;
-        if (nhuYeuPham.getTenNhuYeuPham() == null || nhuYeuPham.getTenNhuYeuPham().trim().isEmpty()) return false;
+        if (nhuYeuPham.getTenHang() == null || nhuYeuPham.getTenHang().trim().isEmpty()) return false;
         if (nhuYeuPham.getDonViTinh() == null || nhuYeuPham.getDonViTinh().trim().isEmpty()) return false;
         if (nhuYeuPham.getGiaNhap() <= 0) return false;
         if (nhuYeuPham.getHanSuDung() == null) return false;
@@ -29,7 +29,7 @@ public class NhuYeuPham_BLL {
     public boolean capNhatNhuYeuPham(NhuYeuPham_DTO nhuYeuPham) {
         // Kiểm tra dữ liệu đầu vào
         if (nhuYeuPham == null) return false;
-        if (nhuYeuPham.getTenNhuYeuPham() == null || nhuYeuPham.getTenNhuYeuPham().trim().isEmpty()) return false;
+        if (nhuYeuPham.getTenHang() == null || nhuYeuPham.getTenHang().trim().isEmpty()) return false;
         if (nhuYeuPham.getDonViTinh() == null || nhuYeuPham.getDonViTinh().trim().isEmpty()) return false;
         if (nhuYeuPham.getGiaNhap() <= 0) return false;
         if (nhuYeuPham.getHanSuDung() == null) return false;
@@ -79,7 +79,7 @@ public class NhuYeuPham_BLL {
         if (ngayHetHan == null) {
             return new ArrayList<>();
         }
-        return nhuYeuPhamDAO.getExpiringItems(ngayHetHan);
+        return nhuYeuPhamDAO.getExpiringItems(new java.sql.Date(ngayHetHan.getTime()));
     }
     
     // Kiểm tra mã nhu yếu phẩm đã tồn tại chưa
