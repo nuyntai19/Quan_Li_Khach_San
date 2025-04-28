@@ -5,7 +5,6 @@ import DTO.DoGiaDung_DTO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class DoGiaDung_BLL {
@@ -26,14 +25,14 @@ public class DoGiaDung_BLL {
             throw new IllegalArgumentException("Dữ liệu không hợp lệ");
         }
         
-        if (isMaDGDExist(dgd.getMaDoGiaDung())) {
-            throw new IllegalArgumentException("Mã " + dgd.getMaDoGiaDung() + " đã tồn tại");
+        if (isMaDGDExist(dgd.getMaHang())) {
+            throw new IllegalArgumentException("Mã " + dgd.getMaHang() + " đã tồn tại");
         }
         
         boolean result = dgdDAO.insert(dgd);
         if (result) {
             dgdList.add(dgd);
-            Collections.sort(dgdList, Comparator.comparing(DoGiaDung_DTO::getMaDoGiaDung));
+            Collections.sort(dgdList, Comparator.comparingInt(DoGiaDung_DTO::getMaHang));
         }
         return result;
     }
@@ -45,7 +44,7 @@ public class DoGiaDung_BLL {
         
         boolean result = dgdDAO.update(dgd);
         if (result) {
-            int index = findIndexById(dgd.getMaDoGiaDung());
+            int index = findIndexById(dgd.getMaHang());
             if (index != -1) {
                 dgdList.set(index, dgd);
             } else {
@@ -55,14 +54,10 @@ public class DoGiaDung_BLL {
         return result;
     }
     
-    public synchronized boolean delete(String maDGD) {
-        if (maDGD == null || maDGD.trim().isEmpty()) {
-            return false;
-        }
-        
+    public synchronized boolean delete(int maDGD) {
         boolean result = dgdDAO.delete(maDGD);
         if (result) {
-            dgdList.removeIf(item -> item.getMaDoGiaDung().equals(maDGD));
+            dgdList.removeIf(item -> item.getMaHang() == maDGD);
         }
         return result;
     }
@@ -77,23 +72,23 @@ public class DoGiaDung_BLL {
             .filter(item -> {
                 switch (searchType) {
                     case "MA":
-                        return item.getMaDoGiaDung().toLowerCase().contains(lowerKeyword);
+                        return String.valueOf(item.getMaHang()).contains(lowerKeyword);
                     case "TEN":
-                        return item.getTenDoGiaDung().toLowerCase().contains(lowerKeyword);
-                    case "CHATLIEU":
-                        return item.getChatLieu().toLowerCase().contains(lowerKeyword);
+                        return item.getTenHang().toLowerCase().contains(lowerKeyword);
+                    case "TINHTRANG":
+                        return item.getTinhTrang().toLowerCase().contains(lowerKeyword);
                     default:
-                        return item.getMaDoGiaDung().toLowerCase().contains(lowerKeyword) ||
-                               item.getTenDoGiaDung().toLowerCase().contains(lowerKeyword);
+                        return String.valueOf(item.getMaHang()).contains(lowerKeyword) ||
+                               item.getTenHang().toLowerCase().contains(lowerKeyword);
                 }
             })
             .collect(Collectors.toCollection(ArrayList::new));
     }
     
-    // Phân loại theo chất liệu
-    public ArrayList<DoGiaDung_DTO> filterByMaterial(String material) {
+    // Phân loại theo tình trạng
+    public ArrayList<DoGiaDung_DTO> filterByStatus(String status) {
         return dgdList.stream()
-            .filter(item -> item.getChatLieu().equalsIgnoreCase(material))
+            .filter(item -> item.getTinhTrang().equalsIgnoreCase(status))
             .collect(Collectors.toCollection(ArrayList::new));
     }
     
@@ -107,27 +102,47 @@ public class DoGiaDung_BLL {
     }
     
     // Các phương thức hỗ trợ
-    private int findIndexById(String maDGD) {
+    private int findIndexById(int maDGD) {
         for (int i = 0; i < dgdList.size(); i++) {
-            if (dgdList.get(i).getMaDoGiaDung().equals(maDGD)) {
+            if (dgdList.get(i).getMaHang() == maDGD) {
                 return i;
             }
         }
         return -1;
     }
     
-    public boolean isMaDGDExist(String maDGD) {
-        return dgdList.stream().anyMatch(item -> item.getMaDoGiaDung().equals(maDGD));
+    public boolean isMaDGDExist(int maDGD) {
+        return dgdList.stream().anyMatch(item -> item.getMaHang() == maDGD);
     }
     
     private boolean validateDGD(DoGiaDung_DTO dgd) {
         return dgd != null &&
-               dgd.getMaDoGiaDung() != null &&
-               !dgd.getMaDoGiaDung().trim().isEmpty() &&
-               dgd.getTenDoGiaDung() != null &&
-               !dgd.getTenDoGiaDung().trim().isEmpty() &&
+               dgd.getMaHang() > 0 &&
+               dgd.getTenHang() != null &&
+               !dgd.getTenHang().trim().isEmpty() &&
                dgd.getGiaNhap() > 0 &&
-               dgd.getChatLieu() != null &&
-               !dgd.getChatLieu().trim().isEmpty();
+               dgd.getTinhTrang() != null &&
+               !dgd.getTinhTrang().trim().isEmpty();
+    }
+
+    // Các phương thức mới thêm
+    public DoGiaDung_DTO layDoGiaDungTheoMa(int maDoGiaDung) {
+        return dgdDAO.getById(maDoGiaDung);
+    }
+
+    public ArrayList<DoGiaDung_DTO> getAll() {
+        return dgdDAO.getAll();
+    }
+
+    public ArrayList<DoGiaDung_DTO> searchByCode(int maDoGiaDung) {
+        return dgdDAO.searchByCode(maDoGiaDung);
+    }
+
+    public ArrayList<DoGiaDung_DTO> searchByName(String tenDoGiaDung) {
+        return dgdDAO.searchByName(tenDoGiaDung);
+    }
+
+    public ArrayList<DoGiaDung_DTO> searchByStatus(String tinhTrang) {
+        return dgdDAO.searchByStatus(tinhTrang);
     }
 }

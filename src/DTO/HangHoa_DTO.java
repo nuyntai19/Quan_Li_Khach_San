@@ -1,11 +1,15 @@
 package DTO;
 
+import java.sql.Date;
+
 public class HangHoa_DTO {
-    protected int maHang; 
-    protected String tenHang; 
-    protected String donViTinh;
-    protected double giaNhap;
-    protected String loaiHang; // Loại hàng
+    private int maHang;
+    private String tenHang;
+    private String donViTinh;
+    private double giaNhap;
+    private String loaiHang;
+    private Date hanSuDung;
+    private String nhaCungCap;
 
     // Constructor mặc định
     public HangHoa_DTO() {
@@ -14,15 +18,19 @@ public class HangHoa_DTO {
         donViTinh = "";
         giaNhap = 0.0;
         loaiHang = "";
+        hanSuDung = null;
+        nhaCungCap = "";
     }
 
     // Constructor đầy đủ thông tin
-    public HangHoa_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang) {
+    public HangHoa_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang, Date hanSuDung, String nhaCungCap) {
         this.maHang = maHang;
         this.tenHang = tenHang;
         this.donViTinh = donViTinh;
         this.giaNhap = giaNhap;
         this.loaiHang = loaiHang;
+        this.hanSuDung = hanSuDung;
+        this.nhaCungCap = nhaCungCap;
     }
 
     // Constructor sao chép
@@ -32,6 +40,19 @@ public class HangHoa_DTO {
         this.donViTinh = tmp.donViTinh;
         this.giaNhap = tmp.giaNhap;
         this.loaiHang = tmp.loaiHang;
+        this.hanSuDung = tmp.hanSuDung;
+        this.nhaCungCap = tmp.nhaCungCap;
+    }
+
+    // Constructor với 5 tham số (dùng cho các lớp con)
+    public HangHoa_DTO(int maHang, String tenHang, String donViTinh, double giaNhap, String loaiHang) {
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.donViTinh = donViTinh;
+        this.giaNhap = giaNhap;
+        this.loaiHang = loaiHang;
+        this.hanSuDung = null;
+        this.nhaCungCap = "";
     }
 
     // Setter
@@ -55,6 +76,14 @@ public class HangHoa_DTO {
         this.loaiHang = loaiHang;
     }
 
+    public void setHanSuDung(Date hanSuDung) {
+        this.hanSuDung = hanSuDung;
+    }
+
+    public void setNhaCungCap(String nhaCungCap) {
+        this.nhaCungCap = nhaCungCap;
+    }
+
     // Getter
     public int getMaHang() {
         return this.maHang;
@@ -74,5 +103,13 @@ public class HangHoa_DTO {
 
     public String getLoaiHang() {
         return this.loaiHang;
+    }
+
+    public Date getHanSuDung() {
+        return this.hanSuDung;
+    }
+
+    public String getNhaCungCap() {
+        return this.nhaCungCap;
     }
 }

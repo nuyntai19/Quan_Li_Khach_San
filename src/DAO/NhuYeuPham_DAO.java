@@ -61,15 +61,15 @@ public class NhuYeuPham_DAO {
     
     // Thêm nhu yếu phẩm mới
     public boolean insert(NhuYeuPham_DTO nhuYeuPham) {
-        if (isMaNhuYeuPhamExists(nhuYeuPham.getMaNhuYeuPham())) {
+        if (isMaNhuYeuPhamExists(nhuYeuPham.getMaHang())) {
             return false;
         }
         
         String sql = "INSERT INTO " + TABLE_NAME + " (" + String.join(", ", COLUMNS) + ") VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, nhuYeuPham.getMaNhuYeuPham());
-            stmt.setString(2, nhuYeuPham.getTenNhuYeuPham());
+            stmt.setInt(1, nhuYeuPham.getMaHang());
+            stmt.setString(2, nhuYeuPham.getTenHang());
             stmt.setString(3, nhuYeuPham.getDonViTinh());
             stmt.setDouble(4, nhuYeuPham.getGiaNhap());
             stmt.setDate(5, new java.sql.Date(nhuYeuPham.getHanSuDung().getTime()));
@@ -89,12 +89,12 @@ public class NhuYeuPham_DAO {
                     COLUMNS[5] + " = ? WHERE " + COLUMNS[0] + " = ?";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, nhuYeuPham.getTenNhuYeuPham());
+            stmt.setString(1, nhuYeuPham.getTenHang());
             stmt.setString(2, nhuYeuPham.getDonViTinh());
             stmt.setDouble(3, nhuYeuPham.getGiaNhap());
             stmt.setDate(4, new java.sql.Date(nhuYeuPham.getHanSuDung().getTime()));
             stmt.setString(5, nhuYeuPham.getNhaCungCap());
-            stmt.setInt(6, nhuYeuPham.getMaNhuYeuPham());
+            stmt.setInt(6, nhuYeuPham.getMaHang());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
