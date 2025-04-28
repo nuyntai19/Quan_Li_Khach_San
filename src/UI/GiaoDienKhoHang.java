@@ -7,23 +7,18 @@ import DTO.DoGiaDung_DTO;
 import DTO.HangHoa_DTO;
 import DTO.NhuYeuPham_DTO;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import sql.DatabaseQLKS;
 
 public class GiaoDienKhoHang extends JFrame {
     // Các thành phần giao diện
@@ -38,8 +33,9 @@ public class GiaoDienKhoHang extends JFrame {
     private JComboBox<String> cboLoaiHang;
     private JMenuBar menuBar;
     private JToolBar toolBar;
-    private JStatusBar statusBar;
+    private JPanel statusBar;
     private JLabel lblTrangThai;
+    private JButton btnTimKiem;
     
     // Các đối tượng BLL
     private HangHoa_BLL hangHoaBLL;
@@ -366,21 +362,26 @@ public class GiaoDienKhoHang extends JFrame {
     }
     
     private void setupStatusBar() {
-        statusBar = new JStatusBar();
+        statusBar = new JPanel(new BorderLayout());
         lblTrangThai = new JLabel("Sẵn sàng");
-        statusBar.add(lblTrangThai);
+        statusBar.add(lblTrangThai, BorderLayout.WEST);
         add(statusBar, BorderLayout.SOUTH);
     }
     
     private void initData() {
-        hangHoaBLL = new HangHoa_BLL();
-        doGiaDungBLL = new DoGiaDung_BLL();
-        nhuYeuPhamBLL = new NhuYeuPham_BLL();
-        
-        // Load dữ liệu ban đầu
-        loadHangHoa();
-        loadDoGiaDung();
-        loadNhuYeuPham();
+        try {
+            Connection conn = DatabaseQLKS.getConnection();
+            hangHoaBLL = new HangHoa_BLL(conn);
+            doGiaDungBLL = new DoGiaDung_BLL();
+            nhuYeuPhamBLL = new NhuYeuPham_BLL();
+            
+            // Load dữ liệu ban đầu
+            loadHangHoa();
+            loadDoGiaDung();
+            loadNhuYeuPham();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
+        }
     }
     
     private void setupEventHandlers() {
@@ -513,8 +514,32 @@ public class GiaoDienKhoHang extends JFrame {
         JMenuItem miExportExcel = menuReport.getItem(1);
         JMenuItem miPrint = menuReport.getItem(2);
         
-        miExportPDF.addActionListener(e -> exportToPDF());
-        miExportExcel.addActionListener(e -> exportToExcel());
+        miExportPDF.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("PDF files (*.pdf)", "pdf"));
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    exportToPDF(fileChooser.getSelectedFile());
+                    JOptionPane.showMessageDialog(this, "Xuất PDF thành công!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xuất PDF: " + ex.getMessage());
+                }
+            }
+        });
+        
+        miExportExcel.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Excel files (*.xlsx)", "xlsx"));
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    exportToExcel(fileChooser.getSelectedFile());
+                    JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xuất Excel: " + ex.getMessage());
+                }
+            }
+        });
+        
         miPrint.addActionListener(e -> in());
         
         // Menu Help
@@ -529,15 +554,15 @@ public class GiaoDienKhoHang extends JFrame {
         DoGiaDung_DTO doGiaDung = doGiaDungBLL.layDoGiaDungTheoMa(maDoGiaDung);
         
         if (doGiaDung != null) {
-            txtMa.setText(String.valueOf(doGiaDung.getMaDoGiaDung()));
-            txtTen.setText(doGiaDung.getTenDoGiaDung());
+            txtMa.setText(String.valueOf(doGiaDung.getMaHang()));
+            txtTen.setText(doGiaDung.getTenHang());
             txtDonViTinh.setText(doGiaDung.getDonViTinh());
             txtGiaNhap.setText(String.valueOf(doGiaDung.getGiaNhap()));
             txtTinhTrang.setText(doGiaDung.getTinhTrang());
             txtHanSuDung.setText("");
             txtNhaCungCap.setText("");
             
-            updateStatus("Đang xem thông tin đồ gia dụng: " + doGiaDung.getTenDoGiaDung());
+            updateStatus("Đang xem thông tin đồ gia dụng: " + doGiaDung.getTenHang());
         }
     }
     
@@ -547,15 +572,15 @@ public class GiaoDienKhoHang extends JFrame {
         
         if (nhuYeuPham != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            txtMa.setText(String.valueOf(nhuYeuPham.getMaNhuYeuPham()));
-            txtTen.setText(nhuYeuPham.getTenNhuYeuPham());
+            txtMa.setText(String.valueOf(nhuYeuPham.getMaHang()));
+            txtTen.setText(nhuYeuPham.getTenHang());
             txtDonViTinh.setText(nhuYeuPham.getDonViTinh());
             txtGiaNhap.setText(String.valueOf(nhuYeuPham.getGiaNhap()));
             txtTinhTrang.setText("");
             txtHanSuDung.setText(sdf.format(nhuYeuPham.getHanSuDung()));
             txtNhaCungCap.setText(nhuYeuPham.getNhaCungCap());
             
-            updateStatus("Đang xem thông tin nhu yếu phẩm: " + nhuYeuPham.getTenNhuYeuPham());
+            updateStatus("Đang xem thông tin nhu yếu phẩm: " + nhuYeuPham.getTenHang());
         }
     }
     
@@ -611,23 +636,20 @@ public class GiaoDienKhoHang extends JFrame {
             hangHoa.setGiaNhap(Double.parseDouble(txtGiaNhap.getText().trim()));
             
             if (isEditing) {
-                if (hangHoaBLL.suaHangHoa(hangHoa)) {
+                if (hangHoaBLL.capNhatHangHoa(hangHoa)) {
                     JOptionPane.showMessageDialog(this, "Sửa hàng hóa thành công!");
                     loadHangHoa();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi sửa hàng hóa");
+                    JOptionPane.showMessageDialog(this, "Sửa hàng hóa thất bại!");
                 }
             } else {
                 if (hangHoaBLL.themHangHoa(hangHoa)) {
                     JOptionPane.showMessageDialog(this, "Thêm hàng hóa thành công!");
                     loadHangHoa();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi thêm hàng hóa");
+                    JOptionPane.showMessageDialog(this, "Thêm hàng hóa thất bại!");
                 }
             }
-            
-            clearFields();
-            updateStatus(isEditing ? "Đã sửa hàng hóa" : "Đã thêm hàng hóa");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
@@ -636,30 +658,27 @@ public class GiaoDienKhoHang extends JFrame {
     private void saveDoGiaDung() {
         try {
             DoGiaDung_DTO doGiaDung = new DoGiaDung_DTO();
-            doGiaDung.setMaDoGiaDung(Integer.parseInt(txtMa.getText().trim()));
-            doGiaDung.setTenDoGiaDung(txtTen.getText().trim());
+            doGiaDung.setMaHang(Integer.parseInt(txtMa.getText().trim()));
+            doGiaDung.setTenHang(txtTen.getText().trim());
             doGiaDung.setDonViTinh(txtDonViTinh.getText().trim());
             doGiaDung.setGiaNhap(Double.parseDouble(txtGiaNhap.getText().trim()));
             doGiaDung.setTinhTrang(txtTinhTrang.getText().trim());
             
             if (isEditing) {
-                if (doGiaDungBLL.suaDoGiaDung(doGiaDung)) {
+                if (doGiaDungBLL.update(doGiaDung)) {
                     JOptionPane.showMessageDialog(this, "Sửa đồ gia dụng thành công!");
                     loadDoGiaDung();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi sửa đồ gia dụng");
+                    JOptionPane.showMessageDialog(this, "Sửa đồ gia dụng thất bại!");
                 }
             } else {
-                if (doGiaDungBLL.themDoGiaDung(doGiaDung)) {
+                if (doGiaDungBLL.insert(doGiaDung)) {
                     JOptionPane.showMessageDialog(this, "Thêm đồ gia dụng thành công!");
                     loadDoGiaDung();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi thêm đồ gia dụng");
+                    JOptionPane.showMessageDialog(this, "Thêm đồ gia dụng thất bại!");
                 }
             }
-            
-            clearFields();
-            updateStatus(isEditing ? "Đã sửa đồ gia dụng" : "Đã thêm đồ gia dụng");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
@@ -668,38 +687,35 @@ public class GiaoDienKhoHang extends JFrame {
     private void saveNhuYeuPham() {
         try {
             NhuYeuPham_DTO nhuYeuPham = new NhuYeuPham_DTO();
-            nhuYeuPham.setMaNhuYeuPham(Integer.parseInt(txtMa.getText().trim()));
-            nhuYeuPham.setTenNhuYeuPham(txtTen.getText().trim());
+            nhuYeuPham.setMaHang(Integer.parseInt(txtMa.getText().trim()));
+            nhuYeuPham.setTenHang(txtTen.getText().trim());
             nhuYeuPham.setDonViTinh(txtDonViTinh.getText().trim());
             nhuYeuPham.setGiaNhap(Double.parseDouble(txtGiaNhap.getText().trim()));
-            nhuYeuPham.setHanSuDung(new SimpleDateFormat("dd/MM/yyyy").parse(txtHanSuDung.getText().trim()));
+            nhuYeuPham.setHanSuDung(new java.sql.Date(new SimpleDateFormat("dd/MM/yyyy").parse(txtHanSuDung.getText().trim()).getTime()));
             nhuYeuPham.setNhaCungCap(txtNhaCungCap.getText().trim());
             
             if (isEditing) {
-                if (nhuYeuPhamBLL.suaNhuYeuPham(nhuYeuPham)) {
+                if (nhuYeuPhamBLL.capNhatNhuYeuPham(nhuYeuPham)) {
                     JOptionPane.showMessageDialog(this, "Sửa nhu yếu phẩm thành công!");
                     loadNhuYeuPham();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi sửa nhu yếu phẩm");
+                    JOptionPane.showMessageDialog(this, "Sửa nhu yếu phẩm thất bại!");
                 }
             } else {
                 if (nhuYeuPhamBLL.themNhuYeuPham(nhuYeuPham)) {
                     JOptionPane.showMessageDialog(this, "Thêm nhu yếu phẩm thành công!");
                     loadNhuYeuPham();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi khi thêm nhu yếu phẩm");
+                    JOptionPane.showMessageDialog(this, "Thêm nhu yếu phẩm thất bại!");
                 }
             }
-            
-            clearFields();
-            updateStatus(isEditing ? "Đã sửa nhu yếu phẩm" : "Đã thêm nhu yếu phẩm");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
         }
     }
     
     private void showSortDialog() {
-        String[] options = {"Mã", "Tên", "Giá nhập"};
+        String[] options = {"Mã", "Tên", "Giá nhập", "Hạn sử dụng"};
         String selected = (String) JOptionPane.showInputDialog(this,
             "Chọn tiêu chí sắp xếp:",
             "Sắp xếp",
@@ -714,39 +730,48 @@ public class GiaoDienKhoHang extends JFrame {
     }
     
     private void sortTable(String criteria) {
-        DefaultTableModel model;
-        switch (currentTab) {
-            case "HangHoa":
-                model = (DefaultTableModel) tableHangHoa.getModel();
-                break;
-            case "DoGiaDung":
-                model = (DefaultTableModel) tableDoGiaDung.getModel();
-                break;
-            case "NhuYeuPham":
-                model = (DefaultTableModel) tableNhuYeuPham.getModel();
-                break;
-            default:
-                return;
-        }
+        DefaultTableModel model = getCurrentTableModel();
+        if (model == null) return;
         
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        int columnIndex = -1;
+        final int columnIndex;
         
         switch (criteria) {
-            case "Mã":
+            case "MA":
                 columnIndex = 0;
                 break;
-            case "Tên":
+            case "TEN":
                 columnIndex = 1;
                 break;
-            case "Giá nhập":
+            case "GIA":
                 columnIndex = 3;
                 break;
+            case "HAN_SU_DUNG":
+                columnIndex = 4;
+                break;
+            default:
+                columnIndex = -1;
         }
         
         if (columnIndex != -1) {
             sorter.setSortable(columnIndex, true);
-            sorter.sort();
+            sorter.setComparator(columnIndex, (o1, o2) -> {
+                if (columnIndex == 3) { // Giá
+                    return Double.compare(Double.parseDouble(o1.toString()), Double.parseDouble(o2.toString()));
+                } else if (columnIndex == 4) { // Hạn sử dụng
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date d1 = sdf.parse(o1.toString());
+                        Date d2 = sdf.parse(o2.toString());
+                        return d1.compareTo(d2);
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                } else {
+                    return o1.toString().compareTo(o2.toString());
+                }
+            });
+            getCurrentTable().setRowSorter(sorter);
         }
     }
     
@@ -766,23 +791,38 @@ public class GiaoDienKhoHang extends JFrame {
     }
     
     private void filterTable(String filter) {
-        DefaultTableModel model;
-        switch (currentTab) {
-            case "HangHoa":
-                model = (DefaultTableModel) tableHangHoa.getModel();
-                break;
-            case "DoGiaDung":
-                model = (DefaultTableModel) tableDoGiaDung.getModel();
-                break;
-            case "NhuYeuPham":
-                model = (DefaultTableModel) tableNhuYeuPham.getModel();
-                break;
-            default:
-                return;
-        }
+        DefaultTableModel model = getCurrentTableModel();
+        if (model == null) return;
         
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
         sorter.setRowFilter(RowFilter.regexFilter(filter));
+        getCurrentTable().setRowSorter(sorter);
+    }
+    
+    private DefaultTableModel getCurrentTableModel() {
+        switch (currentTab) {
+            case "HangHoa":
+                return (DefaultTableModel) tableHangHoa.getModel();
+            case "DoGiaDung":
+                return (DefaultTableModel) tableDoGiaDung.getModel();
+            case "NhuYeuPham":
+                return (DefaultTableModel) tableNhuYeuPham.getModel();
+            default:
+                return null;
+        }
+    }
+    
+    private JTable getCurrentTable() {
+        switch (currentTab) {
+            case "HangHoa":
+                return tableHangHoa;
+            case "DoGiaDung":
+                return tableDoGiaDung;
+            case "NhuYeuPham":
+                return tableNhuYeuPham;
+            default:
+                return null;
+        }
     }
     
     private void showSearchDialog() {
@@ -841,28 +881,32 @@ public class GiaoDienKhoHang extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
         model.setRowCount(0);
         
-        ArrayList<HangHoa_DTO> danhSach = hangHoaBLL.layTatCaHangHoa();
-        for (HangHoa_DTO hh : danhSach) {
-            model.addRow(new Object[]{
-                hh.getMaHang(),
-                hh.getTenHang(),
-                hh.getDonViTinh(),
-                hh.getGiaNhap()
-            });
+        try {
+            List<HangHoa_DTO> danhSach = hangHoaBLL.layDanhSachHangHoa();
+            for (HangHoa_DTO hh : danhSach) {
+                model.addRow(new Object[]{
+                    hh.getMaHang(),
+                    hh.getTenHang(),
+                    hh.getDonViTinh(),
+                    hh.getGiaNhap()
+                });
+            }
+            
+            updateStatus("Đã tải " + danhSach.size() + " hàng hóa");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu: " + e.getMessage());
         }
-        
-        updateStatus("Đã tải " + danhSach.size() + " hàng hóa");
     }
     
     private void loadDoGiaDung() {
         DefaultTableModel model = (DefaultTableModel) tableDoGiaDung.getModel();
         model.setRowCount(0);
         
-        ArrayList<DoGiaDung_DTO> danhSach = doGiaDungBLL.layTatCaDoGiaDung();
+        ArrayList<DoGiaDung_DTO> danhSach = doGiaDungBLL.getAll();
         for (DoGiaDung_DTO dgd : danhSach) {
             model.addRow(new Object[]{
-                dgd.getMaDoGiaDung(),
-                dgd.getTenDoGiaDung(),
+                dgd.getMaHang(),
+                dgd.getTenHang(),
                 dgd.getDonViTinh(),
                 dgd.getGiaNhap(),
                 dgd.getTinhTrang()
@@ -880,8 +924,8 @@ public class GiaoDienKhoHang extends JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (NhuYeuPham_DTO nyp : danhSach) {
             model.addRow(new Object[]{
-                nyp.getMaNhuYeuPham(),
-                nyp.getTenNhuYeuPham(),
+                nyp.getMaHang(),
+                nyp.getTenHang(),
                 nyp.getDonViTinh(),
                 nyp.getGiaNhap(),
                 sdf.format(nyp.getHanSuDung()),
@@ -894,18 +938,22 @@ public class GiaoDienKhoHang extends JFrame {
     
     private void showHangHoaDetails(int row) {
         int maHang = (int) tableHangHoa.getValueAt(row, 0);
-        HangHoa_DTO hangHoa = hangHoaBLL.layHangHoaTheoMa(maHang);
-        
-        if (hangHoa != null) {
-            txtMa.setText(String.valueOf(hangHoa.getMaHang()));
-            txtTen.setText(hangHoa.getTenHang());
-            txtDonViTinh.setText(hangHoa.getDonViTinh());
-            txtGiaNhap.setText(String.valueOf(hangHoa.getGiaNhap()));
-            txtTinhTrang.setText("");
-            txtHanSuDung.setText("");
-            txtNhaCungCap.setText("");
+        try {
+            HangHoa_DTO hangHoa = hangHoaBLL.timHangHoaTheoMa(maHang);
             
-            updateStatus("Đang xem thông tin hàng hóa: " + hangHoa.getTenHang());
+            if (hangHoa != null) {
+                txtMa.setText(String.valueOf(hangHoa.getMaHang()));
+                txtTen.setText(hangHoa.getTenHang());
+                txtDonViTinh.setText(hangHoa.getDonViTinh());
+                txtGiaNhap.setText(String.valueOf(hangHoa.getGiaNhap()));
+                txtTinhTrang.setText("");
+                txtHanSuDung.setText("");
+                txtNhaCungCap.setText("");
+                
+                updateStatus("Đang xem thông tin hàng hóa: " + hangHoa.getTenHang());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin: " + e.getMessage());
         }
     }
     
@@ -986,26 +1034,34 @@ public class GiaoDienKhoHang extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
         model.setRowCount(0);
         
-        ArrayList<HangHoa_DTO> danhSach;
-        switch (searchType) {
-            case "Mã":
-                danhSach = hangHoaBLL.timKiemTheoMa(Integer.parseInt(keyword));
-                break;
-            case "Tên":
-                danhSach = hangHoaBLL.timKiemTheoTen(keyword);
-                break;
-            default:
-                danhSach = hangHoaBLL.layTatCaHangHoa();
-                break;
-        }
-        
-        for (HangHoa_DTO hh : danhSach) {
-            model.addRow(new Object[]{
-                hh.getMaHang(),
-                hh.getTenHang(),
-                hh.getDonViTinh(),
-                hh.getGiaNhap()
-            });
+        try {
+            List<HangHoa_DTO> danhSach;
+            switch (searchType) {
+                case "Mã":
+                    HangHoa_DTO hangHoa = hangHoaBLL.timKiemTheoMa(String.valueOf(Integer.parseInt(keyword)));
+                    danhSach = new ArrayList<>();
+                    if (hangHoa != null) {
+                        danhSach.add(hangHoa);
+                    }
+                    break;
+                case "Tên":
+                    danhSach = hangHoaBLL.timKiemTheoTen(keyword);
+                    break;
+                default:
+                    danhSach = hangHoaBLL.layDanhSachHangHoa();
+                    break;
+            }
+            
+            for (HangHoa_DTO hh : danhSach) {
+                model.addRow(new Object[]{
+                    hh.getMaHang(),
+                    hh.getTenHang(),
+                    hh.getDonViTinh(),
+                    hh.getGiaNhap()
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage());
         }
     }
     
@@ -1016,23 +1072,23 @@ public class GiaoDienKhoHang extends JFrame {
         ArrayList<DoGiaDung_DTO> danhSach;
         switch (searchType) {
             case "Mã":
-                danhSach = doGiaDungBLL.timKiemTheoMa(Integer.parseInt(keyword));
+                danhSach = doGiaDungBLL.searchByCode(Integer.parseInt(keyword));
                 break;
             case "Tên":
-                danhSach = doGiaDungBLL.timKiemTheoTen(keyword);
+                danhSach = doGiaDungBLL.searchByName(keyword);
                 break;
             case "Tình trạng":
-                danhSach = doGiaDungBLL.timKiemTheoTinhTrang(keyword);
+                danhSach = doGiaDungBLL.searchByStatus(keyword);
                 break;
             default:
-                danhSach = doGiaDungBLL.layTatCaDoGiaDung();
+                danhSach = doGiaDungBLL.getAll();
                 break;
         }
         
         for (DoGiaDung_DTO dgd : danhSach) {
             model.addRow(new Object[]{
-                dgd.getMaDoGiaDung(),
-                dgd.getTenDoGiaDung(),
+                dgd.getMaHang(),
+                dgd.getTenHang(),
                 dgd.getDonViTinh(),
                 dgd.getGiaNhap(),
                 dgd.getTinhTrang()
@@ -1063,8 +1119,8 @@ public class GiaoDienKhoHang extends JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (NhuYeuPham_DTO nyp : danhSach) {
             model.addRow(new Object[]{
-                nyp.getMaNhuYeuPham(),
-                nyp.getTenNhuYeuPham(),
+                nyp.getMaHang(),
+                nyp.getTenHang(),
                 nyp.getDonViTinh(),
                 nyp.getGiaNhap(),
                 sdf.format(nyp.getHanSuDung()),
@@ -1116,71 +1172,47 @@ public class GiaoDienKhoHang extends JFrame {
     }
     
     private void exportToPDF(File file) throws Exception {
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(file));
-        document.open();
-        
-        // Thêm tiêu đề
-        Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-        Paragraph title = new Paragraph("Báo Cáo Kho Hàng", titleFont);
-        title.setAlignment(Element.ALIGN_CENTER);
-        title.setSpacingAfter(20);
-        document.add(title);
-        
-        // Thêm bảng dữ liệu
-        PdfPTable table = new PdfPTable(4);
-        table.setWidthPercentage(100);
-        
-        // Thêm header
-        String[] headers = {"Mã", "Tên", "Đơn vị tính", "Giá nhập"};
-        for (String header : headers) {
-            table.addCell(new PdfPCell(new Phrase(header)));
-        }
-        
-        // Thêm dữ liệu
-        DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                table.addCell(new PdfPCell(new Phrase(model.getValueAt(i, j).toString())));
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            // Thêm tiêu đề
+            writer.println("BÁO CÁO KHO HÀNG");
+            writer.println("=================");
+            writer.println();
+
+            // Thêm header
+            DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                writer.print(model.getColumnName(i) + "\t");
+            }
+            writer.println();
+            writer.println("--------------------------------------------------");
+
+            // Thêm dữ liệu
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    writer.print(model.getValueAt(i, j) + "\t");
+                }
+                writer.println();
             }
         }
-        
-        document.add(table);
-        document.close();
     }
     
     private void exportToExcel(File file) throws Exception {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Báo Cáo");
-        
-        // Tạo header
-        Row headerRow = sheet.createRow(0);
-        String[] headers = {"Mã", "Tên", "Đơn vị tính", "Giá nhập"};
-        for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
-        }
-        
-        // Thêm dữ liệu
-        DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            Row row = sheet.createRow(i + 1);
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                Cell cell = row.createCell(j);
-                cell.setCellValue(model.getValueAt(i, j).toString());
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            // Thêm header
+            DefaultTableModel model = (DefaultTableModel) tableHangHoa.getModel();
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                writer.print(model.getColumnName(i) + ",");
+            }
+            writer.println();
+
+            // Thêm dữ liệu
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    writer.print(model.getValueAt(i, j) + ",");
+                }
+                writer.println();
             }
         }
-        
-        // Tự động điều chỉnh độ rộng cột
-        for (int i = 0; i < headers.length; i++) {
-            sheet.autoSizeColumn(i);
-        }
-        
-        // Lưu file
-        FileOutputStream fileOut = new FileOutputStream(file);
-        workbook.write(fileOut);
-        fileOut.close();
-        workbook.close();
     }
     
     private void in() {
