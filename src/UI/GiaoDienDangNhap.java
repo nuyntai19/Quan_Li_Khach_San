@@ -240,6 +240,8 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         HoaDonDatPhong = new javax.swing.JButton();
         DSKhachHang = new javax.swing.JButton();
         DSDatDichVu = new javax.swing.JButton();
+        DSDatPhong1 = new javax.swing.JButton();
+        DatDichVu = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -374,6 +376,21 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         DSDatDichVu.setText("Danh Sách Đặt Dịch Vụ");
         DSDatDichVu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
+        DSDatPhong1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DSDatPhong1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
+        DSDatPhong1.setText("Danh Sách Đặt Phòng");
+        DSDatPhong1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        DatDichVu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/desk-bell.png"))); // NOI18N
+        DatDichVu.setText("Đặt Dịch Vụ");
+        DatDichVu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -386,7 +403,9 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                     .addComponent(HoaDonDatPhong, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                    .addComponent(DSDatDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+                    .addComponent(DSDatDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                    .addComponent(DSDatPhong1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -399,12 +418,16 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CheckOut, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DSDatPhong1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(HoaDonDatPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DSKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DSDatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(203, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -454,7 +477,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(501, 501, 501))
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(418, 418, 418)
+                .addGap(557, 557, 557)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnDangNhap)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -606,6 +629,11 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
+    private void DatDichVuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVuActionPerformed
+        dispose();
+        new DatDichVu().setVisible(true);
+    }//GEN-LAST:event_DatDichVuActionPerformed
+
    
     public static void main(String args[]) {
         TaiKhoanBLL bll = new TaiKhoanBLL();
@@ -623,8 +651,10 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
     private javax.swing.JButton CheckIn;
     private javax.swing.JButton CheckOut;
     private javax.swing.JButton DSDatDichVu;
+    private javax.swing.JButton DSDatPhong1;
     private javax.swing.JButton DSKhachHang;
     private javax.swing.JButton DSPhong;
+    private javax.swing.JButton DatDichVu;
     private javax.swing.JButton DatPhong;
     private javax.swing.JButton HoaDonDatPhong;
     private javax.swing.JButton KhachSan;

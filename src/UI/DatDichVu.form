@@ -245,14 +245,26 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="DatPhong" max="32767" attributes="0"/>
-                      <Component id="CheckIn" alignment="1" max="32767" attributes="0"/>
-                      <Component id="HoaDonDatPhong" alignment="1" max="32767" attributes="0"/>
-                      <Component id="CheckOut" alignment="1" max="32767" attributes="0"/>
-                      <Component id="DSKhachHang" alignment="0" max="32767" attributes="0"/>
-                      <Component id="DatDichVu" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="DSDatPhong" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="HoaDonDatPhong" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="DatDichVu1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="DatPhong" alignment="0" max="32767" attributes="0"/>
+                              <Component id="CheckIn" alignment="1" max="32767" attributes="0"/>
+                              <Component id="CheckOut" alignment="1" max="32767" attributes="0"/>
+                              <Component id="DSKhachHang" alignment="0" max="32767" attributes="0"/>
+                              <Component id="DatDichVu" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -266,12 +278,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="CheckOut" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DSDatPhong" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="HoaDonDatPhong" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DSKhachHang" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DatDichVu1" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="DatDichVu" min="-2" pref="47" max="-2" attributes="0"/>
-                  <EmptySpace pref="331" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -353,6 +369,33 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVuActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="DSDatPhong">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/list.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Danh S&#xe1;ch &#x110;&#x1eb7;t Ph&#xf2;ng"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="DatDichVu1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/reception.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Danh S&#xe1;ch &#x110;&#x1eb7;t D&#x1ecb;ch V&#x1ee5;"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVu1ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

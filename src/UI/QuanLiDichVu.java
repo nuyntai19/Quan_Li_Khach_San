@@ -171,6 +171,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonThongKe = new javax.swing.JButton();
         ButtonQLNhapHang = new javax.swing.JButton();
         ButtonKhoHang = new javax.swing.JButton();
+        ButtonTaoTaiKhoan = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -663,7 +664,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                     .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -734,6 +735,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonKhoHang.setText("Kho Hàng");
         ButtonKhoHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
+        ButtonTaoTaiKhoan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ButtonTaoTaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/accountant.png"))); // NOI18N
+        ButtonTaoTaiKhoan.setText("Tạo Tài Khoản");
+        ButtonTaoTaiKhoan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -747,7 +753,8 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                     .addComponent(ButtonQLNV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ButtonThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ButtonQLNhapHang, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                    .addComponent(ButtonKhoHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ButtonKhoHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ButtonTaoTaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -767,7 +774,9 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 .addComponent(ButtonQLNhapHang, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonKhoHang, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(250, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonTaoTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -1102,6 +1111,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     private javax.swing.JButton ButtonQLPhong;
     private javax.swing.JButton ButtonSua;
     private javax.swing.JButton ButtonSua1;
+    private javax.swing.JButton ButtonTaoTaiKhoan;
     private javax.swing.JButton ButtonThem;
     private javax.swing.JButton ButtonThongKe;
     private javax.swing.JButton ButtonTim;

@@ -251,6 +251,8 @@
                       <Component id="CheckOut" alignment="1" max="32767" attributes="0"/>
                       <Component id="DSKhachHang" alignment="0" pref="222" max="32767" attributes="0"/>
                       <Component id="DSDatDichVu" alignment="0" pref="222" max="32767" attributes="0"/>
+                      <Component id="DSDatPhong1" alignment="0" max="32767" attributes="0"/>
+                      <Component id="DatDichVu" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -266,12 +268,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="CheckOut" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DSDatPhong1" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   <Component id="HoaDonDatPhong" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DSKhachHang" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DSDatDichVu" min="-2" pref="47" max="-2" attributes="0"/>
-                  <EmptySpace pref="307" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DatDichVu" min="-2" pref="47" max="-2" attributes="0"/>
+                  <EmptySpace pref="203" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -352,6 +358,33 @@
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JButton" name="DSDatPhong1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/list.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Danh S&#xe1;ch &#x110;&#x1eb7;t Ph&#xf2;ng"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="DatDichVu">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/desk-bell.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x110;&#x1eb7;t D&#x1ecb;ch V&#x1ee5;"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVuActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel4">
@@ -375,7 +408,7 @@
                   <EmptySpace min="-2" pref="501" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="418" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="557" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="btnDangNhap" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
