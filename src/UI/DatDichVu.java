@@ -866,34 +866,34 @@ public class DatDichVu extends javax.swing.JFrame {
 
     private void btnTimDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimDatPhongActionPerformed
         String loaiTim = cbTimChiTietPhieuThue.getSelectedItem().toString(); // Lấy tiêu chí
-    String tuKhoa = txtTimChiTietPhieuThue.getText().trim(); // Lấy từ khóa tìm
+        String tuKhoa = txtTimChiTietPhieuThue.getText().trim(); // Lấy từ khóa tìm
 
-    try {
-        ChiTietPhieuThuePhongBLL bll = new ChiTietPhieuThuePhongBLL();
-        ArrayList<ChiTietPhieuThuePhongDTO> ketQua = bll.timChiTiet(loaiTim, tuKhoa);
+        try {
+            ChiTietPhieuThuePhongBLL bll = new ChiTietPhieuThuePhongBLL();
+            ArrayList<ChiTietPhieuThuePhongDTO> ketQua = bll.timChiTiet(loaiTim, tuKhoa);
 
-        // Sau khi có danh sách kết quả, bạn cần đổ lại lên table
-        // Giả sử bạn có 1 JTable tên là tableChiTietThue
+            // Sau khi có danh sách kết quả, bạn cần đổ lại lên table
+            // Giả sử bạn có 1 JTable tên là tableChiTietThue
 
-        DefaultTableModel model = (DefaultTableModel) tblDSCHITIETPHIEUTHUE.getModel();
-        model.setRowCount(0); // Xóa bảng cũ
+            DefaultTableModel model = (DefaultTableModel) tblDSCHITIETPHIEUTHUE.getModel();
+            model.setRowCount(0); // Xóa bảng cũ
 
-        for (ChiTietPhieuThuePhongDTO ct : ketQua) {
-            model.addRow(new Object[]{
-                ct.getId(),
-                ct.getMaThuePhong(),
-                ct.getMaPhong(),
-                ct.getNgayDatPhong(),
-                ct.getNgayTraPhong(),
-                ct.getGiaPhong(),
-                ct.getThanhTien()
-            });
+            for (ChiTietPhieuThuePhongDTO ct : ketQua) {
+                model.addRow(new Object[]{
+                    ct.getId(),
+                    ct.getMaThuePhong(),
+                    ct.getMaPhong(),
+                    ct.getNgayDatPhong(),
+                    ct.getNgayTraPhong(),
+                    ct.getGiaPhong(),
+                    ct.getThanhTien()
+                });
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
         }
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
-    }
     }//GEN-LAST:event_btnTimDatPhongActionPerformed
  
     private void txtTimChiTietPhieuThueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimChiTietPhieuThueActionPerformed

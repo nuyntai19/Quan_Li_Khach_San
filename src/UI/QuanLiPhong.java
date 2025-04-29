@@ -770,6 +770,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonTaoTaiKhoan1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/accountant.png"))); // NOI18N
         ButtonTaoTaiKhoan1.setText("Tạo Tài Khoản");
         ButtonTaoTaiKhoan1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonTaoTaiKhoan1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonTaoTaiKhoan1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1071,6 +1076,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
     private void CBMaLoaiPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMaLoaiPhongActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CBMaLoaiPhongActionPerformed
+
+    private void ButtonTaoTaiKhoan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTaoTaiKhoan1ActionPerformed
+        dispose();
+        new TaiKhoan().setVisible(true);
+    }//GEN-LAST:event_ButtonTaoTaiKhoan1ActionPerformed
 
     /**
      * @param args the command line arguments

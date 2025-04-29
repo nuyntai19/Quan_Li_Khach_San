@@ -739,6 +739,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonTaoTaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/accountant.png"))); // NOI18N
         ButtonTaoTaiKhoan.setText("Tạo Tài Khoản");
         ButtonTaoTaiKhoan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonTaoTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonTaoTaiKhoanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1050,6 +1055,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
             });
         }
     }//GEN-LAST:event_jButtonResertActionPerformed
+
+    private void ButtonTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTaoTaiKhoanActionPerformed
+        dispose();
+        new TaiKhoan().setVisible(true);
+    }//GEN-LAST:event_ButtonTaoTaiKhoanActionPerformed
 
     /**
      * @param args the command line arguments

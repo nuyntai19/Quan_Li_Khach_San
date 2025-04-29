@@ -1310,7 +1310,6 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 return;
             }
 
-            System.out.println("Danh sách tạm trước khi lưu:");
             for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
                 System.out.println(ct);
             }
