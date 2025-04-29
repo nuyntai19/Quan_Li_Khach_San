@@ -47,6 +47,10 @@ public class DatDichVuBLL {
         datDichVuDAO.xoaDatDichVu(idChiTietPhieuThue, maDichVu);
     }
     
+    public ArrayList<DatDichVuDTO> getByIDChiTietPhieuThue(int id) {
+        return datDichVuDAO.getByIDChiTietPhieuThue(id);
+    }
+    
     
 
 }

@@ -90,4 +90,29 @@ public class DatDichVuDAO {
         }
         return ds;
     }
+    
+    public ArrayList<DatDichVuDTO> getByIDChiTietPhieuThue(int idChiTietPhieuThue) {
+        ArrayList<DatDichVuDTO> list = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM DatDichVu WHERE IDChiTietPhieuThue = ?";
+            Connection conn = DatabaseQLKS.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idChiTietPhieuThue);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DatDichVuDTO dv = new DatDichVuDTO();
+                dv.setIdChiTietPhieuThue(rs.getInt("IDChiTietPhieuThue"));
+                dv.setMaDichVu(rs.getInt("MaDichVu"));
+                dv.setSoLuong(rs.getInt("SoLuong"));
+                dv.setDonGia(rs.getDouble("DonGia"));
+                dv.setThanhTien(rs.getDouble("ThanhTien"));
+                list.add(dv);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

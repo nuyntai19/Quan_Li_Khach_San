@@ -15,6 +15,8 @@ import DTO.LoaiPhongDTO;
 import DTO.QuanLiPhongDTO;
 import BLL.LoaiPhongBLL;
 import BLL.QuanLiPhongBLL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class QuanLiPhong extends javax.swing.JFrame {
@@ -677,7 +679,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -708,7 +710,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addComponent(KhachSan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(QuanLi, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -721,6 +723,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(52, 152, 219), 5));
         jPanel3.setPreferredSize(new java.awt.Dimension(244, 385));
 
+        ButtonQLPhong.setBackground(new java.awt.Color(238, 255, 255));
         ButtonQLPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/room.png"))); // NOI18N
         ButtonQLPhong.setText("Quản lí Phòng");
@@ -745,6 +748,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonQLNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNV.png"))); // NOI18N
         ButtonQLNV.setText("Quản lí Nhân Viên");
         ButtonQLNV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonQLNVActionPerformed(evt);
+            }
+        });
 
         ButtonQLNhaCUngCap.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLNhaCUngCap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHACUNGCAP.png"))); // NOI18N
@@ -812,7 +820,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 .addComponent(ButtonKhoHang, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonTaoTaiKhoan1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addGap(204, 204, 204))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1034,10 +1042,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTrangThaiActionPerformed
 
     private void ButtonQLPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLPhongActionPerformed
-        dispose();
-        loadData();
-        loadDataLoaiPhongToTable();
-        new QuanLiPhong().setVisible(true);
+        
     }//GEN-LAST:event_ButtonQLPhongActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
@@ -1081,6 +1086,15 @@ public class QuanLiPhong extends javax.swing.JFrame {
         dispose();
         new TaiKhoan().setVisible(true);
     }//GEN-LAST:event_ButtonTaoTaiKhoan1ActionPerformed
+
+    private void ButtonQLNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLNVActionPerformed
+        dispose();
+        try {
+            new QuanLiNhanVien().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(QuanLiPhong.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_ButtonQLNVActionPerformed
 
     /**
      * @param args the command line arguments
