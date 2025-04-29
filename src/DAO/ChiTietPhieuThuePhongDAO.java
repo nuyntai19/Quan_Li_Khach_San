@@ -1,13 +1,14 @@
-
 package DAO;
 
+import DTO.ChiTietPhieuThuePhongDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import sql.DatabaseQLKS;
-import DTO.ChiTietPhieuThuePhongDTO;
 
 
 public class ChiTietPhieuThuePhongDAO {
@@ -21,13 +22,13 @@ public class ChiTietPhieuThuePhongDAO {
 
             while (rs.next()) {
                 ds.add(new ChiTietPhieuThuePhongDTO(
+                    rs.getInt("ID"),
                     rs.getInt("maThuePhong"),
                     rs.getInt("maPhong"),
                     rs.getDate("ngayDatPhong"),
                     rs.getDate("ngayTraPhong"),
                     rs.getDouble("giaPhong"),
-                    rs.getDouble("thanhTien"),
-                    rs.getString("trangThai")
+                    rs.getDouble("thanhTien")
                 ));
             }
         }
@@ -35,7 +36,7 @@ public class ChiTietPhieuThuePhongDAO {
     }
 
     public void themChiTiet(ChiTietPhieuThuePhongDTO c) throws SQLException {
-        String sql = "INSERT INTO ChiTietPhieuThue (MaThuePhong, MaPhong, NgayDatPhong, NgayTraPhong, GiaPhong, ThanhTien, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ChiTietPhieuThue (MaThuePhong, MaPhong, NgayDatPhong, NgayTraPhong, GiaPhong, ThanhTien) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, c.getMaThuePhong());
@@ -44,33 +45,54 @@ public class ChiTietPhieuThuePhongDAO {
             stmt.setDate(4, new java.sql.Date(c.getNgayTraPhong().getTime()));
             stmt.setDouble(5, c.getGiaPhong());
             stmt.setDouble(6, c.getThanhTien());
-            stmt.setString(7, c.getTrangThai());
             stmt.executeUpdate();
         }
     }
 
-    public void xoaChiTiet(int maThuePhong, int maPhong) throws SQLException {
-        String sql = "DELETE FROM ChiTietPhieuThue WHERE MaThuePhong = ? AND MaPhong = ?";
+    public void xoaChiTiet(int id) throws SQLException {
+        String sql = "DELETE FROM ChiTietPhieuThue WHERE ID = ?";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, maThuePhong);
-            stmt.setInt(2, maPhong);
+            stmt.setInt(1, id); // Sử dụng ID để xác định bản ghi
             stmt.executeUpdate();
         }
     }
 
     public void capNhatChiTiet(ChiTietPhieuThuePhongDTO c) throws SQLException {
-        String sql = "UPDATE ChiTietPhieuThue SET NgayDatPhong = ?, NgayTraPhong = ?, GiaPhong = ?, ThanhTien = ?, TrangThai = ? WHERE MaThuePhong = ? AND MaPhong = ?";
+        String sql = "UPDATE ChiTietPhieuThue SET MaThuePhong = ?, MaPhong = ?, NgayDatPhong = ?, NgayTraPhong = ?, GiaPhong = ?, ThanhTien = ? WHERE ID = ?";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setDate(1, new java.sql.Date(c.getNgayDatPhong().getTime()));
-            stmt.setDate(2, new java.sql.Date(c.getNgayTraPhong().getTime()));
-            stmt.setDouble(3, c.getGiaPhong());
-            stmt.setDouble(4, c.getThanhTien());
-            stmt.setString(5, c.getTrangThai());
-            stmt.setInt(6, c.getMaThuePhong());
-            stmt.setInt(7, c.getMaPhong());
+            stmt.setInt(1, c.getMaThuePhong());
+            stmt.setInt(2, c.getMaPhong());
+            stmt.setDate(3, new java.sql.Date(c.getNgayDatPhong().getTime()));
+            stmt.setDate(4, new java.sql.Date(c.getNgayTraPhong().getTime()));
+            stmt.setDouble(5, c.getGiaPhong());
+            stmt.setDouble(6, c.getThanhTien());
+            stmt.setInt(7, c.getId()); // Sử dụng ID để xác định bản ghi
             stmt.executeUpdate();
         }
     }
+
+    public boolean kiemTraTonTai(int maThuePhong, int maPhong, java.util.Date ngayDatPhong, java.util.Date ngayTraPhong) throws SQLException {
+        String sql = "SELECT * FROM ChiTietPhieuThue WHERE MaThuePhong = ? AND MaPhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maThuePhong);
+            stmt.setInt(2, maPhong);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                java.util.Date daDatTuNgay = rs.getDate("NgayDatPhong");
+                java.util.Date daDatDenNgay = rs.getDate("NgayTraPhong");
+                // Kiểm tra khoảng thời gian bị trùng (giao nhau)
+                boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
+                if (isOverlapping) {
+                    return true; // Trùng lặp
+                }
+            }
+        }
+        return false; // Không trùng lặp
+    }
+    
+   
 }
+

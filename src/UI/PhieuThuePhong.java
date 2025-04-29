@@ -24,6 +24,7 @@ import BLL.KhachHangBLL;
 import DTO.PhieuThuePhongDTO;
 import BLL.PhieuThuePhongManager;
 import BLL.ChiTietPhieuThuePhongBLL;
+import java.util.logging.Level;
 
 
 public class PhieuThuePhong extends javax.swing.JFrame {
@@ -39,7 +40,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         phongBLL = new QuanLiPhongBLL();
         model = (DefaultTableModel) tblDSPHONGTRONG.getModel(); 
         
-        loadDataPhongTrong();
+        loadDataPhong();
         
         tblDSPHONGTRONG.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,7 +69,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         });
     }
     
-    private void loadDataPhongTrong() {
+    private void loadDataPhong() {
         try {
             model.setRowCount(0); // Xóa dữ liệu cũ
 
@@ -81,12 +82,10 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
             // chỉ hiển thị phòng có trạng thái là "Trống"
             for (QuanLiPhongDTO phong : danhSachPhongGoc) {
-                if ("Trống".equalsIgnoreCase(phong.getTrangThai())) {
                     model.addRow(new Object[] {
                         phong.getMaPhong(), phong.getMaLoaiPhong(), phong.getSoGiuong(),
                         phong.getDonGia(), phong.getTrangThai()
                     });
-                }
             }
 
         } catch (SQLException e) {
@@ -148,6 +147,8 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         HoaDonDatPhong = new javax.swing.JButton();
         DSKhachHang = new javax.swing.JButton();
         DatDichVu = new javax.swing.JButton();
+        DSDatPhong = new javax.swing.JButton();
+        DatDichVu1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -322,6 +323,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(52, 152, 219), 5));
 
+        DatPhong.setBackground(new java.awt.Color(238, 255, 255));
         DatPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/review.png"))); // NOI18N
         DatPhong.setText("Đặt Phòng");
@@ -346,11 +348,21 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         HoaDonDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
         HoaDonDatPhong.setText("Hóa Đơn ");
         HoaDonDatPhong.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        HoaDonDatPhong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HoaDonDatPhongActionPerformed(evt);
+            }
+        });
 
         DSKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DSKhachHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/registration-form.png"))); // NOI18N
         DSKhachHang.setText("Danh Sách Khách Hàng");
         DSKhachHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DSKhachHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DSKhachHangActionPerformed(evt);
+            }
+        });
 
         DatDichVu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DatDichVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/desk-bell.png"))); // NOI18N
@@ -359,6 +371,21 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         DatDichVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DatDichVuActionPerformed(evt);
+            }
+        });
+
+        DSDatPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DSDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
+        DSDatPhong.setText("Danh Sách Đặt Phòng");
+        DSDatPhong.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        DatDichVu1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reception.png"))); // NOI18N
+        DatDichVu1.setText("Danh Sách Đặt Dịch Vụ");
+        DatDichVu1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVu1ActionPerformed(evt);
             }
         });
 
@@ -373,8 +400,10 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     .addComponent(CheckIn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(HoaDonDatPhong, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckOut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                    .addComponent(DatDichVu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DSDatPhong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -387,12 +416,16 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CheckOut, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DSDatPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(HoaDonDatPhong, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DSKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addGap(204, 204, 204))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -535,7 +568,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         jTextField2.setEnabled(false);
 
         LBPhongTrong.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        LBPhongTrong.setText("Danh sách phòng trống:");
+        LBPhongTrong.setText("Danh sách phòng :");
 
         LBPhongTrong1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         LBPhongTrong1.setText("TÌM PHÒNG TRỐNG:");
@@ -926,7 +959,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 .addComponent(KhachSan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(QuanLi, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -939,14 +972,14 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -1117,27 +1150,58 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
     private void ButtonChonNhieuPhongDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonNhieuPhongDatActionPerformed
         try {
-            // Lấy dữ liệu từ các TextField
+             // Lấy dữ liệu từ các TextField
             String maDatPhongStr = TXDP.getText().trim();
             String maPhongStr = TXMaPhong.getText().trim();
             java.util.Date ngayDatPhong = DCNgayDP.getDate();
             java.util.Date ngayTraPhong = DCNgayTP.getDate();
-            double giaPhong = Double.parseDouble(TXGiaThue.getText().trim());
-            String trangThai = "Đang chọn";
+            String giaPhongStr = TXGiaThue.getText().trim();
 
             // Kiểm tra dữ liệu hợp lệ
-            if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null) {
+            if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null || giaPhongStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
                 return;
             }
 
+            // Kiểm tra ngày đặt và ngày trả
+            java.util.Date ngayHienTai = new java.util.Date();
+            if (ngayDatPhong.after(ngayTraPhong)) {
+                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải nhỏ hơn hoặc bằng ngày trả phòng.");
+                return;
+            }
+            if (ngayDatPhong.before(ngayHienTai)) {
+                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải lớn hơn hoặc bằng ngày hiện tại.");
+                return;
+            }
             int maDatPhong = Integer.parseInt(maDatPhongStr);
             int maPhong = Integer.parseInt(maPhongStr);
+            double giaPhong = Double.parseDouble(giaPhongStr);
 
-            // Lấy danh sách tạm
+
+            // Kiểm tra nếu mã phòng có trạng thái là "Dang su dung" mà trùng thì kiểm tra dữ liệu lưu trong ChiTietPhieuThue có cùng mã phòng xem có trùng ngày chưa
             List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
+            ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
+            for (QuanLiPhongDTO p : dsp) {
+                if (p.getMaPhong() == maPhong && "Dang su dung".equals(p.getTrangThai())) {
+                    ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
+                    ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
+                    for (ChiTietPhieuThuePhongDTO ct : dsct) {
+                        if (ct.getMaPhong() == maPhong) {
+                            // Kiểm tra khoảng thời gian bị trùng (giao nhau)
+                            java.util.Date daDatTuNgay = ct.getNgayDatPhong();
+                            java.util.Date daDatDenNgay = ct.getNgayTraPhong();
+                            boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
+                            if (isOverlapping) {
+                                JOptionPane.showMessageDialog(this, "Phòng này đang sử dụng và bạn đã trùng lịch đặt tiếp theo.");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
-            // ✅ Kiểm tra nếu danh sách tạm đã có dữ liệu
+            // Kiểm tra nếu danh sách tạm đã có dữ liệu
             if (!danhSachTam.isEmpty()) {
                 int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
                 if (maDatPhongCu != maDatPhong) {
@@ -1146,7 +1210,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 }
             }
 
-            // Kiểm tra xem đã chọn phòng này với ngày trùng chưa
+            // Kiểm tra xem đã chọn phòng trong danh sách tạm trùng ngày chưa
             for (ChiTietPhieuThuePhongDTO ct : danhSachTam) {
                 if (ct.getMaPhong() == maPhong) {
                     // Kiểm tra khoảng thời gian bị trùng (giao nhau)
@@ -1159,15 +1223,15 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     }
                 }
             }
-
-            // Tính Thành Tiền: Giá phòng * số ngày thuê
+            
+             // Tính Thành Tiền: Giá phòng * số ngày thuê
             long diffInMillies = Math.abs(ngayTraPhong.getTime() - ngayDatPhong.getTime());
             long diffInDays = diffInMillies / (24 * 60 * 60 * 1000);
             double thanhTien = giaPhong * diffInDays;
 
             // Lưu vào danh sách tạm
             ChiTietPhieuThuePhongDTO chiTiet = new ChiTietPhieuThuePhongDTO(
-                maDatPhong, maPhong, ngayDatPhong, ngayTraPhong, giaPhong, thanhTien, trangThai
+                maDatPhong, maPhong, ngayDatPhong, ngayTraPhong, giaPhong, thanhTien
             );
             BLL.PhieuThuePhongManager.addChiTiet(chiTiet);
 
@@ -1216,6 +1280,20 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
     private void ButtonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDatPhongActionPerformed
         try {
+            // 0. Kiểm tra các trường không được để trống
+            if (TXKhachHang.getText().trim().isEmpty() ||
+                TXHo.getText().trim().isEmpty() ||
+                TXTen.getText().trim().isEmpty() ||
+                DCNgaySinh.getDate() == null ||
+                TXEmail.getText().trim().isEmpty() ||
+                TXSDT.getText().trim().isEmpty() ||
+                TXDP.getText().trim().isEmpty() ||
+                TXTongTien.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin trước khi đặt phòng!");
+                return;
+            }
+
             // 1. Lưu thông tin khách hàng
             String maKhachHangStr = TXKhachHang.getText().trim();
             int maKhachHang = Integer.parseInt(maKhachHangStr);
@@ -1228,7 +1306,6 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
             KhachHangDTO khach = new KhachHangDTO(maKhachHang, ho, ten, new java.sql.Date(ngaySinh.getTime()), gioiTinh, email, sdt);
             KhachHangBLL khBLL = new KhachHangBLL();
-            // Kiểm tra khách hàng đã tồn tại
             if (!khBLL.kiemTraTonTai(maKhachHang)) {
                 khBLL.themKhachHang(khach);
             }
@@ -1238,35 +1315,73 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             TaiKhoanDTO tk = tkDAO.layTaiKhoanDangNhapTuBangNhanVienDangNhap();
             int maNhanVien = tk.getMaNhanVien();
 
+            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
+
+            if (danhSachChiTiet.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Danh sách phòng muốn đặt đang rỗng. Vui lòng chọn phòng trước khi đặt.");
+                return;
+            }
+
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+                System.out.println(ct);
+            }
+
             // 3. Lưu phiếu thuê phòng
             int maThuePhong = Integer.parseInt(TXDP.getText().trim());
             java.util.Date ngayLapPhieu = new java.util.Date(); // Ngày hiện tại
             double tongTien = Double.parseDouble(TXTongTien.getText().trim());
             String trangThai = "Dang thue";
+            // Kiểm tra xem mã thuê phòng có trùng với mã thuê phòng trong danh sách tạm không
+            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
+               if(ct.getMaThuePhong() != maThuePhong) {
+                   JOptionPane.showMessageDialog(this, "Mã thuê phòng không trùng với mã thuê phòng trong danh tạm đang lưu");
+                   return;
+                }
+            }
 
             PhieuThuePhongDTO phieu = new PhieuThuePhongDTO(maThuePhong, maKhachHang, maNhanVien, ngayLapPhieu, tongTien, trangThai);
             PhieuThuePhongBLL phieuBLL = new PhieuThuePhongBLL();
             phieuBLL.themPhieuThue(phieu); // Lưu phiếu thuê
 
-            // 4. Lưu các chi tiết phiếu thuê từ danh sách tạm
-            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
-            for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
-                ct.setTrangThai("Dang Su Dung");
-            }
+            // 4. Lưu chi tiết phiếu thuê + cập nhật trạng thái phòng
             ChiTietPhieuThuePhongBLL chiTietBLL = new ChiTietPhieuThuePhongBLL();
+            QuanLiPhongBLL phongBLL = new QuanLiPhongBLL();
             for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
-                chiTietBLL.themChiTiet(ct); // Lưu từng dòng
+                try {
+                    chiTietBLL.themChiTiet(ct); // Lưu chi tiết
+                    phongBLL.capNhatTrangThai(ct.getMaPhong(), "Dang su dung"); // Cập nhật trạng thái phòng
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu chi tiết phòng: " + e.getMessage());
+                }
             }
 
             JOptionPane.showMessageDialog(this, "Đặt phòng thành công!");
-            // Sau khi đặt có thể reset giao diện hoặc clear danh sách tạm
-            PhieuThuePhongManager.clearDanhSach();
+            PhieuThuePhongManager.clearDanhSach(); // Xóa danh sách tạm sau khi lưu
+            loadDataPhong();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi đặt phòng: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_ButtonDatPhongActionPerformed
+
+    private void DatDichVu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DatDichVu1ActionPerformed
+
+    private void HoaDonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoaDonDatPhongActionPerformed
+        dispose();
+        try {
+            new DanhSachHoaDon().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(PhieuThuePhong.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_HoaDonDatPhongActionPerformed
+
+    private void DSKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSKhachHangActionPerformed
+        dispose();
+        new DanhSachKhachHang().setVisible(true);
+    }//GEN-LAST:event_DSKhachHangActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1284,22 +1399,9 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) { // Gộp tất cả các ngoại lệ vào một catch
             java.util.logging.Logger.getLogger(PhieuThuePhong.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -1322,9 +1424,11 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser DCNgayDP;
     private com.toedter.calendar.JDateChooser DCNgaySinh;
     private com.toedter.calendar.JDateChooser DCNgayTP;
+    private javax.swing.JButton DSDatPhong;
     private javax.swing.JButton DSKhachHang;
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu;
+    private javax.swing.JButton DatDichVu1;
     private javax.swing.JButton DatPhong;
     private javax.swing.JButton HoaDonDatPhong;
     private javax.swing.JButton KhachSan;

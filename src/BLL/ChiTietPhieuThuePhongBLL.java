@@ -1,10 +1,10 @@
 package BLL;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import DAO.ChiTietPhieuThuePhongDAO;
 import DTO.ChiTietPhieuThuePhongDTO;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ChiTietPhieuThuePhongBLL {
     private ChiTietPhieuThuePhongDAO chiTietDAO;
@@ -18,33 +18,54 @@ public class ChiTietPhieuThuePhongBLL {
     }
 
     public void themChiTiet(ChiTietPhieuThuePhongDTO ct) throws Exception {
-        if (kiemTraTonTai(ct.getMaThuePhong(), ct.getMaPhong())) {
-            throw new Exception("Chi tiết thuê đã tồn tại với mã thuê " + ct.getMaThuePhong() + " và mã phòng " + ct.getMaPhong());
+        if (chiTietDAO.kiemTraTonTai(ct.getMaThuePhong(), ct.getMaPhong(), ct.getNgayDatPhong(), ct.getNgayTraPhong())) {
+            throw new Exception("Chi tiết thuê đã tồn tại với mã thuê " + ct.getMaThuePhong() + " và mã phòng " + ct.getMaPhong() + " trong khoảng thời gian này.");
         }
         chiTietDAO.themChiTiet(ct);
     }
 
     public void capNhatChiTiet(ChiTietPhieuThuePhongDTO ct) throws SQLException {
-        if (!kiemTraTonTai(ct.getMaThuePhong(), ct.getMaPhong())) {
+        if (!chiTietDAO.kiemTraTonTai(ct.getMaThuePhong(), ct.getMaPhong(), ct.getNgayDatPhong(), ct.getNgayTraPhong())) {
             throw new SQLException("Không tìm thấy chi tiết thuê để cập nhật.");
         }
         chiTietDAO.capNhatChiTiet(ct);
     }
 
-    public void xoaChiTiet(int maThuePhong, int maPhong) throws SQLException {
-        if (!kiemTraTonTai(maThuePhong, maPhong)) {
-            throw new SQLException("Không tìm thấy chi tiết thuê để xóa.");
-        }
-        chiTietDAO.xoaChiTiet(maThuePhong, maPhong);
+    public void xoaChiTiet(int id) throws SQLException {
+        chiTietDAO.xoaChiTiet(id);
     }
+    
+    public ArrayList<ChiTietPhieuThuePhongDTO> timChiTiet(String loaiTimKiem, String tuKhoa) throws SQLException {
+        ArrayList<ChiTietPhieuThuePhongDTO> ketQua = new ArrayList<>();
+        ArrayList<ChiTietPhieuThuePhongDTO> danhSach = layDanhSachChiTiet();
 
-    private boolean kiemTraTonTai(int maThuePhong, int maPhong) throws SQLException {
-        ArrayList<ChiTietPhieuThuePhongDTO> danhSach = chiTietDAO.layDanhSachChiTiet();
         for (ChiTietPhieuThuePhongDTO ct : danhSach) {
-            if (ct.getMaThuePhong() == maThuePhong && ct.getMaPhong() == maPhong) {
-                return true;
+            switch (loaiTimKiem) {
+                case "Mã đặt phòng":
+                    if (String.valueOf(ct.getMaThuePhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Mã phòng":
+                    if (String.valueOf(ct.getMaPhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày Đặt Phòng":
+                    if (ct.getNgayDatPhong().toString().contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày Trả Phòng":
+                    if (ct.getNgayTraPhong().toString().contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
             }
         }
-        return false;
+        return ketQua;
     }
+
+
+    
 }

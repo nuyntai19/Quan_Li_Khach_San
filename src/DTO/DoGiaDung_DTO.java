@@ -1,5 +1,5 @@
 package DTO;
-public class DoGiaDung_DTO extends HangHoa {
+public class DoGiaDung_DTO extends HangHoa_DTO {
     private String tinhTrang;
     private static final String LOAI_HANG = "DoGiaDung";
     
@@ -10,13 +10,13 @@ public class DoGiaDung_DTO extends HangHoa {
     }
     
     // Constructor có tham số
-    public DoGiaDung_DTO (String mh, String th, String dvt, int gn, String tt) {
-        super(mh, th, dvt, gn);
+    public DoGiaDung_DTO (int mh, String th, String dvt, double gn, String tt) {
+        super(mh, th, dvt, gn, LOAI_HANG);
         this.tinhTrang = tt;
     }
     
     // Constructor sao chép
-    public DoGiaDung_DTO(DoGiaDung tmp) {
+    public DoGiaDung_DTO(DoGiaDung_DTO tmp) {
         super(tmp);
         this.tinhTrang = tmp.tinhTrang;
     }
@@ -31,7 +31,8 @@ public class DoGiaDung_DTO extends HangHoa {
         return this.tinhTrang;
     }
     
-    public static String getLoaiHang() {
+    @Override
+    public String getLoaiHang() {
         return LOAI_HANG;
     }
 }

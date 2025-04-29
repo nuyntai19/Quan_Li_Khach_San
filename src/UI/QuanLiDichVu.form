@@ -768,11 +768,11 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="5" rowCount="4">
-                    <Column editable="true" title="M&#xe3; d&#x1ecb;ch v&#x1ee5;" type="java.lang.Object"/>
-                    <Column editable="true" title="T&#xea;n d&#x1ecb;ch v&#x1ee5;" type="java.lang.Object"/>
-                    <Column editable="true" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
-                    <Column editable="true" title="&#x110;&#x1a1;n gi&#xe1;" type="java.lang.Object"/>
-                    <Column editable="true" title="M&#xf4; t&#x1ea3;" type="java.lang.Object"/>
+                    <Column editable="false" title="M&#xe3; d&#x1ecb;ch v&#x1ee5;" type="java.lang.Integer"/>
+                    <Column editable="false" title="T&#xea;n d&#x1ecb;ch v&#x1ee5;" type="java.lang.String"/>
+                    <Column editable="false" title="M&#xf4; t&#x1ea3;" type="java.lang.String"/>
+                    <Column editable="false" title="&#x110;&#x1a1;n gi&#xe1;" type="java.lang.Double"/>
+                    <Column editable="false" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng" type="java.lang.Integer"/>
                   </Table>
                 </Property>
               </Properties>
@@ -892,7 +892,7 @@
                   <Component id="KhachSan" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="QuanLi" min="-2" pref="90" max="-2" attributes="0"/>
-                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
               <Component id="jPanel3" alignment="1" pref="240" max="32767" attributes="0"/>
           </Group>
@@ -905,7 +905,7 @@
                       <Component id="QuanLi" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jPanel3" pref="629" max="32767" attributes="0"/>
+                  <Component id="jPanel3" pref="634" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -962,8 +962,9 @@
                           <Component id="ButtonQLNhaCUngCap" alignment="1" max="32767" attributes="0"/>
                           <Component id="ButtonQLNV" alignment="1" max="32767" attributes="0"/>
                           <Component id="ButtonThongKe" alignment="0" max="32767" attributes="0"/>
-                          <Component id="ButtonQLNhapHang" alignment="0" pref="218" max="32767" attributes="0"/>
+                          <Component id="ButtonQLNhapHang" alignment="0" max="32767" attributes="0"/>
                           <Component id="ButtonKhoHang" alignment="0" max="32767" attributes="0"/>
+                          <Component id="ButtonTaoTaiKhoan" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -986,7 +987,9 @@
                       <Component id="ButtonQLNhapHang" min="-2" pref="47" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ButtonKhoHang" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace pref="250" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="ButtonTaoTaiKhoan" min="-2" pref="45" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1009,6 +1012,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="ButtonQLDV">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ee" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="1"/>
                 </Property>
@@ -1033,6 +1039,9 @@
                 <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xed; Nh&#xe2;n Vi&#xea;n"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonQLNVActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="ButtonQLNhaCUngCap">
               <Properties>
@@ -1081,6 +1090,21 @@
                 <Property name="text" type="java.lang.String" value="Kho H&#xe0;ng"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="ButtonTaoTaiKhoan">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="1"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/ICON/accountant.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="T&#x1ea1;o T&#xe0;i Kho&#x1ea3;n"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonTaoTaiKhoanActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

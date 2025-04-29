@@ -14,6 +14,8 @@ import sql.DatabaseQLKS;
 import java.util.ArrayList;
 import DTO.QuanLiDichVuDTO;
 import BLL.QuanLiDichVuBLL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class QuanLiDichVu extends javax.swing.JFrame {
 
@@ -171,6 +173,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonThongKe = new javax.swing.JButton();
         ButtonQLNhapHang = new javax.swing.JButton();
         ButtonKhoHang = new javax.swing.JButton();
+        ButtonTaoTaiKhoan = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -471,9 +474,24 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Mã dịch vụ", "Tên dịch vụ", "Số lượng", "Đơn giá", "Mô tả"
+                "Mã dịch vụ", "Tên dịch vụ", "Mô tả", "Đơn giá", "Số lượng"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane4.setViewportView(tblDSDICHVU);
 
         ButtonThem.setBackground(new java.awt.Color(52, 152, 219));
@@ -684,6 +702,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
             }
         });
 
+        ButtonQLDV.setBackground(new java.awt.Color(238, 255, 255));
         ButtonQLDV.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLDV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLDV.png"))); // NOI18N
         ButtonQLDV.setText("Quản lí Dịch Vụ");
@@ -698,6 +717,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonQLNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNV.png"))); // NOI18N
         ButtonQLNV.setText("Quản lí Nhân Viên");
         ButtonQLNV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonQLNVActionPerformed(evt);
+            }
+        });
 
         ButtonQLNhaCUngCap.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLNhaCUngCap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHACUNGCAP.png"))); // NOI18N
@@ -719,6 +743,16 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonKhoHang.setText("Kho Hàng");
         ButtonKhoHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
+        ButtonTaoTaiKhoan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ButtonTaoTaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/accountant.png"))); // NOI18N
+        ButtonTaoTaiKhoan.setText("Tạo Tài Khoản");
+        ButtonTaoTaiKhoan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonTaoTaiKhoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonTaoTaiKhoanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -731,8 +765,9 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                     .addComponent(ButtonQLNhaCUngCap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ButtonQLNV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ButtonThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ButtonQLNhapHang, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                    .addComponent(ButtonKhoHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ButtonQLNhapHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ButtonKhoHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ButtonTaoTaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -752,7 +787,9 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 .addComponent(ButtonQLNhapHang, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonKhoHang, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(250, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonTaoTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(204, 204, 204))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -764,7 +801,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 .addComponent(KhachSan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(QuanLi, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
@@ -774,7 +811,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                     .addComponent(KhachSan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(QuanLi, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 634, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1006,8 +1043,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void ButtonQLDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLDVActionPerformed
-        dispose();
-        new QuanLiDichVu().setVisible(true);
+        
     }//GEN-LAST:event_ButtonQLDVActionPerformed
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
@@ -1026,6 +1062,20 @@ public class QuanLiDichVu extends javax.swing.JFrame {
             });
         }
     }//GEN-LAST:event_jButtonResertActionPerformed
+
+    private void ButtonTaoTaiKhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTaoTaiKhoanActionPerformed
+        dispose();
+        new TaiKhoan().setVisible(true);
+    }//GEN-LAST:event_ButtonTaoTaiKhoanActionPerformed
+
+    private void ButtonQLNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLNVActionPerformed
+        dispose();
+        try {
+            new QuanLiNhanVien().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(QuanLiPhong.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_ButtonQLNVActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1087,6 +1137,7 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     private javax.swing.JButton ButtonQLPhong;
     private javax.swing.JButton ButtonSua;
     private javax.swing.JButton ButtonSua1;
+    private javax.swing.JButton ButtonTaoTaiKhoan;
     private javax.swing.JButton ButtonThem;
     private javax.swing.JButton ButtonThongKe;
     private javax.swing.JButton ButtonTim;

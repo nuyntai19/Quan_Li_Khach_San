@@ -35,4 +35,9 @@ public class QuanLiPhongBLL {
     public void xoaPhong(int maPhong) throws SQLException {
         phongDAO.xoaPhong(maPhong);
     }
+    
+    public void capNhatTrangThai(int maPhong, String trangThaiMoi) throws SQLException {
+        phongDAO.capNhatTrangThaiPhong(maPhong, trangThaiMoi);
+    }
+
 }

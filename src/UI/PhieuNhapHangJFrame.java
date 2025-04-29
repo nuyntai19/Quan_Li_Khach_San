@@ -1,4 +1,4 @@
-package GUI;
+package UI;
 
 import BLL.PhieuNhapHang_BLL;
 import DTO.PhieuNhapHang_DTO;
