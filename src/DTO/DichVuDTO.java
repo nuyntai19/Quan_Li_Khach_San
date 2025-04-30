@@ -1,26 +1,26 @@
 package DTO;
 
 public class DichVuDTO {
-    private int id;
+    private int maDatDichVu;
     private String maDichVu;
     private int soLuong;
     private double donGia;
 
     public DichVuDTO() {}
 
-    public DichVuDTO(int id, String maDichVu, int soLuong, double donGia) {
-        this.id = id;
+    public DichVuDTO(int maDatDichVu, String maDichVu, int soLuong, double donGia) {
+        this.maDatDichVu = maDatDichVu;
         this.maDichVu = maDichVu;
         this.soLuong = soLuong;
         this.donGia = donGia;
     }
 
-    public int getId() {
-        return id;
+    public int getMaDatDichVu() {
+        return maDatDichVu;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setMaDatDichVu(int maDatDichVu) {
+        this.maDatDichVu = maDatDichVu;
     }
 
     public String getMaDichVu() {
