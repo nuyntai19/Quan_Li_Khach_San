@@ -23,4 +23,7 @@ public class DichVuBLL {
     public List<DichVuDTO> timDichVuTheoMa(String maDV) throws SQLException {
         return dao.findByMaDichVu(maDV);
     }
+    public List<DichVuDTO> timDichVuTheoMaDatDichVu(String maDatDichVu) throws SQLException {
+        return dao.findByMaDatDichVu(maDatDichVu);
+    }
 }
