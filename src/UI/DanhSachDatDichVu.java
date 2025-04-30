@@ -43,7 +43,7 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
             model.setRowCount(0);
             for (DichVuDTO dv : danhSach) {
                 model.addRow(new Object[]{
-                        dv.getId(),
+                        dv.getMaDatDichVu(),
                         dv.getMaDichVu(),
                         dv.getSoLuong(),
                         dv.getDonGia(),
@@ -97,9 +97,9 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
         ButtonTim = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDSPHONG = new javax.swing.JTable();
-        LBMaDichVu = new javax.swing.JLabel();
         TXDichVu = new javax.swing.JTextField();
         jButtonResert = new javax.swing.JButton();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         KhachSan = new javax.swing.JButton();
         QuanLi = new javax.swing.JButton();
@@ -262,13 +262,10 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Mã dịch vụ", "Số lượng", "Đơn giá ", "Thành tiền"
+                "Mã đặt dịch vụ", "Mã dịch vụ", "Số lượng", "Đơn giá ", "Thành tiền"
             }
         ));
         jScrollPane2.setViewportView(tblDSPHONG);
-
-        LBMaDichVu.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        LBMaDichVu.setText("Mã dịch vụ:");
 
         TXDichVu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -283,6 +280,8 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                 jButtonResertActionPerformed(evt);
             }
         });
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "_", "Mã đặt dịch vụ", "Mã dịch vụ" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -307,9 +306,9 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                                         .addComponent(jButtonResert)
                                         .addGap(45, 45, 45))))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(318, 318, 318)
-                        .addComponent(LBMaDichVu)
-                        .addGap(27, 27, 27)
+                        .addGap(329, 329, 329)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(TXDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -333,13 +332,13 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                     .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LBMaDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TXDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonTim))
-                .addGap(51, 51, 51)
+                    .addComponent(ButtonTim)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
                 .addComponent(LBDSDV, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -516,14 +515,30 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
         try {
-            String maDV = TXDichVu.getText().trim();
-            if (maDV.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã dịch vụ cần tìm.");
+            String selectedColumn = (String) jComboBox2.getSelectedItem(); // Giá trị từ combo box
+            String searchValue = TXDichVu.getText().trim(); // Giá trị tìm kiếm nhập vào
+
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị cần tìm.");
                 return;
             }
 
-            List<DichVuDTO> danhSach = dichVuBLL.timDichVuTheoMa(maDV);
-            model.setRowCount(0);
+            List<DichVuDTO> danhSach;
+
+            // Kiểm tra giá trị từ combo box để thực hiện tìm kiếm theo từng trường
+            switch (selectedColumn) {
+                case "Mã đặt dịch vụ":
+                    danhSach = dichVuBLL.timDichVuTheoMaDatDichVu(searchValue); // Phương thức tìm theo mã đặt dịch vụ
+                    break;
+                case "Mã dịch vụ":
+                    danhSach = dichVuBLL.timDichVuTheoMa(searchValue); // Phương thức tìm theo mã dịch vụ
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn trường hợp tìm kiếm hợp lệ.");
+                    return;
+            }
+
+            model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
             if (danhSach == null || danhSach.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy dịch vụ.");
                 return;
@@ -531,11 +546,11 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
 
             for (DichVuDTO dv : danhSach) {
                 model.addRow(new Object[]{
-                        dv.getId(),
-                        dv.getMaDichVu(),
-                        dv.getSoLuong(),
-                        dv.getDonGia(),
-                        dv.getThanhTien()
+                    dv.getMaDatDichVu(),
+                    dv.getMaDichVu(),
+                    dv.getSoLuong(),
+                    dv.getDonGia(),
+                    dv.getThanhTien()
                 });
             }
         } catch (Exception e) {
@@ -681,7 +696,6 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
     private javax.swing.JButton KhachSan;
     private javax.swing.JLabel LBDSDV;
     private javax.swing.JLabel LBDichVu;
-    private javax.swing.JLabel LBMaDichVu;
     private javax.swing.JButton NutDangNhap;
     private javax.swing.JButton QuanLi;
     private javax.swing.JTextField TXDangNhap;
@@ -694,6 +708,7 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonResert;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
