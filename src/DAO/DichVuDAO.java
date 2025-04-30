@@ -22,7 +22,7 @@ public class DichVuDAO {
 
         while (rs.next()) {
             DichVuDTO dv = new DichVuDTO(
-                rs.getInt("id"),
+                rs.getInt("maDatDichVu"),
                 rs.getString("maDichVu"),
                 rs.getInt("soLuong"),
                 rs.getDouble("donGia")
@@ -42,7 +42,7 @@ public class DichVuDAO {
 
         while (rs.next()) {
             DichVuDTO dv = new DichVuDTO(
-                rs.getInt("id"),
+                rs.getInt("maDatDichVu"),
                 rs.getString("maDichVu"),
                 rs.getInt("soLuong"),
                 rs.getDouble("donGia")
@@ -50,6 +50,24 @@ public class DichVuDAO {
             list.add(dv);
         }
 
+        return list;
+    }
+    public List<DichVuDTO> findByMaDatDichVu(String maDatDichVu) throws SQLException {
+        List<DichVuDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM DichVu WHERE maDatDichVu = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, maDatDichVu);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            DichVuDTO dv = new DichVuDTO(
+                rs.getInt("maDatDichVu"),
+                rs.getString("maDichVu"),
+                rs.getInt("soLuong"),
+                rs.getDouble("donGia")
+            );
+            list.add(dv);
+        }
         return list;
     }
 }
