@@ -121,8 +121,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
         ButtonThem = new javax.swing.JButton();
         ButtonSua = new javax.swing.JButton();
         ButtonXoa = new javax.swing.JButton();
-        LBMaLoaiPhongTrong1 = new javax.swing.JLabel();
-        TXMaPhongTim = new javax.swing.JTextField();
+        TXTimNV = new javax.swing.JTextField();
         lbHo = new javax.swing.JLabel();
         TXHo = new javax.swing.JTextField();
         jButtonResert = new javax.swing.JButton();
@@ -135,6 +134,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
         TXEmail = new javax.swing.JTextField();
         TXChucNang = new javax.swing.JTextField();
         TXLuong = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         KhachSan = new javax.swing.JButton();
         QuanLi = new javax.swing.JButton();
@@ -373,12 +373,9 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
             }
         });
 
-        LBMaLoaiPhongTrong1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        LBMaLoaiPhongTrong1.setText("Mã nhân viên:");
-
-        TXMaPhongTim.addActionListener(new java.awt.event.ActionListener() {
+        TXTimNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXMaPhongTimActionPerformed(evt);
+                TXTimNVActionPerformed(evt);
             }
         });
 
@@ -440,6 +437,8 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 TXLuongActionPerformed(evt);
             }
         });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "_", "Mã nhân viên", "Email", "SDT", "Chức vụ" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -512,10 +511,10 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                                     .addComponent(LBPhongTrong)
                                     .addComponent(LBPhongTrong1)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(LBMaLoaiPhongTrong1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TXMaPhongTim, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(64, 64, 64)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTimNV, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
@@ -566,10 +565,10 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(LBPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(LBMaLoaiPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TXMaPhongTim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TXTimNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -578,7 +577,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LBPhongTrong, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -786,22 +785,59 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
         try {
-            String maNhanVienStr = TXMaPhongTim.getText().trim();
-            if (maNhanVienStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên cần tìm.");
+            // Lấy giá trị được chọn từ combo box
+            String selectedColumn = (String) jComboBox1.getSelectedItem(); 
+            // Lấy giá trị tìm kiếm từ ô nhập liệu
+            String searchValue = TXTimNV.getText().trim(); 
+
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị cần tìm.");
                 return;
             }
-            int maNhanVien = Integer.parseInt(maNhanVienStr);
-            model.setRowCount(0);
-            for (NhanVienDTO nv : danhSachNhanVienGoc) {
-                if (nv.getMaNhanVien() == maNhanVien) {
+
+            model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+
+            // Lọc dữ liệu theo giá trị combo box
+            for (NhanVienDTO nv : danhSachNhanVienGoc) { // `danhSachNhanVienGoc` là danh sách dữ liệu gốc
+                boolean matched = false;
+
+                switch (selectedColumn) {
+                    case "Mã nhân viên":
+                        matched = String.valueOf(nv.getMaNhanVien()).equals(searchValue);
+                        break;
+                    case "Tên nhân viên":
+                        matched = nv.getTen().equalsIgnoreCase(searchValue);
+                        break;
+                    case "Email":
+                        matched = nv.getEmail().equalsIgnoreCase(searchValue);
+                        break;
+                    case "Số điện thoại":
+                        matched = nv.getSdt().equals(searchValue);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Lựa chọn không hợp lệ.");
+                        return;
+                }
+
+                if (matched) {
                     model.addRow(new Object[]{
-                        nv.getMaNhanVien(), nv.getTen(), nv.getHo(), nv.getNgaySinh(), nv.getGioiTinh(),
-                        nv.getEmail(), nv.getSdt(), nv.getChucVu(), nv.getLuong()
+                        nv.getMaNhanVien(),
+                        nv.getHo(),
+                        nv.getTen(),
+                        nv.getGioiTinh(),
+                        nv.getEmail(),
+                        nv.getSdt(),
+                        nv.getLuong(),
+                        nv.getChucVu()
                     });
-                    break;
                 }
             }
+
+            // Nếu không tìm thấy kết quả
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy kết quả phù hợp.");
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + e.getMessage());
         }
@@ -879,9 +915,9 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonXoaActionPerformed
 
-    private void TXMaPhongTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaPhongTimActionPerformed
+    private void TXTimNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTimNVActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXMaPhongTimActionPerformed
+    }//GEN-LAST:event_TXTimNVActionPerformed
 
     private void TXHoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXHoActionPerformed
         // TODO add your handling code here:
@@ -910,7 +946,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
         // Xóa nội dung trong các ô tìm kiếm
-        TXMaPhongTim.setText("");
+        TXTimNV.setText("");
 
         // Xóa toàn bộ dữ liệu bảng
         model.setRowCount(0);
@@ -1027,7 +1063,6 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
     private javax.swing.JButton ButtonXoa;
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton KhachSan;
-    private javax.swing.JLabel LBMaLoaiPhongTrong1;
     private javax.swing.JLabel LBPhongTrong;
     private javax.swing.JLabel LBPhongTrong1;
     private javax.swing.JButton NutDangNhap;
@@ -1040,17 +1075,18 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
     private javax.swing.JTextField TXLuong;
     private javax.swing.JTextField TXMK;
     private javax.swing.JTextField TXMaNV;
-    private javax.swing.JTextField TXMaPhongTim;
     private javax.swing.JTextField TXNgaySinh;
     private javax.swing.JTextField TXSDT;
     private javax.swing.JTextField TXTen;
     private javax.swing.JTextField TXTenLP1;
+    private javax.swing.JTextField TXTimNV;
     private javax.swing.JTable TablePhongTrong;
     private javax.swing.JLabel Tittle;
     private javax.swing.ButtonGroup bGNam_Nu;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonResert;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
