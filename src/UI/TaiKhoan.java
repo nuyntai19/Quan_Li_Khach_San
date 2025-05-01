@@ -912,7 +912,7 @@ public class TaiKhoan extends javax.swing.JFrame {
         dispose();
         loadData();
         
-        new TaiKhoan().setVisible(true);
+        new QuanLiPhong().setVisible(true);
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void ButtonQLDVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLDVActionPerformed

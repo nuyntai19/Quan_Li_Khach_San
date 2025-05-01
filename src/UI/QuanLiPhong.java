@@ -1069,13 +1069,8 @@ public class QuanLiPhong extends javax.swing.JFrame {
         // Xóa toàn bộ dữ liệu bảng
         model.setRowCount(0);        
 
-        // Đổ lại toàn bộ dữ liệu từ danh sách gốc
-        for (QuanLiPhongDTO phong : danhSachPhongGoc) {
-            model.addRow(new Object[] {
-                phong.getMaPhong(), phong.getMaLoaiPhong(), phong.getSoGiuong(),
-                phong.getDonGia(), phong.getTrangThai()
-            });
-        }
+        loadData();
+        loadDataLoaiPhongToTable();
     }//GEN-LAST:event_jButtonResertActionPerformed
 
     private void CBMaLoaiPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMaLoaiPhongActionPerformed

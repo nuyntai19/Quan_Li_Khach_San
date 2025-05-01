@@ -1002,8 +1002,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
-        dispose();
-        new PhieuThuePhong().setVisible(true);   
+         
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -1169,10 +1168,16 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải nhỏ hơn hoặc bằng ngày trả phòng.");
                 return;
             }
-            if (ngayDatPhong.before(ngayHienTai)) {
+            // Lấy ngày từ DateChooser và ngày hiện tại, chuẩn hóa bỏ giờ
+             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date ngayDatPhongChuan = sdf.parse(sdf.format(ngayDatPhong)); // bỏ giờ
+            Date ngayHienTaiChuan = sdf.parse(sdf.format(new Date()));   // bỏ giờ
+
+            if (ngayDatPhongChuan.before(ngayHienTaiChuan)) {
                 JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải lớn hơn hoặc bằng ngày hiện tại.");
                 return;
-            }
+            } 
             int maDatPhong = Integer.parseInt(maDatPhongStr);
             int maPhong = Integer.parseInt(maPhongStr);
             double giaPhong = Double.parseDouble(giaPhongStr);
@@ -1183,7 +1188,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
             ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
             for (QuanLiPhongDTO p : dsp) {
-                if (p.getMaPhong() == maPhong && "Dang su dung".equals(p.getTrangThai())) {
+                if (p.getMaPhong() == maPhong && "Dang Thue".equals(p.getTrangThai())) {
                     ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
                     ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
                     for (ChiTietPhieuThuePhongDTO ct : dsct) {
@@ -1290,7 +1295,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 TXDP.getText().trim().isEmpty() ||
                 TXTongTien.getText().trim().isEmpty()) {
 
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin trước khi đặt phòng!");
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin trước khi đặt phiếu thuê!");
                 return;
             }
 
@@ -1318,7 +1323,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
 
             if (danhSachChiTiet.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Danh sách phòng muốn đặt đang rỗng. Vui lòng chọn phòng trước khi đặt.");
+                JOptionPane.showMessageDialog(this, "Danh sách phòng muốn đặt đang rỗng. Vui lòng chọn phòng trước khi đặt phiếu .");
                 return;
             }
 
@@ -1330,7 +1335,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             int maThuePhong = Integer.parseInt(TXDP.getText().trim());
             java.util.Date ngayLapPhieu = new java.util.Date(); // Ngày hiện tại
             double tongTien = Double.parseDouble(TXTongTien.getText().trim());
-            String trangThai = "Dang thue";
+            String trangThai = "Dang cho xac nhan";
             // Kiểm tra xem mã thuê phòng có trùng với mã thuê phòng trong danh sách tạm không
             for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
                if(ct.getMaThuePhong() != maThuePhong) {
@@ -1349,18 +1354,18 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             for (ChiTietPhieuThuePhongDTO ct : danhSachChiTiet) {
                 try {
                     chiTietBLL.themChiTiet(ct); // Lưu chi tiết
-                    phongBLL.capNhatTrangThai(ct.getMaPhong(), "Dang su dung"); // Cập nhật trạng thái phòng
+                    phongBLL.capNhatTrangThai(ct.getMaPhong(), "Dang cho xac nhan"); // Cập nhật trạng thái phòng
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Lỗi khi lưu chi tiết phòng: " + e.getMessage());
                 }
             }
 
-            JOptionPane.showMessageDialog(this, "Đặt phòng thành công!");
+            JOptionPane.showMessageDialog(this, "Đặt phiếu thuê phòng thành công! -- Vui lòng qua phần CheckIn để xác nhận !");
             PhieuThuePhongManager.clearDanhSach(); // Xóa danh sách tạm sau khi lưu
             loadDataPhong();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi đặt phòng: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Lỗi khi đặt phiếu thuê phòng: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_ButtonDatPhongActionPerformed
