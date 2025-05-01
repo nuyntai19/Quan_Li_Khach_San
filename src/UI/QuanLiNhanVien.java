@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import DTO.NhanVienDTO;
 import BLL.NhanVienBLL;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +32,8 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 int selectedRow = tblDSPHONG.getSelectedRow();
                 if (selectedRow != -1) {
                     TXMaNV.setText(getValue(tblDSPHONG, selectedRow, 0));
-                    TXTen.setText(getValue(tblDSPHONG, selectedRow, 1));
-                    TXHo.setText(getValue(tblDSPHONG, selectedRow, 2));
+                    TXHo.setText(getValue(tblDSPHONG, selectedRow, 1));
+                    TXTen.setText(getValue(tblDSPHONG, selectedRow, 2));                  
                     TXNgaySinh.setText(getValue(tblDSPHONG, selectedRow, 3));
                     TXGioiTinh.setText(getValue(tblDSPHONG, selectedRow, 4));
                     TXEmail.setText(getValue(tblDSPHONG, selectedRow, 5));
@@ -53,12 +54,12 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
         try {
             model.setRowCount(0);
             model.setColumnIdentifiers(new String[]{
-                "Mã nhân viên", "Tên", "Họ", "Ngày sinh", "Giới tính", "Email", "Số điện thoại", "Chức vụ", "Lương"
+                "Mã nhân viên", "Họ", "Tên", "Ngày sinh", "Giới tính", "Email", "Số điện thoại", "Chức vụ", "Lương"
             });
             danhSachNhanVienGoc = nhanVienBLL.layDanhSachNhanVien();
             for (NhanVienDTO nv : danhSachNhanVienGoc) {
                 model.addRow(new Object[]{
-                    nv.getMaNhanVien(), nv.getTen(), nv.getHo(), nv.getNgaySinh(), nv.getGioiTinh(),
+                    nv.getMaNhanVien(), nv.getHo(), nv.getTen(), nv.getNgaySinh(), nv.getGioiTinh(),
                     nv.getEmail(), nv.getSdt(), nv.getChucVu(), nv.getLuong()
                 });
             }
@@ -338,7 +339,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Tên", "Họ", "Ngày sinh", "Giới tính", "Email", "SDT", "Chức vụ", "Lương"
+                "Mã nhân viên", "Họ", "Tên", "Ngày sinh", "Giới tính", "Email", "SDT", "Chức vụ", "Lương"
             }
         ));
         jScrollPane2.setViewportView(tblDSPHONG);
@@ -511,15 +512,18 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                                     .addComponent(LBPhongTrong)
                                     .addComponent(LBPhongTrong1)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(186, 186, 186)
-                                .addComponent(TXTimNV, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(64, 64, 64)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
-                        .addComponent(jButtonResert)
-                        .addGap(48, 48, 48)))
+                                .addComponent(TXTimNV, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jButtonResert)
+                                .addGap(48, 48, 48)))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -562,15 +566,16 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(LBPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(TXTimNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ButtonTim))
-                        .addGap(37, 37, 37))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)))
+                        .addGap(18, 18, 18)))
+                .addComponent(ButtonTim)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LBPhongTrong, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
@@ -781,9 +786,7 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
         try {
-            // Lấy giá trị được chọn từ combo box
             String selectedColumn = (String) jComboBox1.getSelectedItem(); 
-            // Lấy giá trị tìm kiếm từ ô nhập liệu
             String searchValue = TXTimNV.getText().trim(); 
 
             if (searchValue.isEmpty()) {
@@ -793,43 +796,36 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
 
             model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
 
-            // Lọc dữ liệu theo giá trị combo box
-            for (NhanVienDTO nv : danhSachNhanVienGoc) { // `danhSachNhanVienGoc` là danh sách dữ liệu gốc
+            for (NhanVienDTO nv : danhSachNhanVienGoc) {
                 boolean matched = false;
 
                 switch (selectedColumn) {
                     case "Mã nhân viên":
                         matched = String.valueOf(nv.getMaNhanVien()).equals(searchValue);
                         break;
-                    case "Tên nhân viên":
-                        matched = nv.getTen().equalsIgnoreCase(searchValue);
-                        break;
                     case "Email":
                         matched = nv.getEmail().equalsIgnoreCase(searchValue);
                         break;
+                    case "SDT":
                     case "Số điện thoại":
                         matched = nv.getSdt().equals(searchValue);
                         break;
+                    case "Chức vụ":
+                        matched = nv.getChucVu().equalsIgnoreCase(searchValue);
+                        break;
                     default:
-                        JOptionPane.showMessageDialog(this, "Lựa chọn không hợp lệ.");
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn trường tìm kiếm hợp lệ.");
                         return;
                 }
 
                 if (matched) {
-                    model.addRow(new Object[]{
-                        nv.getMaNhanVien(),
-                        nv.getHo(),
-                        nv.getTen(),
-                        nv.getGioiTinh(),
-                        nv.getEmail(),
-                        nv.getSdt(),
-                        nv.getLuong(),
-                        nv.getChucVu()
+                    model.addRow(new Object[] {
+                        nv.getMaNhanVien(), nv.getHo(), nv.getTen(), nv.getNgaySinh(),
+                        nv.getGioiTinh(), nv.getEmail(), nv.getSdt(), nv.getChucVu(), nv.getLuong()
                     });
                 }
             }
 
-            // Nếu không tìm thấy kết quả
             if (model.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy kết quả phù hợp.");
             }
@@ -840,18 +836,22 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonTimActionPerformed
 
     private void ButtonThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThemActionPerformed
-                try {
+        try {
             if (TXMaNV.getText().isEmpty() || TXTen.getText().isEmpty() || TXHo.getText().isEmpty() ||
                 TXNgaySinh.getText().isEmpty() || TXGioiTinh.getText().isEmpty() || TXEmail.getText().isEmpty() ||
                 TXSDT.getText().isEmpty() || TXChucNang.getText().isEmpty() || TXLuong.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
                 return;
             }
+            String dateStr = TXNgaySinh.getText();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(dateStr);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             NhanVienDTO nv = new NhanVienDTO(
                 Integer.parseInt(TXMaNV.getText()),
                 TXTen.getText(),
                 TXHo.getText(),
-                TXNgaySinh.getText(),
+                sqlDate,
                 TXGioiTinh.getText(),
                 TXEmail.getText(),
                 TXSDT.getText(),
@@ -873,11 +873,15 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần sửa.");
                 return;
             }
+            String dateStr = TXNgaySinh.getText();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(dateStr);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             NhanVienDTO nv = new NhanVienDTO(
                 Integer.parseInt(TXMaNV.getText()),
                 TXTen.getText(),
                 TXHo.getText(),
-                TXNgaySinh.getText(),
+                sqlDate,
                 TXGioiTinh.getText(),
                 TXEmail.getText(),
                 TXSDT.getText(),

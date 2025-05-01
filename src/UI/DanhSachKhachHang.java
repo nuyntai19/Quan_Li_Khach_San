@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import DTO.KhachHangDTO;
 import BLL.KhachHangBLL;
+import java.awt.HeadlessException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -31,7 +33,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = tblDSPHONG.getSelectedRow();
                 if (selectedRow != -1) {
-                    TXMaNV.setText(getValue(tblDSPHONG, selectedRow, 0));
+                    TXMaKH.setText(getValue(tblDSPHONG, selectedRow, 0));
                     TXHo.setText(getValue(tblDSPHONG, selectedRow, 1));
                     TXTen.setText(getValue(tblDSPHONG, selectedRow, 2));
                     TXNgaySinh.setText(getValue(tblDSPHONG, selectedRow, 3));
@@ -328,7 +330,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Tên", "Họ", "Ngày sinh", "Giới tính", "Email", "SDT"
+                "Mã nhân viên", "Họ", "Tên", "Ngày sinh", "Giới tính", "Email", "SDT"
             }
         ));
         jScrollPane2.setViewportView(tblDSPHONG);
@@ -474,10 +476,10 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                                     .addComponent(LBPhongTrong)
                                     .addComponent(LBPhongTrong1)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(397, 397, 397)
-                                .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(348, 348, 348)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
@@ -813,6 +815,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             
             String ngaySinhStr = TXNgaySinh.getText();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // định dạng theo bạn nhập
+            sdf.setLenient(false);
             Date ngaySinh = sdf.parse(ngaySinhStr);
             KhachHangDTO kh = new KhachHangDTO(
                 Integer.parseInt(TXMaNV.getText()),
@@ -826,9 +829,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             khachHangBLL.capNhatKhachHang(kh);
             loadData();
             JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thành công!");
-        } catch (Exception e) {
+        } catch (HeadlessException | NumberFormatException | SQLException | ParseException e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
-        }
+        } 
     }//GEN-LAST:event_ButtonSuaActionPerformed
 
     private void ButtonXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonXoaActionPerformed
@@ -893,7 +896,43 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     }//GEN-LAST:event_TXEmailActionPerformed
 
     private void ButtonThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThemActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (TXMaKH.getText().isEmpty() || TXHo.getText().isEmpty() || TXTen.getText().isEmpty() ||
+                TXNgaySinh.getText().isEmpty() || TXGioiTinh.getText().isEmpty() || TXEmail.getText().isEmpty() ||
+                TXSDT.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
+                return;
+            }
+
+            // Chuyển đổi ngày sinh từ String sang java.sql.Date
+            String dateStr = TXNgaySinh.getText();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(dateStr);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+            // Tạo đối tượng KhachHangDTO
+            KhachHangDTO kh = new KhachHangDTO(
+                Integer.parseInt(TXMaKH.getText()),
+                TXHo.getText(),
+                TXTen.getText(),
+                sqlDate,
+                TXGioiTinh.getText(),
+                TXEmail.getText(),
+                TXSDT.getText()
+            );
+
+            khachHangBLL.themKhachHang(kh);
+
+            loadData();
+
+            JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công!");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Mã khách hàng phải là số nguyên.");
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Định dạng ngày sinh không hợp lệ (định dạng đúng: yyyy-MM-dd).");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
     }//GEN-LAST:event_ButtonThemActionPerformed
 
     private void DatPhong2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatPhong2ActionPerformed
