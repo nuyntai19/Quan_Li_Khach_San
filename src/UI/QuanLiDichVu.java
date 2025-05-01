@@ -16,6 +16,8 @@ import DTO.QuanLiDichVuDTO;
 import BLL.QuanLiDichVuBLL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 public class QuanLiDichVu extends javax.swing.JFrame {
 
@@ -57,6 +59,15 @@ public class QuanLiDichVu extends javax.swing.JFrame {
                 return value != null ? value.toString() : "";
             }
         });
+        
+        JTableHeader header = tblDSDICHVU.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
+        tblDSDICHVU.getColumnModel().getColumn(1).setPreferredWidth(220);
+        tblDSDICHVU.getColumnModel().getColumn(2).setPreferredWidth(220);
+        
 
     }
     

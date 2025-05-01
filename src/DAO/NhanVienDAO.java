@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import sql.DatabaseQLKS; // Giữ như project cũ bạn
 
 public class NhanVienDAO {
-    private Connection con;
+    private final Connection con;
 
     public NhanVienDAO() throws SQLException {
         con = DatabaseQLKS.getConnection();
@@ -22,7 +22,7 @@ public class NhanVienDAO {
                 rs.getInt("MaNhanVien"),
                 rs.getString("Ten"),
                 rs.getString("Ho"),
-                rs.getString("NgaySinh"),
+                rs.getDate("NgaySinh"),
                 rs.getString("GioiTinh"),
                 rs.getString("Email"),
                 rs.getString("SoDienThoai"),
@@ -39,7 +39,7 @@ public class NhanVienDAO {
         ps.setInt(1, nv.getMaNhanVien());
         ps.setString(2, nv.getTen());
         ps.setString(3, nv.getHo());
-        ps.setString(4, nv.getNgaySinh());
+        ps.setDate(3, new java.sql.Date(nv.getNgaySinh().getTime()));
         ps.setString(5, nv.getGioiTinh());
         ps.setString(6, nv.getEmail());
         ps.setString(7, nv.getSdt());
@@ -53,7 +53,7 @@ public class NhanVienDAO {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, nv.getTen());
         ps.setString(2, nv.getHo());
-        ps.setString(3, nv.getNgaySinh());
+        ps.setDate(3, new java.sql.Date(nv.getNgaySinh().getTime()));
         ps.setString(4, nv.getGioiTinh());
         ps.setString(5, nv.getEmail());
         ps.setString(6, nv.getSdt());

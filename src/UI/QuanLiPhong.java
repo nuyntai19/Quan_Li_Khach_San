@@ -17,11 +17,16 @@ import BLL.LoaiPhongBLL;
 import BLL.QuanLiPhongBLL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 
 public class QuanLiPhong extends javax.swing.JFrame {
     
     private ArrayList<QuanLiPhongDTO> danhSachPhongGoc = new ArrayList<>();
+    private final DefaultTableModel model;
+    private final DefaultTableModel modelLoaiPhong;
+    private final QuanLiPhongBLL phongBLL;
     
     public QuanLiPhong() {
         initComponents();
@@ -69,12 +74,6 @@ public class QuanLiPhong extends javax.swing.JFrame {
                     }
                 }
             }
-
-            // Hàm tiện ích để lấy giá trị có kiểm null
-            private String getValue(JTable table, int row, int col) {
-                Object value = table.getValueAt(row, col);
-                return value != null ? value.toString() : "";
-            }
         });
         
         tblDSLOAIPHONG.addMouseListener(new MouseAdapter() {
@@ -84,17 +83,45 @@ public class QuanLiPhong extends javax.swing.JFrame {
                 if (selectedRow != -1) {
                     String selectedMaLoaiPhong = getValue(tblDSLOAIPHONG, selectedRow, 0);
 
-                    // Tìm và chọn tất cả dòng trong tblDSPHONG có cùng MaLoaiPhong
-                    tblDSPHONG.clearSelection();
-                    for (int i = 0; i < tblDSPHONG.getRowCount(); i++) {
-                        String maLP = getValue(tblDSPHONG, i, 1); // Cột 1 là MaLoaiPhong
-                        if (selectedMaLoaiPhong.equals(maLP)) {
-                            tblDSPHONG.addRowSelectionInterval(i, i); // Chọn dòng đó
+                    // Lọc danh sách phòng có cùng loại phòng
+                    ArrayList<QuanLiPhongDTO> danhSachLoc = new ArrayList<>();
+                    for (QuanLiPhongDTO p : danhSachPhongGoc) {
+                        if (p.getMaLoaiPhong().equals(selectedMaLoaiPhong)) {
+                            danhSachLoc.add(p);
                         }
+                    }
+
+                    // Cập nhật bảng phòng
+                    model.setRowCount(0); // Xóa hết dữ liệu hiện tại
+                    for (QuanLiPhongDTO p : danhSachLoc) {
+                        model.addRow(new Object[]{
+                            p.getMaPhong(),
+                            p.getMaLoaiPhong(),
+                            p.getSoGiuong(),
+                            p.getDonGia(),
+                            p.getTrangThai()
+                        });
                     }
                 }
             }
+
+
         });
+        
+        JTableHeader header = tblDSLOAIPHONG.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
+        tblDSLOAIPHONG.getColumnModel().getColumn(0).setPreferredWidth(60);
+        tblDSLOAIPHONG.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tblDSLOAIPHONG.getColumnModel().getColumn(2).setPreferredWidth(220);
+        
+        JTableHeader headers = tblDSPHONG.getTableHeader(); 
+        headers.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) headers.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
 
     }
     
@@ -446,7 +473,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, true, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -513,7 +540,15 @@ public class QuanLiPhong extends javax.swing.JFrame {
             new String [] {
                 "Mã loại phòng", "Tên loại phòng", "Mô tả"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(tblDSLOAIPHONG);
 
         LBPhongTrong2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -987,7 +1022,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                      return;
             }
                  
-            if(!TXTrangThai.getText().equals("Trống")) {
+            if(!TXTrangThai.getText().equals("Trong")) {
                      JOptionPane.showMessageDialog(this, "Vui lòng nhập trạng thái là trống khi sửa Phòng.");
                      return;
             }
@@ -1069,13 +1104,8 @@ public class QuanLiPhong extends javax.swing.JFrame {
         // Xóa toàn bộ dữ liệu bảng
         model.setRowCount(0);        
 
-        // Đổ lại toàn bộ dữ liệu từ danh sách gốc
-        for (QuanLiPhongDTO phong : danhSachPhongGoc) {
-            model.addRow(new Object[] {
-                phong.getMaPhong(), phong.getMaLoaiPhong(), phong.getSoGiuong(),
-                phong.getDonGia(), phong.getTrangThai()
-            });
-        }
+        loadData();
+        loadDataLoaiPhongToTable();
     }//GEN-LAST:event_jButtonResertActionPerformed
 
     private void CBMaLoaiPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMaLoaiPhongActionPerformed
@@ -1210,9 +1240,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
     private javax.swing.JTable tblDSLOAIPHONG;
     private javax.swing.JTable tblDSPHONG;
     // End of variables declaration//GEN-END:variables
-    private final DefaultTableModel model;
-    private final DefaultTableModel modelLoaiPhong;
-    private final QuanLiPhongBLL phongBLL;
+    
 
 
 }

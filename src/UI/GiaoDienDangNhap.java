@@ -14,203 +14,19 @@ import java.text.SimpleDateFormat;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
-
-
-//DTO
-class TaiKhoanDTO {
-    private int maTaiKhoan;
-    private String tenDangNhap;
-    private String matKhau;
-    private int maNhanVien;
-    private String vaiTro;
-    private String trangThai;
-
-    // Constructors
-    public TaiKhoanDTO() {}
-
-    public TaiKhoanDTO(int maTaiKhoan, String tenDangNhap, String matKhau,
-                       int maNhanVien, String vaiTro, String trangThai) {
-        this.maTaiKhoan = maTaiKhoan;
-        this.tenDangNhap = tenDangNhap;
-        this.matKhau = matKhau;
-        this.maNhanVien = maNhanVien;
-        this.vaiTro = vaiTro;
-        this.trangThai = trangThai;
-    }
-
-    // Getters & Setters
-    public int getMaTaiKhoan() {
-        return maTaiKhoan;
-    }
-
-    public void setMaTaiKhoan(int maTaiKhoan) {
-        this.maTaiKhoan = maTaiKhoan;
-    }
-
-    public String getTenDangNhap() {
-        return tenDangNhap;
-    }
-
-    public void setTenDangNhap(String tenDangNhap) {
-        this.tenDangNhap = tenDangNhap;
-    }
-
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
-    public int getMaNhanVien() {
-        return maNhanVien;
-    }
-
-    public void setMaNhanVien(int maNhanVien) {
-        this.maNhanVien = maNhanVien;
-    }
-
-    public String getVaiTro() {
-        return vaiTro;
-    }
-
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
-}
-
-//DAO
-
-class TaiKhoanDAO {
-    public TaiKhoanDTO dangNhap(String tenDangNhap, String matKhau) {
-        TaiKhoanDTO tk = null;
-        try {
-            Connection conn = sql.DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM TaiKhoan WHERE TenDangNhap = ? AND MatKhau = ? AND TrangThai = 'active'";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, tenDangNhap);
-            ps.setString(2, matKhau);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                tk = new TaiKhoanDTO();
-                tk.setMaTaiKhoan(rs.getInt("MaTaiKhoan"));
-                tk.setTenDangNhap(rs.getString("TenDangNhap"));
-                tk.setMatKhau(rs.getString("MatKhau"));
-                tk.setMaNhanVien(rs.getInt("MaNhanVien"));
-                tk.setVaiTro(rs.getString("VaiTro"));
-                tk.setTrangThai(rs.getString("TrangThai"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return tk;
-    }
-    
-    public TaiKhoanDTO layTaiKhoanDangNhapTuBangNhanVienDangNhap() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = sql.DatabaseQLKS.getConnection();
-            String sql = "SELECT TOP 1 MaTaiKhoan, TenDangNhap, MaNhanVien, VaiTro FROM NhanVienDangNhap ORDER BY ThoiGianDangNhap DESC";
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                TaiKhoanDTO tk = new TaiKhoanDTO();
-                tk.setMaTaiKhoan(rs.getInt("MaTaiKhoan"));
-                tk.setTenDangNhap(rs.getString("TenDangNhap"));
-                tk.setMaNhanVien(rs.getInt("MaNhanVien"));
-                tk.setVaiTro(rs.getString("VaiTro"));
-                return tk;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            sql.DatabaseQLKS.close(conn, stmt, rs);
-        }
-        return null;
-    }
-
-
-}
-
-class TaiKhoanBLL {
-    TaiKhoanDAO dao = new TaiKhoanDAO();
-
-    // Đăng nhập
-    public TaiKhoanDTO dangNhap(String tenDangNhap, String matKhau) {
-        return dao.dangNhap(tenDangNhap, matKhau);
-    }
-
-    // Thêm thông tin đăng nhập vào bảng tạm
-    public void themDangNhapVaoBangTam(TaiKhoanDTO tk) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            conn = sql.DatabaseQLKS.getConnection();
-            String sql = "INSERT INTO NhanVienDangNhap (MaTaiKhoan, TenDangNhap, MaNhanVien, VaiTro, ThoiGianDangNhap) " +
-                         "VALUES (?, ?, ?, ?, GETDATE())";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, tk.getMaTaiKhoan());
-            ps.setString(2, tk.getTenDangNhap());
-            ps.setInt(3, tk.getMaNhanVien());
-            ps.setString(4, tk.getVaiTro());
-
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Xóa toàn bộ thông tin trong bảng NhanVienDangNhap
-    public void xoaTatCaDangNhapBangTam() {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            conn = sql.DatabaseQLKS.getConnection();
-            String sql = "DELETE FROM NhanVienDangNhap";
-            ps = conn.prepareStatement(sql);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-}
+import DTO.TaiKhoanDTO;
+import BLL.TaiKhoanBLL;
+import java.util.logging.Level;
 
 public class GiaoDienDangNhap extends javax.swing.JFrame {
+    
+    private final TaiKhoanBLL bll;
 
     private Component frame;
     public GiaoDienDangNhap() {
+        
         initComponents();
+        bll = new TaiKhoanBLL();
     }
     
     @SuppressWarnings("unchecked")
@@ -621,15 +437,23 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
         String tenDangNhap = TXTenDN.getText();
         String matKhau = new String(TXMK.getPassword());
 
-        TaiKhoanBLL bll = new TaiKhoanBLL();
-        TaiKhoanDTO tk = bll.dangNhap(tenDangNhap, matKhau);
+        TaiKhoanDTO tk = null;
+        try {
+            tk = bll.dangNhap(tenDangNhap, matKhau);
+        } catch (Exception ex) {
+            Logger.getLogger(GiaoDienDangNhap.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         if (tk != null && tk.getTrangThai().equalsIgnoreCase("active")) {
             // Đăng nhập thành công
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
 
-            // Thêm vào bảng tạm
-            bll.themDangNhapVaoBangTam(tk);
+            try {
+                // Thêm vào bảng tạm
+                bll.themDangNhapVaoBangTam(tk);
+            } catch (Exception ex) {
+                Logger.getLogger(GiaoDienDangNhap.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Mở form chính (DatPhong)
             UI.PhieuThuePhong datPhong = new UI.PhieuThuePhong();
@@ -661,7 +485,7 @@ public class GiaoDienDangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_DSKhachHangActionPerformed
 
    
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
         TaiKhoanBLL bll = new TaiKhoanBLL();
         bll.xoaTatCaDangNhapBangTam();  
 

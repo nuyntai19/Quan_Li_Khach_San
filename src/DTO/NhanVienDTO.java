@@ -1,10 +1,12 @@
 package DTO;
 
+import java.util.Date;
+
 public class NhanVienDTO {
     private int maNhanVien;
     private String ten;
     private String ho;
-    private String ngaySinh;
+    private Date ngaySinh;
     private String gioiTinh;
     private String email;
     private String sdt;
@@ -13,7 +15,7 @@ public class NhanVienDTO {
 
     public NhanVienDTO() {}
 
-    public NhanVienDTO(int maNhanVien, String ten, String ho, String ngaySinh, String gioiTinh, String email, String sdt, String chucVu, double luong) {
+    public NhanVienDTO(int maNhanVien, String ten, String ho, Date ngaySinh, String gioiTinh, String email, String sdt, String chucVu, double luong) {
         this.maNhanVien = maNhanVien;
         this.ten = ten;
         this.ho = ho;
@@ -34,8 +36,8 @@ public class NhanVienDTO {
     public String getHo() { return ho; }
     public void setHo(String ho) { this.ho = ho; }
 
-    public String getNgaySinh() { return ngaySinh; }
-    public void setNgaySinh(String ngaySinh) { this.ngaySinh = ngaySinh; }
+    public Date getNgaySinh() { return ngaySinh; }
+    public void setNgaySinh(Date ngaySinh) { this.ngaySinh = ngaySinh; }
 
     public String getGioiTinh() { return gioiTinh; }
     public void setGioiTinh(String gioiTinh) { this.gioiTinh = gioiTinh; }

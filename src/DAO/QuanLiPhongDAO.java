@@ -19,7 +19,7 @@ public class QuanLiPhongDAO {
             ResultSet rs = stmt.executeQuery();
             return rs.next() && rs.getInt(1) > 0;
         }
-    }
+    } 
     
     public void themPhong(QuanLiPhongDTO phong) throws SQLException {
         String sql = "INSERT INTO Phong (MaPhong, MaLoaiPhong, SoGiuong, DonGia, TrangThai) VALUES (?, ?, ?, ?, ?)";
