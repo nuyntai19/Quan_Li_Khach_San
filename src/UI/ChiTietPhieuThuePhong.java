@@ -2,9 +2,13 @@ package UI;
 
 import BLL.PhieuThuePhongManager;
 import DTO.ChiTietPhieuThuePhongDTO;
+import java.awt.Font;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 public class ChiTietPhieuThuePhong extends javax.swing.JFrame {
 
@@ -14,6 +18,12 @@ public class ChiTietPhieuThuePhong extends javax.swing.JFrame {
         initComponents();
         model = (DefaultTableModel) tblDSCHIPHIETPHIEUTHUEPHONGTA.getModel();
         loadData();
+        
+        JTableHeader header = tblDSCHIPHIETPHIEUTHUEPHONGTA.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
     }
     
     private void loadData() {

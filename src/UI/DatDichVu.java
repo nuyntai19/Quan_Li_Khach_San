@@ -2,6 +2,7 @@ package UI;
 
 import DTO.*;
 import BLL.*;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -11,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class DatDichVu extends javax.swing.JFrame {
     
@@ -82,6 +86,19 @@ public class DatDichVu extends javax.swing.JFrame {
                 return value != null ? value.toString() : "";
             }
         });
+        
+        JTableHeader header = tblDSCHITIETPHIEUTHUE.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        JTableHeader headers = tblDSDICHVU.getTableHeader(); 
+        headers.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) headers.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
+        tblDSDICHVU.getColumnModel().getColumn(1).setPreferredWidth(220);
+        tblDSDICHVU.getColumnModel().getColumn(2).setPreferredWidth(240);
+       
 
     }
     
@@ -261,8 +278,8 @@ public class DatDichVu extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(Tittle, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(self, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addComponent(self, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -765,7 +782,7 @@ public class DatDichVu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

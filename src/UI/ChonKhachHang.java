@@ -5,9 +5,13 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import BLL.KhachHangBLL;
+import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 public class ChonKhachHang extends javax.swing.JFrame {
     
@@ -23,6 +27,11 @@ public class ChonKhachHang extends javax.swing.JFrame {
         khachHangBLL = new KhachHangBLL();
         this.formPhieuThue = formPhieuThue;
         loadData();
+        
+        JTableHeader headers = tblDSKHACHHANG.getTableHeader(); 
+        headers.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) headers.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
     }
     
     private void loadData() {

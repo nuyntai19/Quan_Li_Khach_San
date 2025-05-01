@@ -25,6 +25,8 @@ import DTO.PhieuThuePhongDTO;
 import BLL.PhieuThuePhongManager;
 import BLL.ChiTietPhieuThuePhongBLL;
 import java.util.logging.Level;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 
 public class PhieuThuePhong extends javax.swing.JFrame {
@@ -34,6 +36,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     private final DefaultTableModel model;
     private final PhieuThuePhongBLL phieuThuePhongBLL;
     private final QuanLiPhongBLL phongBLL;
+    
     public PhieuThuePhong() {
         initComponents();
         phieuThuePhongBLL = new PhieuThuePhongBLL();
@@ -67,6 +70,12 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 return value != null ? value.toString() : "";
             }
         });
+        JTableHeader header = tblDSPHONGTRONG.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
+        
     }
     
     private void loadDataPhong() {

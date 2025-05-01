@@ -17,6 +17,8 @@ import DTO.TaiKhoanDTO;
 import DTO.NhanVienDTO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 
 public class TaiKhoan extends javax.swing.JFrame {
@@ -61,6 +63,13 @@ public class TaiKhoan extends javax.swing.JFrame {
                 }
             }
         });
+        
+        JTableHeader header = tblDSTAIKHOAN.getTableHeader(); 
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        
+        
+        
     }
     
     private void loadData() {
