@@ -829,11 +829,11 @@ public class CheckIn extends  JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-//         EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new CheckIn().setVisible(true);
-//            }
-//        });
+         EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CheckIn().setVisible(true);
+            }
+        });
          
     }
 }
