@@ -4,6 +4,8 @@ public class LoaiPhongDTO {
     private String tenLoaiPhong;
     private String moTa;
 
+
+    
     public LoaiPhongDTO() {
     }
 

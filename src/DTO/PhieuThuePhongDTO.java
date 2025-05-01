@@ -20,6 +20,9 @@ public class PhieuThuePhongDTO {
         this.trangThai = trangThai;
     }
 
+    public PhieuThuePhongDTO() {
+    }
+
     public int getMaThuePhong() {
         return maThuePhong;
     }

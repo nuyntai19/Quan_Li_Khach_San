@@ -85,5 +85,44 @@ public class PhieuThuePhongDAO {
             stmt.executeUpdate();
         }
     }
-
+    
+    public PhieuThuePhongDTO timPhieuThueTheoMa(int maThuePhong) throws SQLException {
+        String sql = "SELECT * FROM PhieuThuePhong WHERE MaThuePhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maThuePhong);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                PhieuThuePhongDTO p = new PhieuThuePhongDTO();
+                p.setMaThuePhong(rs.getInt("MaThuePhong"));
+                p.setMaKhachHang(rs.getInt("MaKhachHang"));
+                p.setMaNhanVien(rs.getInt("MaNhanVien"));
+                p.setNgayLapPhieu(rs.getDate("NgayLapPhieu"));
+                p.setTongTien(rs.getDouble("TongTien"));
+                p.setTrangThai(rs.getString("TrangThai"));
+                return p;
+            }
+        }
+        return null;
+    }
+    // public void capNhatTrangThaiPhieuThueThanhCong(int maThuePhong) throws SQLException {
+    //     String sql = "UPDATE PhieuThuePhong SET TrangThai = 'Hoàn thành' WHERE MaThuePhong = ?";
+    //     try (Connection conn = DatabaseQLKS.getConnection();
+    //          PreparedStatement stmt = conn.prepareStatement(sql)) {
+    //         stmt.setInt(1, maThuePhong);
+    //         stmt.executeUpdate();
+    //     }
+    // }    
+    public void capNhatTrangThaiPhieu(int maThuePhong, String trangThaiMoi) throws SQLException {
+        String sql = "UPDATE PhieuThuePhong SET TrangThai = ? WHERE MaThuePhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, trangThaiMoi);
+            stmt.setInt(2, maThuePhong);
+            stmt.executeUpdate();
+        }
+    }
+    
+    
 }
