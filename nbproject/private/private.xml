@@ -3,6 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/Users/daosongloc/Documents/Quan_Li_Khach_San/src/UI/KiemTraPhongGUI.java</file>
+=======
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/HoaDonDAO.java</file>
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/QuanLiDichVu.java</file>
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/BLL/QuanLiDichVuBLL.java</file>
@@ -37,6 +40,7 @@
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/QuanLiNhanVien.java</file>
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/DatDichVuDAO.java</file>
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/QuanLyNhaCungCap_GUI.java</file>
+>>>>>>> 41d56e6cb35e188a356d2f82828d04ca894eba79
         </group>
     </open-files>
 </project-private>
