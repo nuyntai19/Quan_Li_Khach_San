@@ -3,16 +3,22 @@ package UI;
 import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
-
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableModel;
+
+import BLL.CheckInOutBLL;
+import DTO.CheckInOutDTO;
+import DTO.KiemTraTinhTrang;
+
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager.LookAndFeelInfo;
+import UI.*;
 
-public class CheckOutGUI extends  JFrame {
+public class DSCheckInGUI extends  JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private  JButton CheckIn;
@@ -47,7 +53,31 @@ public class CheckOutGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-	public CheckOutGUI() {
+    private JTextField textField_1;
+    private JTable table;
+
+	private JScrollPane scrollPane;
+
+	private DefaultTableModel model;
+
+	private final CheckInOutBLL phong;
+	public DSCheckInGUI() {
+		phong = new CheckInOutBLL();
+		model = new DefaultTableModel(new String[]{
+	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
+	        }, 0) {
+	            @Override
+	            public boolean isCellEditable(int row, int column) {
+	                return false;
+	            }
+	        };
+	        model.addRow(new Object[]{"TP001", "P101", "KH001", "2025-05-01", "2025-05-05", "Đã trả"});
+	        model.addRow(new Object[]{"TP002", "P102", "KH002", "2025-05-02", "2025-05-06", "Chưa trả"});
+	        model.addRow(new Object[]{"TP003", "P103", "KH003", "2025-05-03", "2025-05-07", "Đã trả"});
+	        model.addRow(new Object[]{"TP004", "P104", "KH004", "2025-05-04", "2025-05-08", "Chưa trả"});
+	        model.addRow(new Object[]{"TP005", "P105", "KH005", "2025-05-05", "2025-05-10", "Đã huỷ"});
+
+	    //loadDataToModel();
         initComponents();
     }
     
@@ -82,8 +112,7 @@ public class CheckOutGUI extends  JFrame {
         DSDatPhong = new  JButton();
         DSDatPhong.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		dispose();
-                new CheckOutGUI().setVisible(true);
+        		jbtDSDatPhongActionPerformed(e);
         	}
         });
         DSKhachHang = new  JButton();
@@ -139,7 +168,7 @@ public class CheckOutGUI extends  JFrame {
         labelMK.setPreferredSize(new  Dimension(90, 17));
 
         setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CHECK ");
+        setTitle("CHECK IN");
         setBackground(new  Color(255, 255, 255));
 
         jPanel1.setBackground(new  Color(52, 152, 219));
@@ -363,15 +392,44 @@ public class CheckOutGUI extends  JFrame {
          textField.setBackground(new Color(52, 152, 219));
          textField.setColumns(10);
          textField.setBorder(null);
+         
+         scrollPane = new JScrollPane();
+         
+         textField_1 = new JTextField();
+         textField_1.setColumns(10);
+         
+         JButton btnTim = new JButton("Tìm");
+         btnTim.setForeground(new Color(255, 255, 255));
+         btnTim.setBackground(new Color(52, 152, 219));
+         btnTim.setFont(new Font("Dialog", Font.BOLD, 14));
+         
+         JButton btnCheckIn = new JButton("CHECK IN");
+         btnCheckIn.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtCheckInAcitonPerformed(e);
+         	}
+         });
+         btnCheckIn.setForeground(new Color(255, 255, 255));
+         btnCheckIn.setBackground(new Color(52, 152, 219));
+         btnCheckIn.setFont(new Font("Dialog", Font.BOLD, 14));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
          		.addGroup(gl_panel.createSequentialGroup()
+         			.addGap(33)
+         			.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
+         			.addGap(29)
+         			.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED, 579, Short.MAX_VALUE)
+         			.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+         			.addGap(39))
+         		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
-         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-         				.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
-         				.addGroup(gl_panel.createSequentialGroup()
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
+         				.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
+         				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
          );
@@ -382,8 +440,21 @@ public class CheckOutGUI extends  JFrame {
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addContainerGap(634, Short.MAX_VALUE))
+         			.addGap(18)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         					.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+         					.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+         				.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+         			.addPreferredGap(ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 458, GroupLayout.PREFERRED_SIZE)
+         			.addContainerGap())
          );
+         
+         table = new JTable();
+         scrollPane.setViewportView(table);
+         table.setModel(model);
+         
          panel.setLayout(gl_panel);
          
         getContentPane().setLayout(layout);
@@ -395,7 +466,7 @@ public class CheckOutGUI extends  JFrame {
 
     private void DatPhongActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
         dispose();
-        new DatPhong().setVisible(true);   
+        new PhieuThuePhong().setVisible(true);   
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -405,12 +476,12 @@ public class CheckOutGUI extends  JFrame {
 
     private void KhachSanActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
         dispose();
-        new CheckOutGUI().setVisible(true);        
+        new DSCheckInGUI().setVisible(true);        
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void homeActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
         dispose();
-        new CheckOutGUI().setVisible(true);
+        new DSCheckInGUI().setVisible(true);
     }//GEN-LAST:event_homeActionPerformed
 
     private void QuanLiActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
@@ -428,6 +499,41 @@ public class CheckOutGUI extends  JFrame {
         dispose();
         new DatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVuActionPerformed
+    private void jbtDSDatPhongActionPerformed(ActionEvent evt){
+    	dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
+    }
+    private void loadDataToModel() {
+        model.setRowCount(0); // xóa dữ liệu cũ (nếu có)
+        try {
+			for (CheckInOutDTO c : phong.layDanhSachCheckInHopLe()) {
+			    model.addRow(new Object[]{
+			        c.getMaThuePhong(),
+			        c.getMaPhong(),
+			        c.getMaKhachHang(),
+			        c.getNgayDatPhong(),
+			        c.getNgayTraPhong(),
+			        c.getTrangThai()
+			    });
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    private void jBtCheckInAcitonPerformed(ActionEvent evt) {
+    	int selectedRow = table.getSelectedRow();
+    	if (selectedRow != -1) {
+    		String maThue = model.getValueAt(selectedRow, 1).toString();
+    	    String maPhong = model.getValueAt(selectedRow, 2).toString(); // cột 2 là int MaPhong
+
+    	    // Gửi mã phòng sang CheckInGUI
+    	    new CheckIn(maThue,maPhong).setVisible(true);
+    	} else {
+    	    JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để check-in.");
+    	}
+
+    }
 
     /**
      * @param args the command line arguments
@@ -446,13 +552,13 @@ public class CheckOutGUI extends  JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(CheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(CheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch ( UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(CheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -462,7 +568,7 @@ public class CheckOutGUI extends  JFrame {
         /* Create and display the form */
          EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CheckOutGUI().setVisible(true);
+                new DSCheckInGUI().setVisible(true);
             }
         });
          

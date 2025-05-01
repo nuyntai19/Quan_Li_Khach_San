@@ -4,29 +4,30 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
+
 import javax.swing.border.BevelBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
+
+import BLL.CheckInOutBLL;
+import BLL.KiemTraTinhTrangBUS;
+import DAO.ChiTietPhieuThuePhongDAO;
+import DAO.PhieuThuePhongDAO;
+import DAO.QuanLiPhongDAO;
+import DTO.ChiTietPhieuThuePhongDTO;
+import DTO.KiemTraTinhTrang;
+import DTO.PhieuThuePhongDTO;
+import DTO.QuanLiPhongDTO;
 
 import java.sql.*;
-import com.toedter.calendar.JDateChooser;
-
-import BLL.ChiTietPhieuThuePhongBLL;
-import BLL.PhieuThuePhongBLL;
-import DTO.ChiTietPhieuThuePhongDTO;
-import DTO.PhieuThuePhongDTO;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager.LookAndFeelInfo;
-import UI.QuanLiPhong;
+import UI.*;
+import com.toedter.calendar.JDateChooser;
 
-public class DanhSachDatPhongGUI extends  JFrame {
+public class CheckIn extends  JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private  JButton CheckIn;
@@ -61,25 +62,48 @@ public class DanhSachDatPhongGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-    private JButton btnNewButton_4;
-	private JTextField txtDanhSchChi;
-	private JTextField textField_2;
-	private JTable tableCTPhieuThue;
-	private JTable tablePhieuThue;
-	private JTextField textField_3;
+    private JTextField textField_1;
+    private JLabel lblMaPhong;
+    private JTextField textField_2;
+    private JLabel lblLoaiPhong;
+    private JTextField textField_3;
+    private JTextField textField_4;
+    private JLabel lblSoGiuong;
+    private JLabel lblDonGia;
+    private JTextField textField_5;
+    private int maPhong;
+    private int maThuePhong;
+
+	private DefaultTableModel modelTinhTrang;
+	private JLabel lblMaPhongKT1;
 	private JLabel lblNewLabel_1;
+	private JTextField txtMaPhongKT;
+	private JButton btnCheckIn;
+	private JButton btnHuyCK;
 
-	private JScrollPane scrollPane_1;
-	private final PhieuThuePhongBLL phieuThueBLL = new PhieuThuePhongBLL();
-	private final ChiTietPhieuThuePhongBLL ctphieuThueBLL = new ChiTietPhieuThuePhongBLL();
+	private final KiemTraTinhTrangBUS ktttBUS = new KiemTraTinhTrangBUS();
 
-	private JScrollPane scrollPane;
-
-	private DefaultTableModel modelPhieuThue;
-	private DefaultTableModel modelChiTietPhieuThue;
-	private JLabel lblNewLabel_2;
+	private KiemTraTinhTrang kttt;
+	private JTable table;
+	private JLabel lblTenKH;
+	private JTextField textField_6;
+	private JLabel lblNgayDatPhong;
+	private JLabel lblNgyTrPhng;
+	private JLabel lblMaThuePhong;
+	private final QuanLiPhongDAO phongDAO = new QuanLiPhongDAO(); // hoặc PhongDAO nếu bạn dùng DAO
+	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
+	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
+	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
 	
-	public DanhSachDatPhongGUI() {
+	public CheckIn(String ma, String ma1) {
+		int maThuePhong = Integer.parseInt(ma);
+		this.maThuePhong = maThuePhong;
+		int maPhong = Integer.parseInt(ma1);
+		this.maPhong = maPhong;
+		modelTinhTrang = new DefaultTableModel(new String[]{
+			    "Mã kiểm tra", "Mã phòng", "Mã nhân viên", "Ngày kiểm tra", "Mô tả thiệt hại", "Chi phí đền bù"
+			}, 0);
+		
         initComponents();
     }
     
@@ -99,7 +123,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
         menuBar3 = new  MenuBar();
         menu5 = new  Menu();
         menu6 = new  Menu();
-        lbDangNhap = new  JLabel(); 
+        lbDangNhap = new  JLabel();
         NutDangNhap = new  JButton();
         labelMK = new  JLabel();
         jPanel1 = new  JPanel();
@@ -171,7 +195,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
         labelMK.setPreferredSize(new  Dimension(90, 17));
 
         setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
-        setTitle("DanhSachDatPhong");
+        setTitle("CHECK ");
         setBackground(new  Color(255, 255, 255));
 
         jPanel1.setBackground(new  Color(52, 152, 219));
@@ -368,7 +392,8 @@ public class DanhSachDatPhongGUI extends  JFrame {
          						.addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
          						.addComponent(jPanel5, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
          					.addPreferredGap(ComponentPlacement.RELATED)
-         					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 1163, GroupLayout.PREFERRED_SIZE)))
+         					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 1155, GroupLayout.PREFERRED_SIZE)
+         					.addGap(8)))
          			.addContainerGap())
          );
          layout.setVerticalGroup(
@@ -376,7 +401,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
          		.addGroup(layout.createSequentialGroup()
          			.addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
          			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+         			.addGroup(layout.createParallelGroup(Alignment.LEADING)
          				.addGroup(layout.createSequentialGroup()
          					.addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
          					.addPreferredGap(ComponentPlacement.RELATED)
@@ -385,7 +410,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
          			.addGap(125))
          );
          
-         JLabel lblNewLabel = new JLabel("DANH SÁCH ĐẶT PHÒNG");
+         JLabel lblNewLabel = new JLabel("Check In");
          lblNewLabel.setFont(new Font("Segoe UI", 1, 19));
          lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
          lblNewLabel.setForeground(new Color(52, 152, 219));
@@ -396,96 +421,166 @@ public class DanhSachDatPhongGUI extends  JFrame {
          textField.setColumns(10);
          textField.setBorder(null);
          
-         btnNewButton_4 = new JButton("");
-         btnNewButton_4.addActionListener(new ActionListener() {
-         	public void actionPerformed(ActionEvent e) {
-         	}
-         });
-         btnNewButton_4.setSelectedIcon(new ImageIcon(DanhSachDatPhongGUI.class.getResource("/ICON/refresh.png")));
-         btnNewButton_4.setForeground(Color.WHITE);
-         btnNewButton_4.setFont(new Font("Dialog", Font.BOLD, 15));
-         btnNewButton_4.setBackground(new Color(52, 152, 219));
+         lblMaThuePhong = new JLabel("Mã thuê phòng:");
+         lblMaThuePhong.setFont(new Font("Times New Roman", Font.PLAIN, 14));
          
-         txtDanhSchChi = new JTextField();
-         txtDanhSchChi.setFont(new Font("Times New Roman", Font.BOLD, 14));
-         txtDanhSchChi.setColumns(10);
+         textField_1 = new JTextField();
+         textField_1.setColumns(10);
          
-         JButton btnTIm = new JButton("Tìm");
-         btnTIm.addActionListener(new ActionListener() {
-         	public void actionPerformed(ActionEvent e) {
-         	}
-         });
-         btnTIm.setForeground(new Color(255, 255, 255));
-         btnTIm.setBackground(new Color(52, 152, 219));
-         btnTIm.setFont(new Font("Dialog", Font.BOLD, 14));
-         
-         scrollPane = new JScrollPane();
+         lblMaPhong = new JLabel("Mã phòng:");
+         lblMaPhong.setFont(new Font("Times New Roman", Font.PLAIN, 14));
          
          textField_2 = new JTextField();
-         textField_2.setEditable(false);
          textField_2.setColumns(10);
-         textField_2.setBorder(null);
-         textField_2.setBackground(new Color(52, 152, 219));
          
-         scrollPane_1 = new JScrollPane();
+         lblLoaiPhong = new JLabel("Loại phòng:");
+         lblLoaiPhong.setFont(new Font("Times New Roman", Font.PLAIN, 14));
          
          textField_3 = new JTextField();
          textField_3.setColumns(10);
          
-         JButton btnNewButton = new JButton("Tìm");
-         btnNewButton.setBackground(new Color(52, 152, 219));
-         btnNewButton.setFont(new Font("Dialog", Font.BOLD, 14));
-         btnNewButton.setForeground(new Color(255, 255, 255));
+         textField_4 = new JTextField();
+         textField_4.setColumns(10);
          
-         lblNewLabel_1 = new JLabel("Danh sách phiếu thuê:");
-         lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 14));
+         lblSoGiuong = new JLabel("Số giường:");
+         lblSoGiuong.setFont(new Font("Times New Roman", Font.PLAIN, 14));
          
-         lblNewLabel_2 = new JLabel("Danh sách chi tiết phiếu thuê:");
-         lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+         lblDonGia = new JLabel("Đơn giá:");
+         lblDonGia.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+         
+         textField_5 = new JTextField();
+         textField_5.setColumns(10);
+         
+         JScrollPane scrollPane = new JScrollPane();
+         
+         lblMaPhongKT1 = new JLabel("Mã phòng:");
+         lblMaPhongKT1.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+         
+         lblNewLabel_1 = new JLabel("Kiểm tra phòng");
+         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+         lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 16));
+         
+         txtMaPhongKT = new JTextField();
+         txtMaPhongKT.setColumns(10);
+         
+         JButton btnKiemTra = new JButton("Kiểm tra");
+         btnKiemTra.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtTimKiemActionPerformed(e);
+         	}
+         });
+         btnKiemTra.setForeground(new Color(255, 255, 255));
+         btnKiemTra.setBackground(new Color(52, 152, 219));
+         btnKiemTra.setFont(new Font("Dialog", Font.BOLD, 15));
+         
+         btnCheckIn = new JButton("Xác nhận");
+         btnCheckIn.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtSaveActionPerformed(e);
+         	}
+         });
+         btnCheckIn.setForeground(Color.WHITE);
+         btnCheckIn.setFont(new Font("Dialog", Font.BOLD, 15));
+         btnCheckIn.setBackground(new Color(52, 152, 219));
+         
+         btnHuyCK = new JButton("Huỷ");
+         btnHuyCK.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtHuyActionPerformed(e);
+         	}
+         });
+         btnHuyCK.setForeground(Color.WHITE);
+         btnHuyCK.setFont(new Font("Dialog", Font.BOLD, 15));
+         btnHuyCK.setBackground(new Color(52, 152, 219));
+         
+         lblTenKH = new JLabel("Tên khách hàng:");
+         lblTenKH.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+         
+         textField_6 = new JTextField();
+         textField_6.setColumns(10);
+         
+         lblNgayDatPhong = new JLabel("Ngày đặt phòng");
+         lblNgayDatPhong.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+         
+         lblNgyTrPhng = new JLabel("Ngày trả phòng:");
+         lblNgyTrPhng.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+         
+         JDateChooser dateChooserNgayDat = new JDateChooser();
+         
+         JDateChooser dateChooserNgayTra = new JDateChooser();
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
          		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
-         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 1149, Short.MAX_VALUE)
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 1143, GroupLayout.PREFERRED_SIZE)
-         					.addGap(14))
-         				.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-         					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
-         					.addGroup(gl_panel.createSequentialGroup()
-         						.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
-         						.addContainerGap()))))
+         					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1143, Short.MAX_VALUE)
+         					.addContainerGap())))
          		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
-         			.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(lblMaPhongKT1, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED)
+         					.addComponent(txtMaPhongKT, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+         					.addGap(12))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(btnKiemTra, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+         					.addGap(49))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+         					.addPreferredGap(ComponentPlacement.RELATED)))
+         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 880, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addContainerGap()
-         			.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 1151, GroupLayout.PREFERRED_SIZE)
-         			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+         			.addContainerGap(765, Short.MAX_VALUE)
+         			.addComponent(btnHuyCK, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+         			.addGap(35)
+         			.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+         			.addGap(41))
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(50)
-         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-         				.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
-         				.addComponent(txtDanhSchChi, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
-         			.addGap(36)
-         			.addComponent(btnTIm, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-         			.addContainerGap(704, Short.MAX_VALUE))
-         		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(47)
+         			.addGap(191)
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-         					.addContainerGap())
+         					.addComponent(lblSoGiuong, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         					.addGap(6)
+         					.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE)
-         					.addGap(18)
-         					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED, 563, Short.MAX_VALUE)
-         					.addComponent(btnNewButton_4, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
-         					.addGap(42))))
+         					.addComponent(lblLoaiPhong, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         					.addGap(6)
+         					.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+         				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+         					.addGroup(gl_panel.createSequentialGroup()
+         						.addComponent(lblMaPhong, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         						.addPreferredGap(ComponentPlacement.RELATED)
+         						.addComponent(textField_2))
+         					.addGroup(gl_panel.createSequentialGroup()
+         						.addComponent(lblMaThuePhong, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         						.addPreferredGap(ComponentPlacement.RELATED)
+         						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))))
+         			.addGap(156)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+         					.addGroup(gl_panel.createSequentialGroup()
+         						.addComponent(lblTenKH, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         						.addGap(6)
+         						.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+         					.addGroup(gl_panel.createSequentialGroup()
+         						.addComponent(lblNgayDatPhong, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         						.addPreferredGap(ComponentPlacement.RELATED)
+         						.addComponent(dateChooserNgayDat, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+         					.addGroup(gl_panel.createSequentialGroup()
+         						.addComponent(lblNgyTrPhng, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         						.addPreferredGap(ComponentPlacement.RELATED)
+         						.addComponent(dateChooserNgayTra, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE)))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(lblDonGia, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+         					.addGap(6)
+         					.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE)))
+         			.addContainerGap(204, Short.MAX_VALUE))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -494,56 +589,83 @@ public class DanhSachDatPhongGUI extends  JFrame {
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
+         			.addGap(61)
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
+         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         						.addComponent(lblMaThuePhong, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
          					.addGap(18)
-         					.addComponent(btnNewButton_4, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addComponent(lblMaPhong, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addGroup(gl_panel.createSequentialGroup()
+         							.addGap(1)
+         							.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+         					.addGap(18)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addComponent(lblLoaiPhong, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addGroup(gl_panel.createSequentialGroup()
+         							.addGap(1)
+         							.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+         					.addGap(18)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addComponent(lblSoGiuong, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addGroup(gl_panel.createSequentialGroup()
+         							.addGap(1)
+         							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         								.addComponent(lblDonGia, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         								.addGroup(gl_panel.createSequentialGroup()
+         									.addGap(1)
+         									.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
+         								.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))))
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addPreferredGap(ComponentPlacement.UNRELATED)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addComponent(lblTenKH, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addGroup(gl_panel.createSequentialGroup()
+         							.addGap(1)
+         							.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+         					.addGap(18)
          					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
-         						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-         						.addComponent(textField_3, GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))))
-         			.addGap(18)
-         			.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addGap(12)
+         						.addComponent(dateChooserNgayDat, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+         						.addComponent(lblNgayDatPhong, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
+         					.addGap(18)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addComponent(dateChooserNgayTra, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(lblNgyTrPhng, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))))
+         			.addGap(96)
          			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-         				.addComponent(txtDanhSchChi)
-         				.addComponent(btnTIm, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
-         			.addContainerGap())
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+         					.addPreferredGap(ComponentPlacement.RELATED)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+         						.addComponent(txtMaPhongKT)
+         						.addComponent(lblMaPhongKT1, GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
+         					.addGap(18)
+         					.addComponent(btnKiemTra, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         					.addGap(13))
+         				.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+         			.addGap(26)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         				.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnHuyCK, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
+         			.addGap(20))
          );
          
-         modelPhieuThue = new DefaultTableModel(new Object[][]{}, new String[] {
-     	        "Mã Thuê Phòng", "Mã Khách Hàng", "Mã Nhân Viên", "Ngày Lập", "Tổng Tiền", "Trạng Thái"
-     	    });
-         tablePhieuThue = new JTable(modelPhieuThue);
-         scrollPane_1.setViewportView(tablePhieuThue);
-         loadDataPhieuThue();
-        
-         modelChiTietPhieuThue = new DefaultTableModel(new Object[][]{}, new String[]{
-        	        "Mã Thuê Phòng", "Mã Phòng", "Ngày Đặt", "Ngày Trả", "Giá Phòng", "Thành Tiền"
-        	    });
-         tableCTPhieuThue = new JTable(modelChiTietPhieuThue);
-         scrollPane.setViewportView(tableCTPhieuThue);
-         loadDataChiTietPhieuThue();
-       
-
+         table = new JTable();
+         table.setModel(modelTinhTrang);
+         scrollPane.setViewportView(table);
          panel.setLayout(gl_panel);
+         
         getContentPane().setLayout(layout);
+ 
+        
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void DatPhongActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
         dispose();
-        new QuanLiPhong().setVisible(true);   
+        new PhieuThuePhong().setVisible(true);   
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -553,13 +675,12 @@ public class DanhSachDatPhongGUI extends  JFrame {
 
     private void KhachSanActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
         dispose();
-        new DanhSachDatPhongGUI().setVisible(true);        
+        new DSCheckInGUI().setVisible(true);        
     }//GEN-LAST:event_KhachSanActionPerformed
 
-    
     private void homeActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
         dispose();
-        new DanhSachDatPhongGUI().setVisible(true);
+        new DSCheckInGUI().setVisible(true);
     }//GEN-LAST:event_homeActionPerformed
 
     private void QuanLiActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
@@ -577,61 +698,106 @@ public class DanhSachDatPhongGUI extends  JFrame {
         dispose();
         new DatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVuActionPerformed
-
-    private void loadDataPhieuThue() {
+    
+    public void napDuLieu(int maPhong) {
         try {
-            // Giả sử PhieuThuePhongBLL là lớp xử lý dữ liệu của bạn
-            ArrayList<PhieuThuePhongDTO> dsPhieuThue = phieuThueBLL.layDanhSachPhieuThue();
-            
-            // Xóa các dòng hiện tại trong bảng
-            modelPhieuThue.setRowCount(0);
-            
-            // Thêm các dữ liệu vào bảng
-            for (PhieuThuePhongDTO phieuThue : dsPhieuThue) {
-                Object[] row = new Object[]{
-                    phieuThue.getMaThuePhong(),
-                    phieuThue.getMaKhachHang(),
-                    phieuThue.getMaNhanVien(),
-                    phieuThue.getNgayLapPhieu(),
-                    phieuThue.getTongTien(),
-                    phieuThue.getTrangThai()
-                };
-                modelPhieuThue.addRow(row);
+            kttt = ktttBUS.timTheoMaPhong(maPhong);
+            if (kttt != null) {
+                modelTinhTrang.addRow(new Object[]{
+                    kttt.getMaKiemTra(),
+                    kttt.getMaPhong(),
+                    kttt.getMaNhanVien(),
+                    kttt.getNgayKiemTra(),
+                    kttt.getMoTaThietHai(),
+                    kttt.getChiPhiDenBu()
+                });
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu Phiếu Thuê Phòng.");
         }
     }
+    private void jBtTimKiemActionPerformed(ActionEvent e) {
+        String maPhongStr = txtMaPhongKT.getText().trim();
+        if (maPhongStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập mã phòng.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    
-    private void loadDataChiTietPhieuThue() {
         try {
-            // Giả sử ChiTietPhieuThuePhongBLL là lớp xử lý dữ liệu của bạn
-            ArrayList<ChiTietPhieuThuePhongDTO> dsChiTietPhieuThue = ctphieuThueBLL.layDanhSachChiTiet();
+            int maPhong = Integer.parseInt(maPhongStr);
             
-            // Xóa các dòng hiện tại trong bảng
-            modelChiTietPhieuThue.setRowCount(0);
-            
-            // Thêm các dữ liệu vào bảng
-            for (ChiTietPhieuThuePhongDTO chiTiet : dsChiTietPhieuThue) {
-                Object[] row = new Object[]{
-                    chiTiet.getMaThuePhong(),
-                    chiTiet.getMaPhong(),
-                    chiTiet.getNgayDatPhong(),
-                    chiTiet.getNgayTraPhong(),
-                    chiTiet.getGiaPhong(),
-                    chiTiet.getThanhTien()
-                };
-                modelChiTietPhieuThue.addRow(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu Chi Tiết Phiếu Thuê Phòng.");
+            // Xóa dữ liệu cũ trong bảng trước khi thêm mới
+            modelTinhTrang.setRowCount(0);
+
+            // Gọi hàm nạp dữ liệu
+            napDuLieu(maPhong);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Mã phòng phải là số nguyên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+//    private void hienThiThongTin(int maPhong) {
+//        QuanLiPhongDTO phong = phongDAO.timPhongTheoMa(maPhong);
+//        ChiTietPhieuThuePhongDTO chiTiet = chiTietDAO.timChiTietTheoMaPhong(maPhong);
+//        PhieuThuePhongDTO phieu = phieuThueDAO.timPhieuTheoMa(chiTiet.getMaThuePhong());
+//        
+//
+//        // Gán dữ liệu vào các text field
+//        txtMaPhong.setText(String.valueOf(maPhong));
+//        txtLoaiPhong.setText(phong.getMaLoaiPhong());
+//        txtSoGiuong.setText(String.valueOf(phong.getSoGiuong()));
+//        txtDonGia.setText(String.valueOf(phong.getDonGia()));
+//        txtMaThuePhong.setText(String.valueOf(phieu.getMaThuePhong()));
+//        txtTenKH.setText(khach.getTenKhachHang());
+//
+//        dateChooserNgayDat.setDate(chiTiet.getNgayDatPhong());
+//        dateChooserNgayTra.setDate(chiTiet.getNgayTraPhong());
+//    }
+//    
+    private void jBtSaveActionPerformed(ActionEvent evt) {
+        try {
+            int maPhong = this.maPhong; 
+            int maThuePhong = this.maThuePhong;
+            phongDAO.capNhatTrangThaiPhong(maPhong, "Đang sử dụng");
+            phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Đang thuê");
+            checkInOutBLL.updTTCheckInOut(maPhong);
+            
+            JOptionPane.showMessageDialog(this, "Check-in thành công!");
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
+        }
+    }
     
+    	private void jBtHuyActionPerformed(ActionEvent evt) {
+    		int maPhong = this.maPhong;
+            KiemTraTinhTrang kiemTraTinhTrang = ktttBUS.timKiemKTTT(maPhong);
+
+            if (kiemTraTinhTrang != null) {
+                String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
+                
+                int option = JOptionPane.showConfirmDialog(null, 
+                        "Huỷ phòng vì " + moTaThietHai + ". Tiến hành hoàn tiền!", 
+                        "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+
+                if (option == JOptionPane.OK_OPTION) {
+                    checkInOutBLL.xoaCheckInDTO(maPhong);
+                    try {
+                    	phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    try {
+                    	phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                       
+                }
+            }
+    	}
+
     /**
      * @param args the command line arguments
      */
@@ -649,13 +815,13 @@ public class DanhSachDatPhongGUI extends  JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DanhSachDatPhongGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(CheckIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(DanhSachDatPhongGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(CheckIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(DanhSachDatPhongGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(CheckIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch ( UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(DanhSachDatPhongGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(CheckIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -663,10 +829,11 @@ public class DanhSachDatPhongGUI extends  JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-         EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DanhSachDatPhongGUI().setVisible(true);
-            }
-        });
+//         EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new CheckIn().setVisible(true);
+//            }
+//        });
+         
     }
 }

@@ -5,14 +5,20 @@ import javax.swing.*;
 import java.awt.*;
 
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableModel;
+
+import BLL.CheckInOutBLL;
+import DTO.CheckInOutDTO;
+
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager.LookAndFeelInfo;
+import UI.*;
 
-public class CheckInGUI extends  JFrame {
+public class DSCheckOutGUI extends  JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private  JButton CheckIn;
@@ -47,7 +53,17 @@ public class CheckInGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-	public CheckInGUI() {
+    private JTextField textField_1;
+    private JTable table;
+
+	private JScrollPane scrollPane;
+
+	private final CheckInOutBLL phong;
+
+	private DefaultTableModel model;
+
+	public DSCheckOutGUI() {
+		phong = new CheckInOutBLL();
         initComponents();
     }
     
@@ -83,7 +99,7 @@ public class CheckInGUI extends  JFrame {
         DSDatPhong.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		dispose();
-                new CheckInGUI().setVisible(true);
+                new DSCheckOutGUI().setVisible(true);
         	}
         });
         DSKhachHang = new  JButton();
@@ -139,7 +155,7 @@ public class CheckInGUI extends  JFrame {
         labelMK.setPreferredSize(new  Dimension(90, 17));
 
         setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CHECK IN");
+        setTitle("CHECK ");
         setBackground(new  Color(255, 255, 255));
 
         jPanel1.setBackground(new  Color(52, 152, 219));
@@ -363,6 +379,21 @@ public class CheckInGUI extends  JFrame {
          textField.setBackground(new Color(52, 152, 219));
          textField.setColumns(10);
          textField.setBorder(null);
+         
+         textField_1 = new JTextField();
+         textField_1.setColumns(10);
+         
+         JButton btnTìm = new JButton("Tìm");
+         btnTìm.setBackground(new Color(52, 152, 219));
+         btnTìm.setForeground(new Color(255, 255, 255));
+         btnTìm.setFont(new Font("Times New Roman", Font.BOLD, 14));
+         
+         scrollPane = new JScrollPane();
+         
+         JButton btnCheckOut = new JButton("CHECK OUT");
+         btnCheckOut.setBackground(new Color(52, 152, 219));
+         btnCheckOut.setForeground(new Color(255, 255, 255));
+         btnCheckOut.setFont(new Font("Dialog", Font.BOLD, 14));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -374,6 +405,17 @@ public class CheckInGUI extends  JFrame {
          				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
+         		.addGroup(gl_panel.createSequentialGroup()
+         			.addGap(37)
+         			.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE)
+         			.addGap(36)
+         			.addComponent(btnTìm, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED, 542, Short.MAX_VALUE)
+         			.addComponent(btnCheckOut, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+         			.addGap(39))
+         		.addGroup(gl_panel.createSequentialGroup()
+         			.addContainerGap()
+         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -382,8 +424,30 @@ public class CheckInGUI extends  JFrame {
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addContainerGap(634, Short.MAX_VALUE))
+         			.addGap(18)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         				.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnTìm, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+         				.addComponent(btnCheckOut, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
+         			.addGap(115)
+         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE)
+         			.addContainerGap())
          );
+         
+         table = new JTable();
+         model = new DefaultTableModel(new String[]{
+ 	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
+ 	        }, 0) {
+ 	            @Override
+ 	            public boolean isCellEditable(int row, int column) {
+ 	                return false;
+ 	            }
+ 	        };
+ 	     
+         scrollPane.setViewportView(table);
+         table.setModel(model);
+         loadData();
+         
          panel.setLayout(gl_panel);
          
         getContentPane().setLayout(layout);
@@ -395,7 +459,7 @@ public class CheckInGUI extends  JFrame {
 
     private void DatPhongActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
         dispose();
-        new DatPhong().setVisible(true);   
+        new PhieuThuePhong().setVisible(true);   
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed
@@ -405,12 +469,12 @@ public class CheckInGUI extends  JFrame {
 
     private void KhachSanActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_KhachSanActionPerformed
         dispose();
-        new CheckInGUI().setVisible(true);        
+        new DSCheckOutGUI().setVisible(true);        
     }//GEN-LAST:event_KhachSanActionPerformed
 
     private void homeActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
         dispose();
-        new CheckInGUI().setVisible(true);
+        new DSCheckOutGUI().setVisible(true);
     }//GEN-LAST:event_homeActionPerformed
 
     private void QuanLiActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
@@ -428,6 +492,36 @@ public class CheckInGUI extends  JFrame {
         dispose();
         new DatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVuActionPerformed
+    
+    
+    public void loadData() {
+        // Làm mới model của bảng
+        model.setRowCount(0);  // Xoá hết các dòng cũ trong bảng
+        
+        // Lọc và thêm dữ liệu "Đã check in"
+        try {
+			for (CheckInOutDTO checkIn : phong.layDanhSachCheckInHopLe()) {
+			    if ("Đã check in".equals(checkIn.getTrangThai())) {  // Kiểm tra trạng thái là "Đã check in"
+			        // Lấy thông tin từ CheckInOutDTO
+			        Object[] row = new Object[]{
+			            checkIn.getMaThuePhong(),
+			            checkIn.getMaPhong(),
+			            checkIn.getMaKhachHang(),
+			            checkIn.getNgayDatPhong(),
+			            checkIn.getNgayTraPhong(),
+			            checkIn.getTrangThai()
+			        };
+			        
+			        // Thêm dòng vào model bảng
+			        model.addRow(row);
+			    }
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
 
     /**
      * @param args the command line arguments
@@ -446,13 +540,13 @@ public class CheckInGUI extends  JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(CheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(CheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch ( UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(CheckInGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(DSCheckOutGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -462,7 +556,7 @@ public class CheckInGUI extends  JFrame {
         /* Create and display the form */
          EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CheckInGUI().setVisible(true);
+                new DSCheckOutGUI().setVisible(true);
             }
         });
          

@@ -98,9 +98,10 @@ CREATE TABLE ChiTietPhieuThue (
 -- Bảng Kiểm tra tình trạng phòng
 CREATE TABLE KiemTraTinhTrang (
     MaKiemTra INT PRIMARY KEY,
-    MaNhanVien INT,
+    MaPhong INT,
     MaThuePhong INT,
-    NgayKiemTra DATETIME,
+    MaNhanVien INT,
+    NgayKiemTra DATE,
     MoTaThietHai TEXT,
     ChiPhiDenBu DECIMAL(18,2),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
