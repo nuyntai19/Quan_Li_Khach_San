@@ -119,7 +119,6 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         tblDSPHONG = new javax.swing.JTable();
         ButtonSua = new javax.swing.JButton();
         ButtonXoa = new javax.swing.JButton();
-        LBMaLoaiPhongTrong1 = new javax.swing.JLabel();
         TXMaKH = new javax.swing.JTextField();
         lbHo = new javax.swing.JLabel();
         TXHo = new javax.swing.JTextField();
@@ -130,6 +129,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         TXSDT = new javax.swing.JTextField();
         TXEmail = new javax.swing.JTextField();
         ButtonThem = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         KhachSan = new javax.swing.JButton();
         QuanLi = new javax.swing.JButton();
@@ -353,9 +353,6 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             }
         });
 
-        LBMaLoaiPhongTrong1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        LBMaLoaiPhongTrong1.setText("Mã khách hàng:");
-
         TXMaKH.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXMaKHActionPerformed(evt);
@@ -412,6 +409,8 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 ButtonThemActionPerformed(evt);
             }
         });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "_", "Mã khách hàng", "Email", "SDT" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -475,9 +474,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                                     .addComponent(LBPhongTrong)
                                     .addComponent(LBPhongTrong1)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(333, 333, 333)
-                                .addComponent(LBMaLoaiPhongTrong1)
-                                .addGap(26, 26, 26)
+                                .addGap(348, 348, 348)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
                                 .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -525,10 +524,10 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(LBPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(LBMaLoaiPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButtonResert, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -750,22 +749,55 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
 
     private void ButtonTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTimActionPerformed
         try {
-            String maKhachHangStr = TXMaKH.getText().trim();
-            if (maKhachHangStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng cần tìm.");
+            // Lấy giá trị từ combo box
+            String selectedColumn = (String) jComboBox1.getSelectedItem(); 
+            String searchValue = TXMaKH.getText().trim(); // Giá trị tìm kiếm nhập vào
+
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị cần tìm.");
                 return;
             }
-            int maKhachHang = Integer.parseInt(maKhachHangStr);
-            model.setRowCount(0);
+
+            model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+
+            // Lọc danh sách khách hàng dựa vào giá trị của combo box
             for (KhachHangDTO kh : danhSachKhachHangGoc) {
-                if (kh.getMaKhachHang() == maKhachHang) {
-                    model.addRow(new Object[]{
-                        kh.getMaKhachHang(), kh.getHo(), kh.getTen(), kh.getNgaySinh(), kh.getGioiTinh(),
-                        kh.getEmail(), kh.getSoDienThoai()
-                    });
-                    break;
+                switch (selectedColumn) {
+                    case "Mã khách hàng":
+                        if (String.valueOf(kh.getMaKhachHang()).equals(searchValue)) {
+                            model.addRow(new Object[]{
+                                kh.getMaKhachHang(), kh.getHo(), kh.getTen(), 
+                                kh.getNgaySinh(), kh.getGioiTinh(), kh.getEmail(), kh.getSoDienThoai()
+                            });
+                        }
+                        break;
+                    case "Email":
+                        if (kh.getEmail().equals(searchValue)) {
+                            model.addRow(new Object[]{
+                                kh.getMaKhachHang(), kh.getHo(), kh.getTen(), 
+                                kh.getNgaySinh(), kh.getGioiTinh(), kh.getEmail(), kh.getSoDienThoai()
+                            });
+                        }
+                        break;
+                    case "SDT":
+                        if (kh.getSoDienThoai().equals(searchValue)) {
+                            model.addRow(new Object[]{
+                                kh.getMaKhachHang(), kh.getHo(), kh.getTen(), 
+                                kh.getNgaySinh(), kh.getGioiTinh(), kh.getEmail(), kh.getSoDienThoai()
+                            });
+                        }
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn trường tìm kiếm hợp lệ.");
+                        return;
                 }
             }
+
+            // Kiểm tra nếu không có dữ liệu nào được tìm thấy
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu phù hợp.");
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + e.getMessage());
         }
@@ -791,7 +823,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 TXEmail.getText(),
                 TXSDT.getText()
             );
-            khachHangBLL.capnhatKhachHang(kh);
+            khachHangBLL.capNhatKhachHang(kh);
             loadData();
             JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thành công!");
         } catch (Exception e) {
@@ -971,7 +1003,6 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     private javax.swing.JButton DatPhong2;
     private javax.swing.JButton HoaDonDatPhong2;
     private javax.swing.JButton KhachSan;
-    private javax.swing.JLabel LBMaLoaiPhongTrong1;
     private javax.swing.JLabel LBPhongTrong;
     private javax.swing.JLabel LBPhongTrong1;
     private javax.swing.JButton NutDangNhap;
@@ -993,6 +1024,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonResert;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
