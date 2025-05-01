@@ -1,15 +1,20 @@
 package BLL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
 
 import DAO.ChiTietPhieuThuePhongDAO;
 import DAO.PhieuThuePhongDAO;
+import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 import DTO.ChiTietPhieuThuePhongDTO;
 import DTO.PhieuThuePhongDTO;
 
 public class CheckInOutBLL {
     private ArrayList<CheckInOutDTO> dsCheckIn;
+    private QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
     private PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
     private ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
     public CheckInOutBLL() {
@@ -24,14 +29,10 @@ public class CheckInOutBLL {
         ArrayList<CheckInOutDTO> dsCheckIn = new ArrayList<>();
 
         ArrayList<PhieuThuePhongDTO> dsPhieu = phieuThueDAO.layDanhSachPhieuThue();
-        
-
+        ArrayList<ChiTietPhieuThuePhongDTO> dsChiTiet = chiTietDAO.layDanhSachChiTiet();
         for (PhieuThuePhongDTO phieu : dsPhieu) {
-            if (!"Đang chờ xác nhận".equalsIgnoreCase(phieu.getTrangThai())) {
+            if (!"Đang chờ xác nhận".equalsIgnoreCase(phieu.getTrangThai())) 
                 continue;
-            }
-
-            ArrayList<ChiTietPhieuThuePhongDTO> dsChiTiet = chiTietDAO.layDanhSachChiTiet();
             for (ChiTietPhieuThuePhongDTO ct : dsChiTiet) 
             {
                 if(ct.getMaThuePhong() != phieu.getMaThuePhong() )
@@ -55,7 +56,7 @@ public class CheckInOutBLL {
         PhieuThuePhongDTO phieu = phieuThueDAO.timPhieuThueTheoMa(maThuePhong);
         if (phieu != null && "Đang chờ xác nhận".equalsIgnoreCase(phieu.getTrangThai())) {
             phieu.setTrangThai("Đang thuê");
-            phieuThueDAO.capNhatPhieuThue(phieu); // DAO này phải có hàm UPDATE
+            phieuThueDAO.capNhatPhieuThue(phieu);
         }
     }
     public void xoaCheckInDTO(int maThuePhong) {
@@ -79,6 +80,47 @@ public class CheckInOutBLL {
             }
         }
     }
+    public void kiemTraQuaHanCheckIn(ArrayList<CheckInOutDTO> dsCheckIn) {
+        Date today = new Date();
     
+        for (CheckInOutDTO checkIn : dsCheckIn) 
+        {
+            try 
+            {
+                if (checkIn.getNgayDatPhong().before(today) && "Đã đặt".equalsIgnoreCase(checkIn.getTrangThai())) 
+                {
+                    checkIn.setTrangThai("Quá hạn check-in");
+                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Đang bảo trì");
+                    //phieuThueDAO.capNhatTrangThaiPhieu(checkIn.getMaThuePhong(), "Đã huỷ");
+                }
+            } 
+            catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi cập nhật trạng thái!");
+            }
+        }
+    }
+
+    public void kiemTraQuaHanCheckOut(ArrayList<CheckInOutDTO> dsCheckIn) {
+        Date today = new Date();
+    
+        for (CheckInOutDTO checkIn : dsCheckIn) 
+        {
+            if (checkIn.getNgayTraPhong().before(today) && "Đang thuê".equalsIgnoreCase(checkIn.getTrangThai())) 
+            {
+                try
+                {
+                    checkIn.setTrangThai("Quá hạn check-out");
+                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Đang bảo trì");
+                }
+                catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi cập nhật trạng thái!");
+                }
+            }
+        }
+    }
+    
+
 }
 

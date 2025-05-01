@@ -85,7 +85,7 @@ public class DlgKTTT extends JDialog {
 	}
 	public void initComponents() {
 		setTitle("Chi tiết kiểm tra");
-		setBounds(100, 100, 500, 409);
+		setBounds(100, 100, 500, 433);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(255, 255, 255));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -176,10 +176,11 @@ public class DlgKTTT extends JDialog {
 		}
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			buttonPane.setBounds(0, 351, 500, 54);
+			contentPanel.add(buttonPane);
 			{
 				JButton okButton = new JButton("Lưu");
+				okButton.setBounds(266, 6, 96, 42);
 				okButton.setBackground(new Color(52, 152, 219));
 				okButton.setForeground(new Color(255, 255, 255));
 				okButton.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -189,7 +190,7 @@ public class DlgKTTT extends JDialog {
 
 				public void actionPerformed(ActionEvent e) {
 			        try {
-			            // 1. Kiểm tra dữ liệu đầu vào
+			            
 			            String maKiemTraText = txtMaKT.getText().trim();
 			            String maPhongText = txtMaPhong.getText().trim();
 			            String maNhanVienText = txtMaNV.getText().trim();
@@ -197,7 +198,7 @@ public class DlgKTTT extends JDialog {
 			            String ngayKiemTraText = txtNgayKT.getText().trim();
 			            String chiPhiText = txtChiPhi.getText().trim();
 			
-			            // Kiểm tra các trường số nguyên
+			            
 			            if (maKiemTraText.isEmpty() || !maKiemTraText.matches("\\d+")) {
 			                JOptionPane.showMessageDialog(null, "Mã Kiểm Tra phải là một số nguyên hợp lệ!");
 			                return;
@@ -285,6 +286,7 @@ public class DlgKTTT extends JDialog {
 			        }
 			    }
 			});
+				buttonPane.setLayout(null);
 
 				//okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
@@ -293,6 +295,7 @@ public class DlgKTTT extends JDialog {
 			{
 				// Nút Cancel (Hủy)
 			    JButton cancelButton = new JButton("Cancel");
+			    cancelButton.setBounds(387, 6, 96, 42);
 			    cancelButton.setBackground(new Color(52, 152, 219));
 			    cancelButton.setForeground(new Color(255, 255, 255));
 			    cancelButton.setFont(new Font("Dialog", Font.BOLD, 15));

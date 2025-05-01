@@ -1,5 +1,6 @@
 package UI;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +8,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.CheckInOutBLL;
+import BLL.KiemTraTinhTrangBUS;
+import DAO.ChiTietPhieuThuePhongDAO;
+import DAO.PhieuThuePhongDAO;
+import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 import DTO.KiemTraTinhTrang;
 
@@ -33,7 +38,6 @@ public class DSCheckInGUI extends  JFrame {
     private  JButton NutDangNhap;
     private  JButton QuanLi;
     private  JLabel Tittle;
-    private  JButton home;
     private  JButton jButton9;
     private  JLabel jLabel2;
     private  JPanel jPanel1;
@@ -53,31 +57,26 @@ public class DSCheckInGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-    private JTextField textField_1;
+    private JTextField textKT;
     private JTable table;
 
 	private JScrollPane scrollPane;
 
 	private DefaultTableModel model;
+	private final KiemTraTinhTrangBUS ktttBUS = new KiemTraTinhTrangBUS();
+	private final QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
+	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
+	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
+	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
+	private JButton btnHuy;
+	private JButton btnRefresh;
+	private DlgKTphong dlg;
 
-	private final CheckInOutBLL phong;
+	private ArrayList<CheckInOutDTO> danhSach;
+	private JButton KiemTraTinhTrang;
+
 	public DSCheckInGUI() {
-		phong = new CheckInOutBLL();
-		model = new DefaultTableModel(new String[]{
-	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
-	        }, 0) {
-	            @Override
-	            public boolean isCellEditable(int row, int column) {
-	                return false;
-	            }
-	        };
-	        model.addRow(new Object[]{"TP001", "P101", "KH001", "2025-05-01", "2025-05-05", "Đã trả"});
-	        model.addRow(new Object[]{"TP002", "P102", "KH002", "2025-05-02", "2025-05-06", "Chưa trả"});
-	        model.addRow(new Object[]{"TP003", "P103", "KH003", "2025-05-03", "2025-05-07", "Đã trả"});
-	        model.addRow(new Object[]{"TP004", "P104", "KH004", "2025-05-04", "2025-05-08", "Chưa trả"});
-	        model.addRow(new Object[]{"TP005", "P105", "KH005", "2025-05-05", "2025-05-10", "Đã huỷ"});
-
-	    //loadDataToModel();
+		
         initComponents();
     }
     
@@ -103,7 +102,6 @@ public class DSCheckInGUI extends  JFrame {
         jPanel1 = new  JPanel();
         Tittle = new  JLabel();
         self = new  JButton();
-        home = new  JButton();
         jPanel3 = new  JPanel();
         DatPhong = new  JButton();
         CheckIn = new  JButton();
@@ -188,35 +186,23 @@ public class DSCheckInGUI extends  JFrame {
             }
         });
 
-        home.setBackground(new  Color(52, 152, 219));
-        home.setIcon(new  ImageIcon(getClass().getResource("/ICON/home (1).png"))); // NOI18N
-        home.setBorder(null);
-        home.addActionListener(new   ActionListener() {
-            public void actionPerformed(  ActionEvent evt) {
-                homeActionPerformed(evt);
-            }
-        });
-
          GroupLayout jPanel1Layout = new  GroupLayout(jPanel1);
          jPanel1Layout.setHorizontalGroup(
-         	jPanel1Layout.createParallelGroup(Alignment.LEADING)
-         		.addGroup(Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+         	jPanel1Layout.createParallelGroup(Alignment.TRAILING)
+         		.addGroup(Alignment.LEADING, jPanel1Layout.createSequentialGroup()
          			.addGap(16)
          			.addComponent(Tittle, GroupLayout.PREFERRED_SIZE, 276, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED, 1025, Short.MAX_VALUE)
+         			.addPreferredGap(ComponentPlacement.RELATED, 1086, Short.MAX_VALUE)
          			.addComponent(self, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(home, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          );
          jPanel1Layout.setVerticalGroup(
          	jPanel1Layout.createParallelGroup(Alignment.TRAILING)
-         		.addGroup(jPanel1Layout.createSequentialGroup()
+         		.addGroup(Alignment.LEADING, jPanel1Layout.createSequentialGroup()
          			.addContainerGap()
-         			.addGroup(jPanel1Layout.createParallelGroup(Alignment.TRAILING)
-         				.addComponent(Tittle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+         			.addGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING)
          				.addComponent(self, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-         				.addComponent(home, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+         				.addComponent(Tittle, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
          			.addContainerGap())
          );
         jPanel1.setLayout(jPanel1Layout);
@@ -273,45 +259,58 @@ public class DSCheckInGUI extends  JFrame {
                 DatDichVuActionPerformed(evt);
             }
         });
+         
+         KiemTraTinhTrang = new JButton();
+         KiemTraTinhTrang.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         	}
+         });
+         KiemTraTinhTrang.setText("Kiểm tra tình trạng");
+         KiemTraTinhTrang.setIcon(new ImageIcon(DSCheckInGUI.class.getResource("/ICON/checkTinhTrang.png")));
+         KiemTraTinhTrang.setHorizontalAlignment(SwingConstants.LEFT);
+         KiemTraTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
 
          GroupLayout jPanel3Layout = new  GroupLayout(jPanel3);
+         jPanel3Layout.setHorizontalGroup(
+         	jPanel3Layout.createParallelGroup(Alignment.LEADING)
+         		.addGroup(jPanel3Layout.createSequentialGroup()
+         			.addContainerGap()
+         			.addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+         				.addComponent(DatPhong, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(CheckIn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(HoaDonDatPhong, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(CheckOut, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(DSDatPhong, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(DSKhachHang, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(DSDatDichVu, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(DatDichVu, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+         				.addComponent(KiemTraTinhTrang, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE))
+         			.addContainerGap())
+         );
+         jPanel3Layout.setVerticalGroup(
+         	jPanel3Layout.createParallelGroup(Alignment.LEADING)
+         		.addGroup(jPanel3Layout.createSequentialGroup()
+         			.addContainerGap()
+         			.addComponent(DatPhong, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(CheckIn, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(CheckOut, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(DSDatPhong, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(HoaDonDatPhong, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(DSKhachHang, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(DSDatDichVu, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(DatDichVu, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(KiemTraTinhTrang, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+         			.addContainerGap(148, Short.MAX_VALUE))
+         );
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-                    .addComponent(DatPhong,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckIn,  GroupLayout.Alignment.TRAILING,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HoaDonDatPhong,  GroupLayout.Alignment.TRAILING,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckOut,  GroupLayout.Alignment.TRAILING,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSDatPhong,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSKhachHang,  GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                    .addComponent(DSDatDichVu,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu,  GroupLayout.Alignment.TRAILING,  GroupLayout.DEFAULT_SIZE,  GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(DatPhong,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CheckIn,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CheckOut,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DSDatPhong,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(HoaDonDatPhong,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DSKhachHang,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DSDatDichVu,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DatDichVu,  GroupLayout.PREFERRED_SIZE, 47,  GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(201, Short.MAX_VALUE))
-        );
 
         jPanel5.setBackground(new  Color(255, 255, 255));
         jPanel5.setBorder( BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -382,7 +381,7 @@ public class DSCheckInGUI extends  JFrame {
          			.addGap(125))
          );
          
-         JLabel lblNewLabel = new JLabel("Check In");
+         JLabel lblNewLabel = new JLabel("DANH SÁCH CHECK IN");
          lblNewLabel.setFont(new Font("Segoe UI", 1, 19));
          lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
          lblNewLabel.setForeground(new Color(52, 152, 219));
@@ -395,10 +394,15 @@ public class DSCheckInGUI extends  JFrame {
          
          scrollPane = new JScrollPane();
          
-         textField_1 = new JTextField();
-         textField_1.setColumns(10);
+         textKT = new JTextField();
+         textKT.setColumns(10);
          
          JButton btnTim = new JButton("Tìm");
+         btnTim.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtTimKiemActionPerformed(e);
+         	}
+         });
          btnTim.setForeground(new Color(255, 255, 255));
          btnTim.setBackground(new Color(52, 152, 219));
          btnTim.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -406,32 +410,75 @@ public class DSCheckInGUI extends  JFrame {
          JButton btnCheckIn = new JButton("CHECK IN");
          btnCheckIn.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
-         		jBtCheckInAcitonPerformed(e);
+         		jBtCheckInActionPerformed(e);
          	}
          });
          btnCheckIn.setForeground(new Color(255, 255, 255));
          btnCheckIn.setBackground(new Color(52, 152, 219));
          btnCheckIn.setFont(new Font("Dialog", Font.BOLD, 14));
+         
+         JButton btnKTTT = new JButton("Kiểm tra tình trạng");
+         btnKTTT.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow();
+				int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+         		dlg = new DlgKTphong(maPhong);
+         		dlg.setVisible(true);
+         	}
+         });
+         btnKTTT.setForeground(new Color(255, 255, 255));
+         btnKTTT.setFont(new Font("Dialog", Font.BOLD, 14));
+         btnKTTT.setBackground(new Color(52, 152, 219));
+         
+         btnHuy = new JButton("HUỶ");
+         btnHuy.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtHuyActionPerformed(e);
+         	}
+         });
+         btnHuy.setForeground(Color.WHITE);
+         btnHuy.setFont(new Font("Dialog", Font.BOLD, 14));
+         btnHuy.setBackground(new Color(52, 152, 219));
+         
+         btnRefresh = new JButton("");
+         btnRefresh.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtRefreshActionPerformed(e);
+         	}
+         });
+         btnRefresh.setOpaque(false);
+         btnRefresh.setIcon(new ImageIcon(DSCheckInGUI.class.getResource("/ICON/refresh_40.png")));
+         btnRefresh.setFocusPainted(false);
+         btnRefresh.setContentAreaFilled(false);
+         btnRefresh.setBorderPainted(false);
+         btnRefresh.setBackground(Color.WHITE);
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(33)
-         			.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-         			.addGap(29)
-         			.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED, 579, Short.MAX_VALUE)
-         			.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-         			.addGap(39))
-         		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
-         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-         				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
-         				.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
-         				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
+         				.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
+         				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
+         		.addGroup(gl_panel.createSequentialGroup()
+         			.addGap(33)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+         					.addGap(18)
+         					.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+         				.addComponent(textKT, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE))
+         			.addGap(29)
+         			.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED, 512, Short.MAX_VALUE)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE))
+         			.addGap(31))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -440,20 +487,36 @@ public class DSCheckInGUI extends  JFrame {
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addGap(18)
-         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-         				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         					.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-         					.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-         				.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-         			.addPreferredGap(ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+         					.addGap(18)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         						.addComponent(textKT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(12)
+         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         						.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+         					.addPreferredGap(ComponentPlacement.UNRELATED)))
          			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 458, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          );
-         
+         model = new DefaultTableModel(new String[]{
+ 	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
+ 	        }, 0) {
+ 	            @Override
+ 	            public boolean isCellEditable(int row, int column) {
+ 	                return false;
+ 	            }
+ 	        };
          table = new JTable();
-         scrollPane.setViewportView(table);
          table.setModel(model);
+         scrollPane.setViewportView(table);
+         loadDataToModel();
          
          panel.setLayout(gl_panel);
          
@@ -479,11 +542,6 @@ public class DSCheckInGUI extends  JFrame {
         new DSCheckInGUI().setVisible(true);        
     }//GEN-LAST:event_KhachSanActionPerformed
 
-    private void homeActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
-        dispose();
-        new DSCheckInGUI().setVisible(true);
-    }//GEN-LAST:event_homeActionPerformed
-
     private void QuanLiActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
         ThongTinNhanVienBLL bll = new ThongTinNhanVienBLL();
         if (bll.laAdminDangNhap()) {
@@ -504,9 +562,11 @@ public class DSCheckInGUI extends  JFrame {
         new DanhSachDatPhongGUI().setVisible(true);
     }
     private void loadDataToModel() {
-        model.setRowCount(0); // xóa dữ liệu cũ (nếu có)
+        model.setRowCount(0);
         try {
-			for (CheckInOutDTO c : phong.layDanhSachCheckInHopLe()) {
+        	danhSach = checkInOutBLL.layDanhSachCheckInHopLe();
+        	checkInOutBLL.kiemTraQuaHanCheckIn(danhSach);
+			for (CheckInOutDTO c : danhSach) {
 			    model.addRow(new Object[]{
 			        c.getMaThuePhong(),
 			        c.getMaPhong(),
@@ -517,24 +577,161 @@ public class DSCheckInGUI extends  JFrame {
 			    });
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
     }
-    private void jBtCheckInAcitonPerformed(ActionEvent evt) {
-    	int selectedRow = table.getSelectedRow();
-    	if (selectedRow != -1) {
-    		String maThue = model.getValueAt(selectedRow, 1).toString();
-    	    String maPhong = model.getValueAt(selectedRow, 2).toString(); // cột 2 là int MaPhong
+    private void jBtRefreshActionPerformed(ActionEvent evt){
+    	try {
+            loadDataToModel();
+            textKT.setText("");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi làm mới dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private boolean KTPhong(int maPhong) {
+    KiemTraTinhTrang kiemTraTinhTrang = ktttBUS.timKiemKTTT(maPhong);
 
-    	    // Gửi mã phòng sang CheckInGUI
-    	    new CheckIn(maThue,maPhong).setVisible(true);
+    if (kiemTraTinhTrang != null) 
+    {
+        String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
+        if ("Không".equalsIgnoreCase(moTaThietHai.trim()))
+            return true;
+
+        int option = JOptionPane.showConfirmDialog(null, 
+                "Phòng gặp sự cố: " + moTaThietHai + ".\nHuỷ phòng và hoàn tiền?", 
+                "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == JOptionPane.OK_OPTION) 
+        {
+            checkInOutBLL.xoaCheckInDTO(maPhong);
+            try {
+                phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            try {
+                phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        } else return false;
+    }
+    return true;
+}
+    public void huyPhongQuaHan(int maPhong) {
+        KiemTraTinhTrang kiemTra = ktttBUS.timKiemKTTT(maPhong);
+
+        if (kiemTra != null) {
+            String moTa = kiemTra.getMoTaThietHai();
+            if (!"Không".equalsIgnoreCase(moTa)) 
+            {
+                try {
+                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
+                    phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+                    checkInOutBLL.xoaCheckInDTO(maPhong);
+                    JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
+                }
+            } 
+            else 
+            {
+                try {
+                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
+                    phongDAO.capNhatTrangThaiPhong(maPhong, "Phòng trốn");
+                    checkInOutBLL.xoaCheckInDTO(maPhong);
+                    JOptionPane.showMessageDialog(null, "Phòng đã huỷ thành công.");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
+                }
+            }
+        }
+    }
+
+    // kt Mô tả thiệt hại và checkin
+    private void jBtCheckInActionPerformed(ActionEvent evt) {
+    	int selectedRow = table.getSelectedRow(); 
+    	
+    	if (selectedRow != -1) { 
+    	    try {
+    	        int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());      
+    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+
+    	        if (!KTPhong(maPhong)) {
+    	            return;
+    	        }
+    	        
+    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Đang sử dụng");
+    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Đang thuê");
+    	        checkInOutBLL.updTTCheckInOut(maPhong);
+
+    	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
+
+    	    } catch (SQLException ex) {
+    	        ex.printStackTrace();
+    	        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
+    	    } catch (NumberFormatException ex) {
+    	        JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ!");
+    	    }
     	} else {
-    	    JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để check-in.");
+    	    JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng!");
     	}
 
     }
 
+    private void jBtHuyActionPerformed(ActionEvent evt) {
+        int selectedRow = table.getSelectedRow(); 
+        if (selectedRow != -1) {
+            int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+            String trangThai = table.getValueAt(selectedRow, 5).toString();
+
+            int option = JOptionPane.showConfirmDialog(null, 
+                "Bạn có chắc chắn muốn huỷ phòng này?", 
+                "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+
+            if (option == JOptionPane.OK_OPTION) 
+            {
+            	if ("Quá hạn check-in".equals(trangThai))
+            		huyPhongQuaHan(maPhong);
+            	else KTPhong(maPhong);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng cần huỷ.");
+        }
+    }
+
+    private void jBtTimKiemActionPerformed(ActionEvent evt) {
+        String searchText = textKT.getText().toLowerCase(); 
+        filterTable(searchText);
+    }                                           
+
+    private void filterTable(String searchText) {
+    model.setRowCount(0);
+    
+    for (CheckInOutDTO c : danhSach) {
+        if (String.valueOf(c.getMaThuePhong()).toLowerCase().contains(searchText.toLowerCase()) ||
+            String.valueOf(c.getMaPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
+            String.valueOf(c.getMaKhachHang()).toLowerCase().contains(searchText.toLowerCase()) ||
+            String.valueOf(c.getNgayDatPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
+            String.valueOf(c.getNgayTraPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
+            String.valueOf(c.getTrangThai()).toLowerCase().contains(searchText.toLowerCase())) {
+
+            model.addRow(new Object[]{
+                c.getMaThuePhong(),
+                c.getMaPhong(),
+                c.getMaKhachHang(),
+                c.getNgayDatPhong(),
+                c.getNgayTraPhong(),
+                c.getTrangThai()
+            });
+        }
+    }
+}
+    
     /**
      * @param args the command line arguments
      */
