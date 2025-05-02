@@ -301,7 +301,7 @@ public class DlgKTTT extends JDialog {
 			    cancelButton.setFont(new Font("Dialog", Font.BOLD, 15));
 			    cancelButton.addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent e) {
-			            dispose();  // Đóng dialog khi người dùng nhấn "Cancel"
+			            dispose(); 
 			        }
 			    });
 				buttonPane.add(cancelButton);

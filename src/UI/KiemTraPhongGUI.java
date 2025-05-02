@@ -641,7 +641,7 @@ public class KiemTraPhongGUI extends  JFrame {
         }
     }
     private void jBtDeleteActionPerformed(ActionEvent e) {
-        int selectedRow = table.getSelectedRow(); // lấy dòng được chọn
+        int selectedRow = table.getSelectedRow();
 
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần xoá.");

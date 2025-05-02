@@ -566,7 +566,7 @@ public class DSCheckOutGUI extends  JFrame {
         	danhSach = checkInOutBLL.layDanhSachCheckInHopLe();
         	checkInOutBLL.kiemTraQuaHanCheckOut(danhSach); 
 			for (CheckInOutDTO checkIn : danhSach) {
-			    if ("Đã check in".equals(checkIn.getTrangThai()) || "Quá hạn check-out".equals(checkIn.getTrangThai())) {  
+			    if ("Da check-in".equals(checkIn.getTrangThai()) || "Qua han check-out".equals(checkIn.getTrangThai())) {  
 			      
 			        Object[] row = new Object[]{
 			            checkIn.getMaThuePhong(),
@@ -623,7 +623,7 @@ public class DSCheckOutGUI extends  JFrame {
     private void KTPhong(int maPhong) {
     	KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
     	String moTa = kt.getMoTaThietHai();
-        if (!moTa.equalsIgnoreCase("Không")) {
+        if (!moTa.equalsIgnoreCase("Khong")) {
             JOptionPane.showMessageDialog(this, "Phòng " + maPhong + " có thiệt hại: " + moTa);
             try {
 				phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
