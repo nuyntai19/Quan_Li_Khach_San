@@ -115,8 +115,31 @@ public class DanhSachDatPhongGUI extends  JFrame {
         jPanel3 = new  JPanel();
         DatPhong = new  JButton();
         CheckIn = new  JButton();
+        CheckIn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DSCheckInGUI().setVisible(true);
+        	}
+        });
         CheckOut = new  JButton();
+        CheckOut.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DSCheckOutGUI().setVisible(true);
+        	}
+        });
         HoaDonDatPhong = new  JButton();
+        HoaDonDatPhong.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                try {
+					new DanhSachHoaDon().setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
         DSDatPhong = new  JButton();
         DSDatPhong.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -125,7 +148,19 @@ public class DanhSachDatPhongGUI extends  JFrame {
         	}
         });
         DSKhachHang = new  JButton();
+        DSKhachHang.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachKhachHang().setVisible(true);
+        	}
+        });
         DSDatDichVu = new  JButton();
+        DSDatDichVu.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachDatDichVu().setVisible(true);
+        	}
+        });
         DatDichVu = new  JButton();
         jPanel5 = new  JPanel();
         KhachSan = new  JButton();

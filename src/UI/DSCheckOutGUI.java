@@ -9,6 +9,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.CheckInOutBLL;
+import BLL.CheckInOutTEMP;
 import BLL.KiemTraTinhTrangBUS;
 import BLL.ThongTinNhanVienBLL;
 import DAO.ChiTietPhieuThuePhongDAO;
@@ -70,6 +71,7 @@ public class DSCheckOutGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
+	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
 	private DlgKTphong dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
@@ -106,17 +108,52 @@ public class DSCheckOutGUI extends  JFrame {
         jPanel3 = new  JPanel();
         DatPhong = new  JButton();
         CheckIn = new  JButton();
+        CheckIn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DSCheckInGUI().setVisible(true);
+        	}
+        });
         CheckOut = new  JButton();
-        HoaDonDatPhong = new  JButton();
-        DSDatPhong = new  JButton();
-        DSDatPhong.addActionListener(new ActionListener() {
+        CheckOut.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		dispose();
                 new DSCheckOutGUI().setVisible(true);
         	}
         });
+        HoaDonDatPhong = new  JButton();
+        HoaDonDatPhong.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                try {
+					new DanhSachHoaDon().setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
+        DSDatPhong = new  JButton();
+        DSDatPhong.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachDatPhongGUI().setVisible(true);
+        	}
+        });
         DSKhachHang = new  JButton();
+        DSKhachHang.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachKhachHang().setVisible(true);
+        	}
+        });
         DSDatDichVu = new  JButton();
+        DSDatDichVu.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachDatDichVu().setVisible(true);
+        	}
+        });
         DatDichVu = new  JButton();
         jPanel5 = new  JPanel();
         KhachSan = new  JButton();
@@ -572,26 +609,21 @@ public class DSCheckOutGUI extends  JFrame {
     
     public void loadData() {
         model.setRowCount(0);
-        try {
-        	danhSach = checkInOutBLL.layDanhSachCheckInHopLe();
-        	checkInOutBLL.kiemTraQuaHanCheckOut(danhSach); 
-			for (CheckInOutDTO checkIn : danhSach) {
-			    if ("Da check-in".equals(checkIn.getTrangThai()) || "Qua han check-out".equals(checkIn.getTrangThai())) {  
-			      
-			        Object[] row = new Object[]{
-			            checkIn.getMaThuePhong(),
-			            checkIn.getMaPhong(),
-			            checkIn.getMaKhachHang(),
-			            checkIn.getNgayDatPhong(),
-			            checkIn.getNgayTraPhong(),
-			            checkIn.getTrangThai()
-			        };
-			        model.addRow(row);
-			    }
-			}
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
+        danhSach = tempList.getTempList();
+        tempList.kiemTraQuaHanCheckOut(danhSach); 
+		for (CheckInOutDTO checkIn : danhSach) {
+		    if ("Da check-in".equals(checkIn.getTrangThai()) || "Qua han check-out".equals(checkIn.getTrangThai())) {  
+		      
+		        Object[] row = new Object[]{
+		            checkIn.getMaThuePhong(),
+		            checkIn.getMaPhong(),
+		            checkIn.getMaKhachHang(),
+		            checkIn.getNgayDatPhong(),
+		            checkIn.getNgayTraPhong(),
+		            checkIn.getTrangThai()
+		        };
+		        model.addRow(row);
+		    }
 		}
     }
     private void  jBtRefreshAcitonPerformed(ActionEvent evt) {
@@ -608,7 +640,7 @@ public class DSCheckOutGUI extends  JFrame {
         String tuKhoa = textTK.getText().trim(); // Lấy từ khóa tìm
 
         try {
-            ArrayList<CheckInOutDTO> ketQua = checkInOutBLL.timChiTietCheckInOut(loaiTim, tuKhoa);
+            ArrayList<CheckInOutDTO> ketQua = tempList.timChiTietCheckInOutTrongTemp(loaiTim, tuKhoa);
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0); 
@@ -660,7 +692,7 @@ public class DSCheckOutGUI extends  JFrame {
 
     	        KTPhong(maPhong);
     	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoan thanh");
-    	        checkInOutBLL.updTTCheckInOut(maPhong);
+    	        tempList.xoaCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-out thành công!");
     	        // có thể kèm hoá đơn
