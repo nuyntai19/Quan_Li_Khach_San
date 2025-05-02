@@ -31,7 +31,7 @@ public class CheckInOutBLL {
         ArrayList<PhieuThuePhongDTO> dsPhieu = phieuThueDAO.layDanhSachPhieuThue();
         ArrayList<ChiTietPhieuThuePhongDTO> dsChiTiet = chiTietDAO.layDanhSachChiTiet();
         for (PhieuThuePhongDTO phieu : dsPhieu) {
-            if (!"Đang chờ xác nhận".equalsIgnoreCase(phieu.getTrangThai())) 
+            if (!"Dang cho xac nhan".equalsIgnoreCase(phieu.getTrangThai())) 
                 continue;
             for (ChiTietPhieuThuePhongDTO ct : dsChiTiet) 
             {
@@ -54,8 +54,8 @@ public class CheckInOutBLL {
     }
     public void capNhatTrangThaiCheckIn(int maThuePhong) throws SQLException {
         PhieuThuePhongDTO phieu = phieuThueDAO.timPhieuThueTheoMa(maThuePhong);
-        if (phieu != null && "Đang chờ xác nhận".equalsIgnoreCase(phieu.getTrangThai())) {
-            phieu.setTrangThai("Đang thuê");
+        if (phieu != null && "Dang cho xac nhan".equalsIgnoreCase(phieu.getTrangThai())) {
+            phieu.setTrangThai("Dang thue");
             phieuThueDAO.capNhatPhieuThue(phieu);
         }
     }
@@ -68,7 +68,7 @@ public class CheckInOutBLL {
         }
     }
     public void capNhatTrangThaiXoaCheckIn(int maThuePhong) throws SQLException {
-        String trangThaiHoanThanh = "Hoàn thành";
+        String trangThaiHoanThanh = "Hoan thanh";
         phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, trangThaiHoanThanh);
         dsCheckIn.removeIf(checkIn -> checkIn.getMaThuePhong() == maThuePhong);
     }
@@ -76,7 +76,7 @@ public class CheckInOutBLL {
     public void updTTCheckInOut(int maPhong){
         for (CheckInOutDTO checkIn : dsCheckIn) {
             if (checkIn.getMaPhong() == maPhong) {
-                checkIn.setTrangThai("Đã check in");
+                checkIn.setTrangThai("Da check-in");
             }
         }
     }
@@ -87,10 +87,10 @@ public class CheckInOutBLL {
         {
             try 
             {
-                if (checkIn.getNgayDatPhong().before(today) && "Đã đặt".equalsIgnoreCase(checkIn.getTrangThai())) 
+                if (checkIn.getNgayDatPhong().before(today) && "Da dat".equalsIgnoreCase(checkIn.getTrangThai())) 
                 {
-                    checkIn.setTrangThai("Quá hạn check-in");
-                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Đang bảo trì");
+                    checkIn.setTrangThai("Qua han check-in");
+                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Dang bao tri");
                     //phieuThueDAO.capNhatTrangThaiPhieu(checkIn.getMaThuePhong(), "Đã huỷ");
                 }
             } 
@@ -106,12 +106,12 @@ public class CheckInOutBLL {
     
         for (CheckInOutDTO checkIn : dsCheckIn) 
         {
-            if (checkIn.getNgayTraPhong().before(today) && "Đang thuê".equalsIgnoreCase(checkIn.getTrangThai())) 
+            if (checkIn.getNgayTraPhong().before(today) && "Dang thue".equalsIgnoreCase(checkIn.getTrangThai())) 
             {
                 try
                 {
-                    checkIn.setTrangThai("Quá hạn check-out");
-                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Đang bảo trì");
+                    checkIn.setTrangThai("Qua han check-out");
+                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Dang bao tri");
                 }
                 catch (SQLException ex) {
                     ex.printStackTrace();

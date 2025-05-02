@@ -596,7 +596,7 @@ public class DSCheckInGUI extends  JFrame {
     if (kiemTraTinhTrang != null) 
     {
         String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
-        if ("Không".equalsIgnoreCase(moTaThietHai.trim()))
+        if ("Khong".equalsIgnoreCase(moTaThietHai.trim()))
             return true;
 
         int option = JOptionPane.showConfirmDialog(null, 
@@ -607,12 +607,12 @@ public class DSCheckInGUI extends  JFrame {
         {
             checkInOutBLL.xoaCheckInDTO(maPhong);
             try {
-                phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
+                phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
             try {
-                phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+                phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -626,11 +626,11 @@ public class DSCheckInGUI extends  JFrame {
 
         if (kiemTra != null) {
             String moTa = kiemTra.getMoTaThietHai();
-            if (!"Không".equalsIgnoreCase(moTa)) 
+            if (!"Khong".equalsIgnoreCase(moTa)) 
             {
                 try {
-                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
-                    phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
                     checkInOutBLL.xoaCheckInDTO(maPhong);
                     JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
                 } catch (SQLException ex) {
@@ -641,10 +641,10 @@ public class DSCheckInGUI extends  JFrame {
             else 
             {
                 try {
-                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Đã huỷ");
-                    phongDAO.capNhatTrangThaiPhong(maPhong, "Phòng trốn");
+                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+                    phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
                     checkInOutBLL.xoaCheckInDTO(maPhong);
-                    JOptionPane.showMessageDialog(null, "Phòng đã huỷ thành công.");
+                    JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
@@ -666,8 +666,8 @@ public class DSCheckInGUI extends  JFrame {
     	            return;
     	        }
     	        
-    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Đang sử dụng");
-    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Đang thuê");
+    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Dang su dung");
+    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Dang thue");
     	        checkInOutBLL.updTTCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
@@ -696,7 +696,7 @@ public class DSCheckInGUI extends  JFrame {
 
             if (option == JOptionPane.OK_OPTION) 
             {
-            	if ("Quá hạn check-in".equals(trangThai))
+            	if ("Qua han check-in".equals(trangThai))
             		huyPhongQuaHan(maPhong);
             	else KTPhong(maPhong);
             }

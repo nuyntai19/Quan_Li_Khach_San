@@ -21,6 +21,7 @@ import java.awt.event.ItemEvent;
 import com.toedter.calendar.JDateChooser;
 
 import BLL.KiemTraTinhTrangBUS;
+import BLL.ThongTinNhanVienBLL;
 import DTO.KiemTraTinhTrang;
 
 public class KiemTraPhongGUI extends  JFrame {
@@ -640,7 +641,7 @@ public class KiemTraPhongGUI extends  JFrame {
         }
     }
     private void jBtDeleteActionPerformed(ActionEvent e) {
-        int selectedRow = table.getSelectedRow(); // lấy dòng được chọn
+        int selectedRow = table.getSelectedRow();
 
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần xoá.");
