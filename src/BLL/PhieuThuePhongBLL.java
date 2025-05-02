@@ -62,4 +62,48 @@ public class PhieuThuePhongBLL {
             return rs.next() && rs.getInt(1) > 0; // Trả về true nếu tìm thấy bản ghi
         }
     }
+
+
+    // tìm kiếm
+    public ArrayList<PhieuThuePhongDTO> timChiTietPhieuThuePhong(String loaiTimKiem, String tuKhoa) throws SQLException {
+        ArrayList<PhieuThuePhongDTO> ketQua = new ArrayList<>();
+        ArrayList<PhieuThuePhongDTO> danhSach = layDanhSachPhieuThue();  // Giả sử hàm này trả về danh sách hợp lệ
+    
+        for (PhieuThuePhongDTO pt : danhSach) {
+            switch (loaiTimKiem) {
+                case "Mã thuê phòng":
+                    if (String.valueOf(pt.getMaThuePhong()).contains(tuKhoa)) {
+                        ketQua.add(pt);
+                    }
+                    break;
+                case "Mã khách hàng":
+                    if (String.valueOf(pt.getMaKhachHang()).contains(tuKhoa)) {
+                        ketQua.add(pt);
+                    }
+                    break;
+                case "Mã nhân viên":
+                    if (String.valueOf(pt.getMaNhanVien()).contains(tuKhoa)) {
+                        ketQua.add(pt);
+                    }
+                    break;
+                case "Ngày lập phiếu":
+                    if (pt.getNgayLapPhieu().toString().contains(tuKhoa)) {
+                        ketQua.add(pt);
+                    }
+                    break;
+                case "Tổng tiền":
+                    if (String.valueOf(pt.getTongTien()).contains(tuKhoa)) {
+                        ketQua.add(pt);
+                    }
+                    break;
+                case "Trạng thái":
+                    if (pt.getTrangThai().toLowerCase().contains(tuKhoa.toLowerCase())) {
+                        ketQua.add(pt);
+                    }
+                    break;
+            }
+        }
+        return ketQua;
+    }
+    
 }

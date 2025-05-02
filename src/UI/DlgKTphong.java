@@ -1,42 +1,53 @@
 package UI;
 
-import java.util.logging.Logger;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.KiemTraTinhTrangBUS;
+import BLL.NhanVienBLL;
+import BLL.PhieuThuePhongBLL;
+import DAO.QuanLiPhongDAO;
 import DTO.KiemTraTinhTrang;
 
-import java.awt.Color;
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTable;
+import java.util.logging.Logger;
+import java.awt.Color;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.awt.event.ActionEvent;
+import java.sql.*;
 
 public class DlgKTphong extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textTKmaPhong;
-	private JTable table;
-	private DefaultTableModel modelTinhTrang;
-	private JScrollPane scrollPane;
-	private final KiemTraTinhTrangBUS ktttBUS = new KiemTraTinhTrangBUS();
-	private JTable table_1;
-	private int ma;
+	private JTextField txtMaKT;
+	private JTextField txtMaThuePhong;
+	private JTextField txtMaNV;
+	private JTextField txtNgayKT;
+	private JTextField txtMoTa;
+	private JTextField txtChiPhi;
+	private JTextField txtMaPhong;
+	private NhanVienBLL nvBLL ;
+	private final KiemTraTinhTrangBUS ktttBLL = new KiemTraTinhTrangBUS();
+	private final PhieuThuePhongBLL phieuThueBLL = new PhieuThuePhongBLL();
+	private final QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
 
 	/**
 	 * Launch the application.
@@ -65,146 +76,226 @@ public class DlgKTphong extends JDialog {
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-	}	
+	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public DlgKTphong(int maPhong) {
-		this.ma = maPhong;
-		initComponents();
+	public DlgKTphong() {
+		try {
+			nvBLL = new NhanVienBLL();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    initComponents();
 	}
-	public void initComponents(){
-		setTitle("Kiểm tra tình trạng phòng");
-		setBounds(100, 100, 1238, 380);
-		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 1238, 303);
+	public void initComponents() {
+		setTitle("CHI TIẾT KIỂM TRA");
+		setBounds(100, 100, 500, 433);
+		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(255, 255, 255));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel);
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 102, 1238, 201);
-		contentPanel.add(scrollPane);
-		
-		
-		modelTinhTrang = new DefaultTableModel(new String[]{
-			    "Mã kiểm tra", "Mã phòng", "Mã nhân viên", "Ngày kiểm tra", "Mô tả thiệt hại", "Chi phí đền bù"
-			}, 0) {
-			@Override
-	            public boolean isCellEditable(int row, int column) {
-	                return false;
-	            }
-	        };
-		
-		table_1 = new JTable();
-		table.setModel(modelTinhTrang);
-		scrollPane.setViewportView(table_1);
-		loadDataToModel();
-		
-		textTKmaPhong = new JTextField();
-		textTKmaPhong.setBounds(186, 32, 306, 43);
-		contentPanel.add(textTKmaPhong);
-		textTKmaPhong.setColumns(10);
-		
-		JButton btnTk = new JButton("Tìm");
-		btnTk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jBtTimKiemActionPerformed(e);
-			}
-		});
-		btnTk.setForeground(new Color(255, 255, 255));
-		btnTk.setBackground(new Color(52, 152, 219));
-		btnTk.setBounds(530, 33, 117, 43);
-		contentPanel.add(btnTk);
-		
-		JLabel lblNewLabel = new JLabel("Mã phòng:");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		lblNewLabel.setBounds(66, 32, 108, 43);
+		{
+		JLabel lblNewLabel = new JLabel("Mã kiểm tra:");
+		lblNewLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel.setBounds(31, 20, 101, 36);
 		contentPanel.add(lblNewLabel);
+		
+		txtMaKT = new JTextField();
+		txtMaKT.setBounds(218, 15, 245, 36);
+		contentPanel.add(txtMaKT);
+		txtMaKT.setColumns(10);
+		}
+		{
+			JLabel lblMThuPhng = new JLabel("Mã thuê phòng:");
+			lblMThuPhng.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblMThuPhng.setBounds(31, 111, 122, 36);
+			contentPanel.add(lblMThuPhng);
+		}
+		{
+			txtMaThuePhong = new JTextField();
+			txtMaThuePhong.setColumns(10);
+			txtMaThuePhong.setBounds(218, 106, 245, 36);
+			contentPanel.add(txtMaThuePhong);
+		}
+		{
+			JLabel lblMNhnVin = new JLabel("Mã nhân viên:");
+			lblMNhnVin.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblMNhnVin.setBounds(31, 159, 122, 36);
+			contentPanel.add(lblMNhnVin);
+		}
+		{
+			txtMaNV = new JTextField();
+			txtMaNV.setColumns(10);
+			txtMaNV.setBounds(218, 154, 245, 36);
+			contentPanel.add(txtMaNV);
+		}
+		{
+			JLabel lblNgyKimTra = new JLabel("Ngày kiểm tra:");
+			lblNgyKimTra.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblNgyKimTra.setBounds(31, 207, 122, 36);
+			contentPanel.add(lblNgyKimTra);
+		}
+		{
+			JLabel lblNgyKimTra = new JLabel("Mô tả thiệt hại:");
+			lblNgyKimTra.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblNgyKimTra.setBounds(31, 255, 122, 36);
+			contentPanel.add(lblNgyKimTra);
+		}
+		{
+			txtNgayKT = new JTextField();
+			txtNgayKT.setColumns(10);
+			txtNgayKT.setBounds(218, 202, 245, 36);
+			contentPanel.add(txtNgayKT);
+		}
+		{
+			txtMoTa = new JTextField();
+			txtMoTa.setColumns(10);
+			txtMoTa.setBounds(218, 250, 245, 36);
+			contentPanel.add(txtMoTa);
+		}
+		{
+			JLabel lblChiPhn = new JLabel("Chi phí đền bù:");
+			lblChiPhn.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblChiPhn.setBounds(31, 303, 122, 36);
+			contentPanel.add(lblChiPhn);
+		}
+		{
+			txtChiPhi = new JTextField();
+			txtChiPhi.setColumns(10);
+			txtChiPhi.setBounds(218, 298, 245, 36);
+			contentPanel.add(txtChiPhi);
+		}
+		{
+			JLabel lblMaPhong = new JLabel("Mã phòng:");
+			lblMaPhong.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblMaPhong.setBounds(31, 63, 122, 36);
+			contentPanel.add(lblMaPhong);
+		}
+		{
+			txtMaPhong = new JTextField();
+			txtMaPhong.setColumns(10);
+			txtMaPhong.setBounds(218, 63, 245, 36);
+			contentPanel.add(txtMaPhong);
+		}
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 299, 1238, 53);
-			getContentPane().add(buttonPane);
-			buttonPane.setLayout(null);
+			buttonPane.setBounds(0, 351, 500, 54);
+			contentPanel.add(buttonPane);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						
-					}
-				});
-				okButton.setBounds(1011, 8, 94, 39);
-				okButton.setForeground(new Color(255, 255, 255));
+				JButton okButton = new JButton("Lưu");
+				okButton.setBounds(266, 6, 96, 42);
 				okButton.setBackground(new Color(52, 152, 219));
-				
-				buttonPane.add(okButton);
+				okButton.setForeground(new Color(255, 255, 255));
+				okButton.setFont(new Font("Dialog", Font.BOLD, 15));
+
+				okButton.addActionListener(new ActionListener() {
 			
+				public void actionPerformed(ActionEvent e) {
+			        try {
+			        	
+			            String maKiemTraText = txtMaKT.getText().trim();
+			            String maPhongText = txtMaPhong.getText().trim();
+			            String maNhanVienText = txtMaNV.getText().trim();
+			            String maThuePhongText = txtMaThuePhong.getText().trim();
+			            String ngayKiemTraText = txtNgayKT.getText().trim();
+			            String chiPhiText = txtChiPhi.getText().trim();
+			
+			            
+			            if (maKiemTraText.isEmpty() || !maKiemTraText.matches("\\d+")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Mã Kiểm Tra phải là một số nguyên hợp lệ!");
+			                return;
+			            }
+			            if (maPhongText.isEmpty() || !maKiemTraText.matches("\\d+")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Mã Kiểm Tra phải là một số nguyên hợp lệ!");
+			                return;
+			            }
+			            if (maNhanVienText.isEmpty() || !maNhanVienText.matches("\\d+")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Mã Nhân Viên phải là một số nguyên hợp lệ!");
+			                return;
+			            }
+			            if (maThuePhongText.isEmpty() || !maThuePhongText.matches("\\d+")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Mã Thuê Phòng phải là một số nguyên hợp lệ!");
+			                return;
+			            }
+			
+			            if (ngayKiemTraText.isEmpty() || !ngayKiemTraText.matches("\\d{2}/\\d{2}/\\d{4}")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Ngày Kiểm Tra phải có định dạng 'dd/MM/yyyy'!");
+			                return;
+			            }
+			
+			            if (chiPhiText.isEmpty() || !chiPhiText.matches("\\d+(\\.\\d+)?")) 
+			            {
+			                JOptionPane.showMessageDialog(null, "Chi Phí phải là một số hợp lệ!");
+			                return;
+			            }
+			            
+			            int maKiemTra = Integer.parseInt(maKiemTraText);
+			            if (ktttBLL.kiemTraTonTaiPhong(maKiemTra)){
+			            	JOptionPane.showMessageDialog(null, "Mã kiểm tra đã tồn tại!");
+			            }
+			            int maPhong = Integer.parseInt(maKiemTraText);
+			            if (phongDAO.kiemTraTonTai(maPhong)){
+			            	JOptionPane.showMessageDialog(null, "Mã phòng không tồn tại!");
+			            }
+			            int maThuePhong = Integer.parseInt(maThuePhongText);
+			            phieuThueBLL.kiemTraTonTaiVaThongBao(maThuePhong);
+			            
+			            int maNhanVien = Integer.parseInt(maNhanVienText);
+			            if (nvBLL.kiemTraTonTai(maPhong)){
+			            	JOptionPane.showMessageDialog(null, "Mã phòng không tồn tại!");
+			            }
+			            
+			            LocalDate ngayKiemTra = LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			            BigDecimal chiPhiDenBu = new BigDecimal(chiPhiText);
+			            String moTaThietHai = txtMoTa.getText().trim();
+			
+			            
+			            KiemTraTinhTrang kt = new KiemTraTinhTrang(maKiemTra, maPhong, maThuePhong, maNhanVien, ngayKiemTra, moTaThietHai, chiPhiDenBu);
+			
+		                if (ktttBLL != null && ktttBLL.themKTTT(kt)) 
+		                {
+		                    JOptionPane.showMessageDialog(null, "Thêm thành công!");
+		                    dispose();  // Đóng dialog sau khi thêm thành công
+		                } else {
+		                    JOptionPane.showMessageDialog(null, "Thêm thất bại!");
+		                }
+		           	} catch (DateTimeParseException ex) {
+			            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng 'dd/MM/yyyy'.");
+		           	} catch (Exception ex) {
+		           		JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi lưu: " + ex.getMessage());
+		           	}
+		    }
+		});
+				buttonPane.setLayout(null);
+				buttonPane.add(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setBounds(1135, 8, 86, 39);
-				cancelButton.setForeground(new Color(255, 255, 255));
-				cancelButton.setBackground(new Color(52, 152, 219));
-				cancelButton.setActionCommand("Cancel");
+				// Nút Cancel (Hủy)
+			    JButton cancelButton = new JButton("Cancel");
+			    cancelButton.setBounds(387, 6, 96, 42);
+			    cancelButton.setBackground(new Color(52, 152, 219));
+			    cancelButton.setForeground(new Color(255, 255, 255));
+			    cancelButton.setFont(new Font("Dialog", Font.BOLD, 15));
+			    cancelButton.addActionListener(new ActionListener() {
+			        public void actionPerformed(ActionEvent e) {
+			            dispose(); 
+			        }
+			    });
 				buttonPane.add(cancelButton);
 			}
 		}
 		
 	}
 	
-	private void loadDataToModel() 
-	{
-        modelTinhTrang.setRowCount(0);
-        for (KiemTraTinhTrang kttt : ktttBUS.getDsKTTT()) {
-            modelTinhTrang.addRow(new Object[]{
-                kttt.getMaKiemTra(),
-                kttt.getMaPhong(),
-                kttt.getMaThuePhong(),
-                kttt.getMaNhanVien(),
-                kttt.getNgayKiemTra(),
-                kttt.getMoTaThietHai(),
-                kttt.getChiPhiDenBu()
-            });
-        }
-    }
-	public void napDuLieu(int maPhong) 
-	{
-        try {
-        	KiemTraTinhTrang kttt = ktttBUS.timTheoMaPhong(maPhong);
-            if (kttt != null) {
-                modelTinhTrang.addRow(new Object[]{
-                    kttt.getMaKiemTra(),
-                    kttt.getMaPhong(),
-                    kttt.getMaNhanVien(),
-                    kttt.getNgayKiemTra(),
-                    kttt.getMoTaThietHai(),
-                    kttt.getChiPhiDenBu()
-                });
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-	
-	private void jBtTimKiemActionPerformed(ActionEvent e) 
-	{
-        String maPhongStr = textTKmaPhong.getText().trim();
-        if (maPhongStr.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập mã phòng.", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
 
-        try {
-            int maPhong = Integer.parseInt(maPhongStr);
-            modelTinhTrang.setRowCount(0);
-            napDuLieu(maPhong);
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Mã phòng phải là số nguyên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-	
 }
+

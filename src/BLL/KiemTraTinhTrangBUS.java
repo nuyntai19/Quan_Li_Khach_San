@@ -65,6 +65,60 @@ public class KiemTraTinhTrangBUS {
     public KiemTraTinhTrang timTheoMaPhong(int maPhong) throws SQLException {
         return ktttDao.timTheoMaPhong(maPhong);
     }
+    public boolean kiemTraTonTaiPhong(int maPhong) {
+        try {
+            return ktttDao.kiemTraTonTai(maPhong);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     
+    public ArrayList<KiemTraTinhTrang> timChiTietKiemTraTinhTrang(String loaiTimKiem, String tuKhoa) throws SQLException {
+        ArrayList<KiemTraTinhTrang> ketQua = new ArrayList<>();
+        ArrayList<KiemTraTinhTrang> danhSach = getDsKTTT();  // Bạn cần có hàm này để trả về danh sách
+    
+        for (KiemTraTinhTrang kt : danhSach) {
+            switch (loaiTimKiem) {
+                case "Mã kiểm tra":
+                    if (String.valueOf(kt.getMaKiemTra()).contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Mã phòng":
+                    if (String.valueOf(kt.getMaPhong()).contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Mã nhân viên":
+                    if (String.valueOf(kt.getMaNhanVien()).contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Mã thuê phòng":
+                    if (String.valueOf(kt.getMaThuePhong()).contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Ngày kiểm tra":
+                    if (kt.getNgayKiemTra().toString().contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Mô tả thiệt hại":
+                    if (kt.getMoTaThietHai() != null && kt.getMoTaThietHai().toLowerCase().contains(tuKhoa.toLowerCase())) {
+                        ketQua.add(kt);
+                    }
+                    break;
+                case "Chi phí đền bù":
+                    if (kt.getChiPhiDenBu().toString().contains(tuKhoa)) {
+                        ketQua.add(kt);
+                    }
+                    break;
+            }
+        }
+    
+        return ketQua;
+    }
     
 }

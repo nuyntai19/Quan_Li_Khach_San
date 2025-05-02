@@ -9,12 +9,14 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.CheckInOutBLL;
 import BLL.KiemTraTinhTrangBUS;
+import BLL.TaiKhoanBLL;
 import BLL.ThongTinNhanVienBLL;
 import DAO.ChiTietPhieuThuePhongDAO;
 import DAO.PhieuThuePhongDAO;
 import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 import DTO.KiemTraTinhTrang;
+import DTO.TaiKhoanDTO;
 
 import java.sql.*;
 import java.awt.event.ActionEvent;
@@ -58,7 +60,7 @@ public class DSCheckInGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-    private JTextField textKT;
+    private JTextField textTK;
     private JTable table;
 
 	private JScrollPane scrollPane;
@@ -71,10 +73,10 @@ public class DSCheckInGUI extends  JFrame {
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
 	private JButton btnHuy;
 	private JButton btnRefresh;
-	private DlgKTphong dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
 	private JButton KiemTraTinhTrang;
+	private JComboBox cbDK;
 
 	public DSCheckInGUI() {
 		
@@ -395,8 +397,8 @@ public class DSCheckInGUI extends  JFrame {
          
          scrollPane = new JScrollPane();
          
-         textKT = new JTextField();
-         textKT.setColumns(10);
+         textTK = new JTextField();
+         textTK.setColumns(10);
          
          JButton btnTim = new JButton("Tìm");
          btnTim.addActionListener(new ActionListener() {
@@ -417,19 +419,6 @@ public class DSCheckInGUI extends  JFrame {
          btnCheckIn.setForeground(new Color(255, 255, 255));
          btnCheckIn.setBackground(new Color(52, 152, 219));
          btnCheckIn.setFont(new Font("Dialog", Font.BOLD, 14));
-         
-         JButton btnKTTT = new JButton("Kiểm tra tình trạng");
-         btnKTTT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int selectedRow = table.getSelectedRow();
-				int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-         		dlg = new DlgKTphong(maPhong);
-         		dlg.setVisible(true);
-         	}
-         });
-         btnKTTT.setForeground(new Color(255, 255, 255));
-         btnKTTT.setFont(new Font("Dialog", Font.BOLD, 14));
-         btnKTTT.setBackground(new Color(52, 152, 219));
          
          btnHuy = new JButton("HUỶ");
          btnHuy.addActionListener(new ActionListener() {
@@ -453,6 +442,9 @@ public class DSCheckInGUI extends  JFrame {
          btnRefresh.setContentAreaFilled(false);
          btnRefresh.setBorderPainted(false);
          btnRefresh.setBackground(Color.WHITE);
+         
+         cbDK = new JComboBox();
+         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"}));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -469,17 +461,18 @@ public class DSCheckInGUI extends  JFrame {
          			.addGap(33)
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
+         					.addGap(18)
+         					.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
+         					.addGap(32)
+         					.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
+         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+         					.addGap(31))
+         				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
          					.addGap(18)
-         					.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
-         				.addComponent(textKT, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE))
-         			.addGap(29)
-         			.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED, 512, Short.MAX_VALUE)
-         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-         				.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-         				.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE))
-         			.addGap(31))
+         					.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -488,21 +481,21 @@ public class DSCheckInGUI extends  JFrame {
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-         				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-         					.addGap(18)
-         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         						.addComponent(textKT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
-         						.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
          					.addGap(12)
          					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+         					.addPreferredGap(ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
          					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
          						.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-         						.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-         						.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
-         					.addPreferredGap(ComponentPlacement.UNRELATED)))
+         						.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(18)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         						.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))))
+         			.addPreferredGap(ComponentPlacement.UNRELATED)
          			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 458, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          );
@@ -514,9 +507,11 @@ public class DSCheckInGUI extends  JFrame {
  	                return false;
  	            }
  	        };
+ 	        
          table = new JTable();
          table.setModel(model);
          scrollPane.setViewportView(table);
+         
          loadDataToModel();
          
          panel.setLayout(gl_panel);
@@ -562,6 +557,37 @@ public class DSCheckInGUI extends  JFrame {
     	dispose();
         new DanhSachDatPhongGUI().setVisible(true);
     }
+    
+    
+    private void jBtTimKiemActionPerformed(ActionEvent evt) {
+    	String loaiTim = cbDK.getSelectedItem().toString(); // Lấy tiêu chí
+        String tuKhoa = textTK.getText().trim(); // Lấy từ khóa tìm
+
+        try {
+            ArrayList<CheckInOutDTO> ketQua = checkInOutBLL.timChiTietCheckInOut(loaiTim, tuKhoa);
+
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); 
+
+            for (CheckInOutDTO ct : ketQua) {
+                model.addRow(new Object[]{
+                    ct.getMaThuePhong(),        
+                    ct.getMaPhong(),            
+                    ct.getMaKhachHang(),        
+                    ct.getNgayDatPhong(),       
+                    ct.getNgayTraPhong(),    
+                    ct.getTrangThai()         
+                });
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
+        }
+    }
+    
+    
+    
     private void loadDataToModel() {
         model.setRowCount(0);
         try {
@@ -585,7 +611,7 @@ public class DSCheckInGUI extends  JFrame {
     private void jBtRefreshActionPerformed(ActionEvent evt){
     	try {
             loadDataToModel();
-            textKT.setText("");
+            textTK.setText("");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Lỗi khi làm mới dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -705,33 +731,8 @@ public class DSCheckInGUI extends  JFrame {
         }
     }
 
-    private void jBtTimKiemActionPerformed(ActionEvent evt) {
-        String searchText = textKT.getText().toLowerCase(); 
-        filterTable(searchText);
-    }                                           
-
-    private void filterTable(String searchText) {
-    model.setRowCount(0);
     
-    for (CheckInOutDTO c : danhSach) {
-        if (String.valueOf(c.getMaThuePhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getMaPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getMaKhachHang()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getNgayDatPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getNgayTraPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getTrangThai()).toLowerCase().contains(searchText.toLowerCase())) {
 
-            model.addRow(new Object[]{
-                c.getMaThuePhong(),
-                c.getMaPhong(),
-                c.getMaKhachHang(),
-                c.getNgayDatPhong(),
-                c.getNgayTraPhong(),
-                c.getTrangThai()
-            });
-        }
-    }
-}
     
     /**
      * @param args the command line arguments
