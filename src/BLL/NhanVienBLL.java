@@ -27,4 +27,8 @@ public class NhanVienBLL {
     public void xoaNhanVien(int maNhanVien) throws SQLException {
         dao.xoaNhanVien(maNhanVien);
     }
+
+    public boolean kiemTraTonTai(int maNV) throws SQLException {
+        return dao.kiemTraTonTai(maNV);
+    }
 }

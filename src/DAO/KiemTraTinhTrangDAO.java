@@ -32,6 +32,15 @@ public class KiemTraTinhTrangDAO {
                 }
         return listKTTT;
     }
+    public boolean kiemTraTonTai(int maPhong) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Phong WHERE MaPhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, maPhong);
+            ResultSet rs = pre.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    } 
 
     public boolean themKTTT(KiemTraTinhTrang kt) throws SQLException {
         String sql = "INSERT INTO KiemTraTinhTrang (MaKiemTra, MaPhong, MaNhanVien, MaThuePhong, NgayKiemTra, MoTaThietHai, ChiPhiDenBu) " +

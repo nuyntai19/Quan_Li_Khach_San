@@ -78,13 +78,14 @@ public class DlgKTTT extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgKTTT(DefaultTableModel model, int selectedRow) {
+		
 	    this.model = model;
 	    this.selectedRow = selectedRow;
 	    
-	    initComponents(); // xây giao diện như bạn đã làm
+	    initComponents();
 	}
 	public void initComponents() {
-		setTitle("Chi tiết kiểm tra");
+		setTitle("CHI TIẾT KIỂM TRA");
 		setBounds(100, 100, 500, 433);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(255, 255, 255));

@@ -22,6 +22,7 @@ import com.toedter.calendar.JDateChooser;
 
 import BLL.KiemTraTinhTrangBUS;
 import BLL.ThongTinNhanVienBLL;
+import DTO.CheckInOutDTO;
 import DTO.KiemTraTinhTrang;
 
 public class KiemTraPhongGUI extends  JFrame {
@@ -69,6 +70,7 @@ public class KiemTraPhongGUI extends  JFrame {
 	private JButton btnSua;
 	private String maPhong;
 	private JTextField textFieldTK;
+	private JComboBox cbDK;
 	public KiemTraPhongGUI() {
 	    ktttBUS = new KiemTraTinhTrangBUS();
 	   
@@ -418,6 +420,7 @@ public class KiemTraPhongGUI extends  JFrame {
          JButton btnNewButton_2 = new JButton("Tìm");
          btnNewButton_2.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
+         		jBtTimKiemActionPerformed(e);
          	}
          });
          btnNewButton_2.setBackground(new Color(52, 152, 219));
@@ -446,6 +449,10 @@ public class KiemTraPhongGUI extends  JFrame {
          
          textFieldTK = new JTextField();
          textFieldTK.setColumns(10);
+         
+         cbDK = new JComboBox();
+         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã kiểm tra", "Mã phòng", "Mã thuê phòng",
+        		 	"Mã nhân viên", "Ngày kiểm tra", "Mô tả thiệt hại", "Chi phí đền bù"}));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -457,25 +464,28 @@ public class KiemTraPhongGUI extends  JFrame {
          				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
-         		.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+         		.addGroup(gl_panel.createSequentialGroup()
          			.addGap(65)
          			.addComponent(textFieldTK, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
-         			.addGap(29)
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+         			.addGap(18)
          			.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-         			.addGap(652)
+         			.addGap(463)
          			.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
          			.addGap(20))
          		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
          			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          			.addContainerGap())
-         		.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-         			.addContainerGap(1034, Short.MAX_VALUE)
-         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-         				.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-         				.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-         				.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-         			.addGap(35))
+         		.addGroup(gl_panel.createSequentialGroup()
+         			.addGap(45)
+         			.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+         			.addPreferredGap(ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+         			.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+         			.addGap(33)
+         			.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+         			.addGap(770))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -487,20 +497,23 @@ public class KiemTraPhongGUI extends  JFrame {
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
          					.addGap(18)
-         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-         					.addGap(18)
-         					.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED)
-         					.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED)
-         					.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
          				.addGroup(gl_panel.createSequentialGroup()
          					.addGap(28)
-         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         						.addComponent(textFieldTK, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-         						.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))))
+         					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         						.addGroup(gl_panel.createSequentialGroup()
+         							.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         							.addPreferredGap(ComponentPlacement.RELATED))
+         						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         							.addComponent(textFieldTK, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+         							.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))))
+         			.addGap(83)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         				.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
          			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
          			.addContainerGap())
          );
          
@@ -516,7 +529,8 @@ public class KiemTraPhongGUI extends  JFrame {
         	});
          
          model = new DefaultTableModel(new String[]{
- 	            "Mã kiểm tra", "Mã phòng", "Mã thuê phòng", "Mã nhân viên", "Ngày kiểm tra", "Mô tả thiệt hại", "Chi phí đền bù"
+ 	            "Mã kiểm tra", "Mã phòng", "Mã thuê phòng", "Mã nhân viên",
+ 	            	"Ngày kiểm tra", "Mô tả thiệt hại", "Chi phí đền bù"
  	        }, 0) {
  	            @Override
  	            public boolean isCellEditable(int row, int column) {
@@ -570,6 +584,35 @@ public class KiemTraPhongGUI extends  JFrame {
     private void KiemTinhTrangActionPerformed(ActionEvent evt) {
     	dispose();
         new KiemTraPhongGUI().setVisible(true);
+    }
+    
+    
+    private void jBtTimKiemActionPerformed(ActionEvent evt) {
+    	String loaiTim = cbDK.getSelectedItem().toString(); // Lấy tiêu chí
+        String tuKhoa = textFieldTK.getText().trim(); // Lấy từ khóa tìm
+
+        try {
+            ArrayList<KiemTraTinhTrang> ketQua = ktttBUS.timChiTietKiemTraTinhTrang(loaiTim, tuKhoa);
+
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); 
+
+            for (KiemTraTinhTrang kttt : ketQua) {
+                model.addRow(new Object[]{
+                		kttt.getMaKiemTra(),
+        	            kttt.getMaPhong(),
+        	            kttt.getMaThuePhong(),
+        	            kttt.getMaNhanVien(),
+        	            kttt.getNgayKiemTra(),
+        	            kttt.getMoTaThietHai(),
+        	            kttt.getChiPhiDenBu()         
+                });
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
+        }
     }
     
     private void jBtRefreshActionPerformed(  ActionEvent evt) {

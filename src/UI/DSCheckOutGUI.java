@@ -59,7 +59,6 @@ public class DSCheckOutGUI extends  JFrame {
     private  MenuBar menuBar3;
     private  JButton self;
     private JPanel panel;
-    private JTextField textTK;
     private JTable table;
 
 	private JScrollPane scrollPane;
@@ -71,10 +70,11 @@ public class DSCheckOutGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
-	private JButton btnKTTT;
 	private DlgKTphong dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
+	private JComboBox cbDK;
+	private JTextField textTK;
 
 
 	public DSCheckOutGUI() {
@@ -395,9 +395,6 @@ public class DSCheckOutGUI extends  JFrame {
          textField.setColumns(10);
          textField.setBorder(null);
          
-         textTK = new JTextField();
-         textTK.setColumns(10);
-         
          JButton btnTìm = new JButton("Tìm");
          btnTìm.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
@@ -433,19 +430,24 @@ public class DSCheckOutGUI extends  JFrame {
          btnRefresh.setFocusPainted(false);       // tắt viền khi focus
          btnRefresh.setOpaque(false);
          
-         btnKTTT = new JButton("Kiểm tra tình trạng");
+         JButton btnKTTT = new JButton("Kiểm tra tình trạng");
          btnKTTT.addActionListener(new ActionListener() {
-         
-			public void actionPerformed(ActionEvent e) {
-         		int selectedRow = table.getSelectedRow();
-				int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-         		dlg = new DlgKTphong(maPhong);
-         		dlg.setVisible(true);
+         	public void actionPerformed(ActionEvent e) {
+         		dlg = new DlgKTphong();
+         		dlg.setLocationRelativeTo(null);
+                dlg.setVisible(true);
          	}
          });
          btnKTTT.setForeground(Color.WHITE);
          btnKTTT.setFont(new Font("Dialog", Font.BOLD, 14));
          btnKTTT.setBackground(new Color(52, 152, 219));
+         
+         cbDK = new JComboBox();
+         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng","Mã phòng",
+        		 	"Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"}));
+         
+         textTK = new JTextField();
+         textTK.setColumns(10);
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -458,46 +460,52 @@ public class DSCheckOutGUI extends  JFrame {
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addContainerGap()
-         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE))
+         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
+         			.addGap(12))
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(56)
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addComponent(btnCheckOut)
-         					.addGap(751)
-         					.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-         					.addGap(50))
+         					.addGap(43)
+         					.addComponent(btnCheckOut))
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE)
-         					.addGap(36)
+         					.addGap(22)
+         					.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)))
+         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+         					.addGap(40))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(16)
+         					.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
+         					.addGap(26)
          					.addComponent(btnTìm, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED, 608, Short.MAX_VALUE)
+         					.addPreferredGap(ComponentPlacement.RELATED, 460, Short.MAX_VALUE)
          					.addComponent(btnRefresh)
          					.addGap(32))))
          );
          gl_panel.setVerticalGroup(
-         	gl_panel.createParallelGroup(Alignment.LEADING)
+         	gl_panel.createParallelGroup(Alignment.TRAILING)
          		.addGroup(gl_panel.createSequentialGroup()
          			.addGap(12)
          			.addComponent(lblNewLabel)
          			.addPreferredGap(ComponentPlacement.RELATED)
          			.addComponent(textField, GroupLayout.PREFERRED_SIZE, 11, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
+         			.addGap(14)
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-         				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-         					.addComponent(btnRefresh)
-         					.addGap(48))
          				.addGroup(gl_panel.createSequentialGroup()
-         					.addGap(12)
+         					.addComponent(btnRefresh)
+         					.addGap(60)
          					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         						.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-         						.addComponent(btnTìm, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
-         					.addGap(45)))
-         			.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-         				.addComponent(btnCheckOut, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-         				.addComponent(btnKTTT, GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
-         			.addGap(12)
+         						.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnCheckOut, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(2)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         						.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+         						.addComponent(btnTìm, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)))
+         				.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
+         			.addPreferredGap(ComponentPlacement.UNRELATED)
          			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          );
@@ -560,6 +568,8 @@ public class DSCheckOutGUI extends  JFrame {
     }
     
     
+    
+    
     public void loadData() {
         model.setRowCount(0);
         try {
@@ -594,46 +604,45 @@ public class DSCheckOutGUI extends  JFrame {
     }
 
     private void jBtTimKiemActionPerformed(ActionEvent evt) {
-        String searchText = textTK.getText().toLowerCase(); 
-        filterTable(searchText);
-    }                                           
+    	String loaiTim = cbDK.getSelectedItem().toString(); // Lấy tiêu chí
+        String tuKhoa = textTK.getText().trim(); // Lấy từ khóa tìm
 
-    private void filterTable(String searchText) {
-    model.setRowCount(0);
-    
-    for (CheckInOutDTO c : danhSach) {
-        if (String.valueOf(c.getMaThuePhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getMaPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getMaKhachHang()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getNgayDatPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getNgayTraPhong()).toLowerCase().contains(searchText.toLowerCase()) ||
-            String.valueOf(c.getTrangThai()).toLowerCase().contains(searchText.toLowerCase())) {
+        try {
+            ArrayList<CheckInOutDTO> ketQua = checkInOutBLL.timChiTietCheckInOut(loaiTim, tuKhoa);
 
-            model.addRow(new Object[]{
-                c.getMaThuePhong(),
-                c.getMaPhong(),
-                c.getMaKhachHang(),
-                c.getNgayDatPhong(),
-                c.getNgayTraPhong(),
-                c.getTrangThai()
-            });
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); 
+
+            for (CheckInOutDTO ct : ketQua) {
+                model.addRow(new Object[]{
+                    ct.getMaThuePhong(),        
+                    ct.getMaPhong(),            
+                    ct.getMaKhachHang(),        
+                    ct.getNgayDatPhong(),       
+                    ct.getNgayTraPhong(),    
+                    ct.getTrangThai()         
+                });
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
         }
     }
-}
     private void KTPhong(int maPhong) {
     	KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
     	String moTa = kt.getMoTaThietHai();
         if (!moTa.equalsIgnoreCase("Khong")) {
             JOptionPane.showMessageDialog(this, "Phòng " + maPhong + " có thiệt hại: " + moTa);
             try {
-				phongDAO.capNhatTrangThaiPhong(maPhong, "Đang bảo trì");
+				phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
 				e.printStackTrace();
 			}
         } else {
             try {
-				phongDAO.capNhatTrangThaiPhong(maPhong, "Phòng trống");
+				phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
 				e.printStackTrace();
@@ -650,7 +659,7 @@ public class DSCheckOutGUI extends  JFrame {
     	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
 
     	        KTPhong(maPhong);
-    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoàn thành");
+    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoan thanh");
     	        checkInOutBLL.updTTCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-out thành công!");

@@ -121,6 +121,46 @@ public class CheckInOutBLL {
         }
     }
     
+    public ArrayList<CheckInOutDTO> timChiTietCheckInOut(String loaiTimKiem, String tuKhoa) throws SQLException {
+        ArrayList<CheckInOutDTO> ketQua = new ArrayList<>();
+        ArrayList<CheckInOutDTO> danhSach = layDanhSachCheckInHopLe();  
+    
+        for (CheckInOutDTO ct : danhSach) {
+            switch (loaiTimKiem) {
+                case "Mã thuê phòng":
+                    if (String.valueOf(ct.getMaThuePhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Mã phòng":
+                    if (String.valueOf(ct.getMaPhong()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Mã khách hàng":
+                    if (String.valueOf(ct.getMaKhachHang()).contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày đặt phòng":
+                    if (ct.getNgayDatPhong().toString().contains(tuKhoa)) {  // Kiểm tra ngày tháng nếu nhập theo định dạng chuỗi
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Ngày trả phòng":
+                    if (ct.getNgayTraPhong().toString().contains(tuKhoa)) {  // Kiểm tra ngày tháng nếu nhập theo định dạng chuỗi
+                        ketQua.add(ct);
+                    }
+                    break;
+                case "Trạng thái":
+                    if (ct.getTrangThai().contains(tuKhoa)) {
+                        ketQua.add(ct);
+                    }
+                    break;
+            }
+        }
+        return ketQua;
+    }    
 
 }
 

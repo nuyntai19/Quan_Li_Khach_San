@@ -32,6 +32,15 @@ public class NhanVienDAO {
         }
         return list;
     }
+    public boolean kiemTraTonTai(int maNV) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM NhanVien WHERE MaNhanVien = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maNV);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    }
 
     public void themNhanVien(NhanVienDTO nv) throws SQLException {
         String sql = "INSERT INTO NhanVien VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
