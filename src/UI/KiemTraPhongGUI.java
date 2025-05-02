@@ -21,6 +21,7 @@ import java.awt.event.ItemEvent;
 import com.toedter.calendar.JDateChooser;
 
 import BLL.KiemTraTinhTrangBUS;
+import BLL.ThongTinNhanVienBLL;
 import DTO.KiemTraTinhTrang;
 
 public class KiemTraPhongGUI extends  JFrame {

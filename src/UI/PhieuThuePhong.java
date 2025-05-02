@@ -24,6 +24,7 @@ import BLL.KhachHangBLL;
 import DTO.PhieuThuePhongDTO;
 import BLL.PhieuThuePhongManager;
 import BLL.ChiTietPhieuThuePhongBLL;
+import BLL.ThongTinNhanVienBLL;
 import java.util.logging.Level;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -1197,7 +1198,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
             ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
             for (QuanLiPhongDTO p : dsp) {
-                if (p.getMaPhong() == maPhong && "Dang Thue".equals(p.getTrangThai())) {
+                if (p.getMaPhong() == maPhong && "Dang Thue".equals(p.getTrangThai()) || "Dang cho xac nhan".equals(p.getTrangThai()) ) {
                     ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
                     ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
                     for (ChiTietPhieuThuePhongDTO ct : dsct) {
@@ -1207,7 +1208,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                             java.util.Date daDatDenNgay = ct.getNgayTraPhong();
                             boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
                             if (isOverlapping) {
-                                JOptionPane.showMessageDialog(this, "Phòng này đang sử dụng và bạn đã trùng lịch đặt tiếp theo.");
+                                JOptionPane.showMessageDialog(this, "Phòng này đang thuê hoặc đang chờ xác nhận và bạn đã trùng lịch đặt tiếp theo.");
                                 return;
                             }
                         }
