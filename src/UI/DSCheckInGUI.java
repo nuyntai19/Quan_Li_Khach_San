@@ -8,6 +8,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.CheckInOutBLL;
+import BLL.CheckInOutTEMP;
 import BLL.KiemTraTinhTrangBUS;
 import BLL.TaiKhoanBLL;
 import BLL.ThongTinNhanVienBLL;
@@ -70,12 +71,14 @@ public class DSCheckInGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
+	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
 	private JButton btnHuy;
 	private JButton btnRefresh;
 
 	private ArrayList<CheckInOutDTO> danhSach;
 	private JButton KiemTraTinhTrang;
 	private JComboBox cbDK;
+
 
 	public DSCheckInGUI() {
 		
@@ -107,8 +110,31 @@ public class DSCheckInGUI extends  JFrame {
         jPanel3 = new  JPanel();
         DatPhong = new  JButton();
         CheckIn = new  JButton();
+        CheckIn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DSCheckInGUI().setVisible(true);
+        	}
+        });
         CheckOut = new  JButton();
+        CheckOut.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DSCheckOutGUI().setVisible(true);
+        	}
+        });
         HoaDonDatPhong = new  JButton();
+        HoaDonDatPhong.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                try {
+					new DanhSachHoaDon().setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
         DSDatPhong = new  JButton();
         DSDatPhong.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -116,7 +142,19 @@ public class DSCheckInGUI extends  JFrame {
         	}
         });
         DSKhachHang = new  JButton();
+        DSKhachHang.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachKhachHang().setVisible(true);
+        	}
+        });
         DSDatDichVu = new  JButton();
+        DSDatDichVu.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+                new DanhSachDatDichVu().setVisible(true);
+        	}
+        });
         DatDichVu = new  JButton();
         jPanel5 = new  JPanel();
         KhachSan = new  JButton();
@@ -265,6 +303,8 @@ public class DSCheckInGUI extends  JFrame {
          KiemTraTinhTrang = new JButton();
          KiemTraTinhTrang.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
+         		dispose();
+                new KiemTraPhongGUI().setVisible(true);
          	}
          });
          KiemTraTinhTrang.setText("Kiểm tra tình trạng");
@@ -669,7 +709,6 @@ public class DSCheckInGUI extends  JFrame {
                 try {
                     phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
                     phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
-                    checkInOutBLL.xoaCheckInDTO(maPhong);
                     JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -681,7 +720,6 @@ public class DSCheckInGUI extends  JFrame {
                 try {
                     phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
                     phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
-                    checkInOutBLL.xoaCheckInDTO(maPhong);
                     JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -706,7 +744,13 @@ public class DSCheckInGUI extends  JFrame {
     	        
     	        phongDAO.capNhatTrangThaiPhong(maPhong, "Dang su dung");
     	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Dang thue");
-    	        checkInOutBLL.updTTCheckInOut(maPhong);
+    	        
+    	        // add vào ds tạm
+    	        CheckInOutDTO c = new CheckInOutDTO();
+    	        c = checkInOutBLL.timCheckInOut(maPhong);
+                c.setTrangThai("Da check-in");
+                tempList.addCheckInOut(c);
+                
 
     	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
                 

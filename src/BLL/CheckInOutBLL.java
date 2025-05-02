@@ -52,13 +52,7 @@ public class CheckInOutBLL {
 
         return dsCheckIn;
     }
-    public void capNhatTrangThaiCheckIn(int maThuePhong) throws SQLException {
-        PhieuThuePhongDTO phieu = phieuThueDAO.timPhieuThueTheoMa(maThuePhong);
-        if (phieu != null && "Dang cho xac nhan".equalsIgnoreCase(phieu.getTrangThai())) {
-            phieu.setTrangThai("Dang thue");
-            phieuThueDAO.capNhatPhieuThue(phieu);
-        }
-    }
+
     public void xoaCheckInDTO(int maThuePhong) {
         for (CheckInOutDTO checkIn : dsCheckIn) {
             if (checkIn.getMaThuePhong() == maThuePhong) {
@@ -67,19 +61,7 @@ public class CheckInOutBLL {
             }
         }
     }
-    public void capNhatTrangThaiXoaCheckIn(int maThuePhong) throws SQLException {
-        String trangThaiHoanThanh = "Hoan thanh";
-        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, trangThaiHoanThanh);
-        dsCheckIn.removeIf(checkIn -> checkIn.getMaThuePhong() == maThuePhong);
-    }
 
-    public void updTTCheckInOut(int maPhong){
-        for (CheckInOutDTO checkIn : dsCheckIn) {
-            if (checkIn.getMaPhong() == maPhong) {
-                checkIn.setTrangThai("Da check-in");
-            }
-        }
-    }
     public void kiemTraQuaHanCheckIn(ArrayList<CheckInOutDTO> dsCheckIn) {
         Date today = new Date();
     
@@ -160,7 +142,16 @@ public class CheckInOutBLL {
             }
         }
         return ketQua;
-    }    
+    }
+
+    public CheckInOutDTO timCheckInOut(int maPhong){
+        for (CheckInOutDTO c : dsCheckIn){
+            if (c.getMaPhong() == maPhong)
+            return c;
+        }
+        return null;
+    }
+
 
 }
 
