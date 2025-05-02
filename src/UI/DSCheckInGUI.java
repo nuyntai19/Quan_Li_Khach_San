@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager.LookAndFeelInfo;
-import UI.*;
 
 public class DSCheckInGUI extends  JFrame {
 	private static final long serialVersionUID = 1L;
@@ -608,6 +607,19 @@ public class DSCheckInGUI extends  JFrame {
 			e.printStackTrace();
 		}
     }
+    private void loadDataToModelTinhTrang() {
+        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        for (KiemTraTinhTrang kttt : ktttBUS.getDsKTTT()) {
+            model.addRow(new Object[]{
+                kttt.getMaKiemTra(),
+                kttt.getMaPhong(),
+                kttt.getMaNhanVien(),
+                kttt.getNgayKiemTra(),
+                kttt.getMoTaThietHai(),
+                kttt.getChiPhiDenBu()
+            });
+        }
+    }
     private void jBtRefreshActionPerformed(ActionEvent evt){
     	try {
             loadDataToModel();
@@ -617,36 +629,36 @@ public class DSCheckInGUI extends  JFrame {
         }
     }
     private boolean KTPhong(int maPhong) {
-    KiemTraTinhTrang kiemTraTinhTrang = ktttBUS.timKiemKTTT(maPhong);
+        KiemTraTinhTrang kiemTraTinhTrang = ktttBUS.timKiemKTTT(maPhong);
 
-    if (kiemTraTinhTrang != null) 
-    {
-        String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
-        if ("Khong".equalsIgnoreCase(moTaThietHai.trim()))
-            return true;
-
-        int option = JOptionPane.showConfirmDialog(null, 
-                "Phòng gặp sự cố: " + moTaThietHai + ".\nHuỷ phòng và hoàn tiền?", 
-                "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
-
-        if (option == JOptionPane.OK_OPTION) 
+        if (kiemTraTinhTrang != null) 
         {
-            checkInOutBLL.xoaCheckInDTO(maPhong);
-            try {
-                phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            try {
-                phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            return false;
-        } else return false;
+            String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
+            if ("Khong".equalsIgnoreCase(moTaThietHai.trim()))
+                return true;
+
+            int option = JOptionPane.showConfirmDialog(null, 
+                    "Phòng gặp sự cố: " + moTaThietHai + ".\nHuỷ phòng và hoàn tiền?", 
+                    "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+
+            if (option == JOptionPane.OK_OPTION) 
+            {
+                checkInOutBLL.xoaCheckInDTO(maPhong);
+                try {
+                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                try {
+                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                return false;
+            } else return false;
+        }
+        return true;
     }
-    return true;
-}
     public void huyPhongQuaHan(int maPhong) {
         KiemTraTinhTrang kiemTra = ktttBUS.timKiemKTTT(maPhong);
 
@@ -697,6 +709,8 @@ public class DSCheckInGUI extends  JFrame {
     	        checkInOutBLL.updTTCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
+                
+                loadDataToModel();
 
     	    } catch (SQLException ex) {
     	        ex.printStackTrace();
@@ -711,25 +725,35 @@ public class DSCheckInGUI extends  JFrame {
     }
 
     private void jBtHuyActionPerformed(ActionEvent evt) {
-        int selectedRow = table.getSelectedRow(); 
-        if (selectedRow != -1) {
-            int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-            String trangThai = table.getValueAt(selectedRow, 5).toString();
+            int selectedRow = table.getSelectedRow(); 
+            if (selectedRow != -1) {
+                int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+                String trangThai = table.getValueAt(selectedRow, 5).toString();
 
-            int option = JOptionPane.showConfirmDialog(null, 
-                "Bạn có chắc chắn muốn huỷ phòng này?", 
-                "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+                int option = JOptionPane.showConfirmDialog(null, 
+                    "Bạn có chắc chắn muốn huỷ phòng này?", 
+                    "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
 
-            if (option == JOptionPane.OK_OPTION) 
-            {
-            	if ("Qua han check-in".equals(trangThai))
-            		huyPhongQuaHan(maPhong);
-            	else KTPhong(maPhong);
+                if (option == JOptionPane.OK_OPTION) 
+                {
+                    if ("Qua han check-in".equals(trangThai))
+                            huyPhongQuaHan(maPhong);
+                    else if(KTPhong(maPhong))
+                            try {
+                            phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+                            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+                            checkInOutBLL.xoaCheckInDTO(maPhong);
+                            JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
+                        }
+
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng cần huỷ.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng cần huỷ.");
         }
-    }
 
     
 

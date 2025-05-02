@@ -78,5 +78,28 @@ public class HoaDonBLL {
 
         return ketQua;
     }
+    
+    public String getMaHoaDonByMaPTP(int maPTP) {
+        try {
+            List<HoaDonDTO> danhSach = hoaDonDAO.layDanhSachHoaDon(); // nếu có DAO
+            for (HoaDonDTO hd : danhSach) {
+                if (hd.getMaPTP() == maPTP) {
+                    return hd.getMaHD();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    public HoaDonDTO getHoaDonByMaHD(String maHD) throws SQLException {
+        List<HoaDonDTO> danhSach = hoaDonDAO.layDanhSachHoaDon();
+        for (HoaDonDTO hd : danhSach) {
+            if (hd.getMaHD().equals(maHD)) {
+                return hd;
+            }
+        }
+        return null;
+    }
 
 }

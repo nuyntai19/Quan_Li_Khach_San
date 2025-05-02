@@ -107,7 +107,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         lbMaKH = new javax.swing.JLabel();
-        TXMaNV = new javax.swing.JTextField();
+        TXMaKH = new javax.swing.JTextField();
         lbNgaySinh = new javax.swing.JLabel();
         lbTen = new javax.swing.JLabel();
         TXTen = new javax.swing.JTextField();
@@ -121,7 +121,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         tblDSPHONG = new javax.swing.JTable();
         ButtonSua = new javax.swing.JButton();
         ButtonXoa = new javax.swing.JButton();
-        TXMaKH = new javax.swing.JTextField();
+        TXTimKiem = new javax.swing.JTextField();
         lbHo = new javax.swing.JLabel();
         TXHo = new javax.swing.JTextField();
         jButtonResert = new javax.swing.JButton();
@@ -274,9 +274,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         lbMaKH.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lbMaKH.setText("Mã khách hàng:");
 
-        TXMaNV.addActionListener(new java.awt.event.ActionListener() {
+        TXMaKH.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXMaNVActionPerformed(evt);
+                TXMaKHActionPerformed(evt);
             }
         });
 
@@ -355,9 +355,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             }
         });
 
-        TXMaKH.addActionListener(new java.awt.event.ActionListener() {
+        TXTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXMaKHActionPerformed(evt);
+                TXTimKiemActionPerformed(evt);
             }
         });
 
@@ -429,7 +429,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TXTen, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TXMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lbNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -479,7 +479,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                                 .addGap(348, 348, 348)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
-                                .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(TXTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
@@ -500,7 +500,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TXMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TXNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -528,7 +528,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                         .addComponent(LBPhongTrong1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TXMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TXTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -733,9 +733,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         new PhieuThuePhong().setVisible(true); 
     }//GEN-LAST:event_KhachSanActionPerformed
 
-    private void TXMaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaNVActionPerformed
+    private void TXMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXMaNVActionPerformed
+    }//GEN-LAST:event_TXMaKHActionPerformed
 
     private void TXTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTenActionPerformed
         // TODO add your handling code here:
@@ -753,7 +753,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         try {
             // Lấy giá trị từ combo box
             String selectedColumn = (String) jComboBox1.getSelectedItem(); 
-            String searchValue = TXMaKH.getText().trim(); // Giá trị tìm kiếm nhập vào
+            String searchValue = TXTimKiem.getText().trim(); // Giá trị tìm kiếm nhập vào
 
             if (searchValue.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập giá trị cần tìm.");
@@ -814,11 +814,11 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
             }
             
             String ngaySinhStr = TXNgaySinh.getText();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // định dạng theo bạn nhập
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sdf.setLenient(false);
             Date ngaySinh = sdf.parse(ngaySinhStr);
             KhachHangDTO kh = new KhachHangDTO(
-                Integer.parseInt(TXMaNV.getText()),
+                Integer.parseInt(TXMaKH.getText()),
                 TXHo.getText(),
                 TXTen.getText(),
                 ngaySinh,
@@ -853,9 +853,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ButtonXoaActionPerformed
 
-    private void TXMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXMaKHActionPerformed
+    private void TXTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXMaKHActionPerformed
+    }//GEN-LAST:event_TXTimKiemActionPerformed
 
     private void TXHoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXHoActionPerformed
         // TODO add your handling code here:
@@ -869,7 +869,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
         // Xóa nội dung trong các ô tìm kiếm
-        TXMaKH.setText("");
+        TXTimKiem.setText("");
 
         // Xóa toàn bộ dữ liệu bảng
         model.setRowCount(0);
@@ -1052,11 +1052,11 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     private javax.swing.JTextField TXHo;
     private javax.swing.JTextField TXMK;
     private javax.swing.JTextField TXMaKH;
-    private javax.swing.JTextField TXMaNV;
     private javax.swing.JTextField TXNgaySinh;
     private javax.swing.JTextField TXSDT;
     private javax.swing.JTextField TXTen;
     private javax.swing.JTextField TXTenLP1;
+    private javax.swing.JTextField TXTimKiem;
     private javax.swing.JTable TablePhongTrong;
     private javax.swing.JLabel Tittle;
     private javax.swing.ButtonGroup bGNam_Nu;

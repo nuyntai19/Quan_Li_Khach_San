@@ -45,17 +45,20 @@ public class NhanVienDAO {
     public void themNhanVien(NhanVienDTO nv) throws SQLException {
         String sql = "INSERT INTO NhanVien VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
+
         ps.setInt(1, nv.getMaNhanVien());
         ps.setString(2, nv.getTen());
         ps.setString(3, nv.getHo());
-        ps.setDate(3, new java.sql.Date(nv.getNgaySinh().getTime()));
+        ps.setDate(4, new java.sql.Date(nv.getNgaySinh().getTime())); // Tham số thứ 4
         ps.setString(5, nv.getGioiTinh());
         ps.setString(6, nv.getEmail());
         ps.setString(7, nv.getSdt());
         ps.setString(8, nv.getChucVu());
         ps.setDouble(9, nv.getLuong());
+
         ps.executeUpdate();
     }
+
 
     public void suaNhanVien(NhanVienDTO nv) throws SQLException {
         String sql = "UPDATE NhanVien SET Ten=?, Ho=?, NgaySinh=?, GioiTinh=?, Email=?, SoDienThoai=?, ChucVu=?, Luong=? WHERE MaNhanVien=?";
