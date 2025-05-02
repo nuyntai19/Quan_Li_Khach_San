@@ -30,6 +30,8 @@ import BLL.QuanLiDichVuBLL;
 import DTO.QuanLiDichVuDTO;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DanhSachHoaDon extends javax.swing.JFrame {
 
@@ -609,13 +611,14 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ButtonLapHD)
-                            .addComponent(ButtonXoaHD)
-                            .addComponent(lbMaHD3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbMaPhieuThuePhong))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbMaPhieuThuePhong, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lbMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ButtonLapHD)
+                                .addComponent(ButtonXoaHD)
+                                .addComponent(lbMaHD3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbMaHD1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -955,8 +958,8 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         String hoaDonText =
                 """
                 ------------------------------------------------
-                            KH\u00c1CH S\u1ea0N LHQT
-                          H\u00d3A \u0110\u01a0N THANH TO\u00c1N
+                                KH\u00c1CH S\u1ea0N LHQT
+                              H\u00d3A \u0110\u01a0N THANH TO\u00c1N
                 ------------------------------------------------
                   M\u00e3 H\u00f3a \u0110\u01a1n: """ + maHD + "\n" +
                 "  Ngày Lập: " + hoaDon.getNgayLap() + "\n" +
@@ -990,18 +993,33 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
     private void ButtonLapHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLapHDActionPerformed
         try {
         String maPTP = cbMaPhieuThuePhong.getSelectedItem().toString();
-        String maHD = hoaDonBLL.generateNextMaHD();
         Date ngayLap = new java.sql.Date(System.currentTimeMillis());
-        
-        if (hoaDonBLL.kiemTraHoaDonTonTai(Integer.parseInt(maPTP))) {
-            JOptionPane.showMessageDialog(this, "Phiếu thuê này đã được lập hóa đơn!");
-            return;
+
+        String maHD; // dùng đúng 1 biến cho mã hóa đơn
+
+        boolean daCoHoaDon = hoaDonBLL.kiemTraHoaDonTonTai(Integer.parseInt(maPTP));
+        if (daCoHoaDon) {
+            maHD = hoaDonBLL.getMaHoaDonByMaPTP(Integer.parseInt(maPTP));
+        } else {
+            maHD = hoaDonBLL.generateNextMaHD();
+            hoaDonBLL.insertHoaDon(maHD, maPTP, ngayLap, 0);
         }
 
-        // Insert vào bảng HoaDon trước với tổng tiền tạm thời là 0
-        hoaDonBLL.insertHoaDon(maHD, maPTP, ngayLap, 0); // bạn cần viết hàm này trong DAO
+        // Lấy danh sách chi tiết đã có trong hóa đơn cũ
+        List<ChiTietHoaDonDTO> daCoChiTiet = chiTietHoaDonBLL.getByMaHD(maHD);
+        Set<String> keyChiTiet = new HashSet<>();
+        for (ChiTietHoaDonDTO ct : daCoChiTiet) {
+            String key = ct.getMaPhong() + "_" + (ct.getMaDV() != null ? ct.getMaDV() : "null") + "_" + ct.getLoaiChiTiet();
+            keyChiTiet.add(key);
+        }
 
         double tongTien = 0;
+        
+        // Nếu đã có hóa đơn, lấy tổng tiền cũ để cộng dồn
+        List<ChiTietHoaDonDTO> danhSachCTMoi = chiTietHoaDonBLL.getByMaHD(maHD);
+            for (ChiTietHoaDonDTO ct : danhSachCTMoi) {
+                tongTien += ct.getThanhTien();
+            }
 
         // 1. Lấy danh sách chi tiết phòng từ MaPTP
         danhSachChiTietPhieuThue = chiTietPhieuThuePhongBLL.layDanhSachChiTiet(); 
@@ -1014,35 +1032,27 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         for (ChiTietPhieuThuePhongDTO phong : danhSachTheoPhieuThue) {
             double thanhTien = phong.getThanhTien();
 
-            chiTietHoaDonBLL.insertChiTietHoaDon(new ChiTietHoaDonDTO(
-                // Xóa giá trị của ID (cột tự động tăng)
-                0, // Đặt giá trị 0 hoặc null nếu cần
-                maHD,
-                phong.getMaPhong(),
-                null, // MaDV = null
-                "Tiền Phòng",
-                1,
-                phong.getGiaPhong(),
-                thanhTien
-            ));
-            tongTien += thanhTien;
+            String keyPhong = phong.getMaPhong() + "_null_Tiền Phòng";
+            if (!keyChiTiet.contains(keyPhong)) {
+                chiTietHoaDonBLL.insertChiTietHoaDon(new ChiTietHoaDonDTO(
+                    0, maHD, phong.getMaPhong(), null, "Tiền Phòng", 1, phong.getGiaPhong(), thanhTien
+                ));
+                tongTien += thanhTien;
+            }
 
-            // 2. Lấy dịch vụ từ từng IDChiTietPhieuThue
             List<DatDichVuDTO> dsDV = datDichVuBLL.getByIDChiTietPhieuThue(phong.getId());
             for (DatDichVuDTO dv : dsDV) {
-                chiTietHoaDonBLL.insertChiTietHoaDon(new ChiTietHoaDonDTO(
-                    0,
-                    maHD,
-                    phong.getMaPhong(),
-                    dv.getMaDichVu(),
-                    "Tiền Dịch Vụ",
-                    dv.getSoLuong(),
-                    dv.getDonGia(),
-                    dv.getThanhTien()
-                ));
-                tongTien += dv.getThanhTien();
+                String keyDV = phong.getMaPhong() + "_" + dv.getMaDichVu() + "_Tiền Dịch Vụ";
+                if (!keyChiTiet.contains(keyDV)) {
+                    chiTietHoaDonBLL.insertChiTietHoaDon(new ChiTietHoaDonDTO(
+                        0, maHD, phong.getMaPhong(), dv.getMaDichVu(), "Tiền Dịch Vụ",
+                        dv.getSoLuong(), dv.getDonGia(), dv.getThanhTien()
+                    ));
+                    tongTien += dv.getThanhTien();
+                }
             }
         }
+
 
         // Cập nhật tổng tiền vào HoaDon
         hoaDonBLL.updateTongTien(maHD, tongTien);
@@ -1349,22 +1359,14 @@ int selectedRow = tblDSHOADON.getSelectedRow();
     private javax.swing.JButton ButtonLapHD;
     private javax.swing.JButton ButtonTim;
     private javax.swing.JButton ButtonXoaHD;
-    private javax.swing.JButton CheckIn;
     private javax.swing.JButton CheckIn2;
-    private javax.swing.JButton CheckOut;
     private javax.swing.JButton CheckOut2;
-    private javax.swing.JButton DSDatPhong;
     private javax.swing.JButton DSDatPhong2;
-    private javax.swing.JButton DSKhachHang;
     private javax.swing.JButton DSKhachHang2;
     private javax.swing.JButton DSPhong;
-    private javax.swing.JButton DatDichVu;
-    private javax.swing.JButton DatDichVu1;
     private javax.swing.JButton DatDichVu3;
     private javax.swing.JButton DatDichVu4;
-    private javax.swing.JButton DatPhong;
     private javax.swing.JButton DatPhong2;
-    private javax.swing.JButton HoaDonDatPhong;
     private javax.swing.JButton HoaDonDatPhong2;
     private javax.swing.JButton KhachSan;
     private javax.swing.JLabel LBPhongTrong1;
@@ -1389,7 +1391,6 @@ int selectedRow = tblDSHOADON.getSelectedRow();
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
