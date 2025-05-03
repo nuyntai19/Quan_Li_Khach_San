@@ -1081,7 +1081,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
 
     private void ButtonThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThongKeActionPerformed
         dispose();
-        new ThongKe().setVisible(true);
+        try {
+            new ThongKe().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(QuanLiDichVu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_ButtonThongKeActionPerformed
 
     private void ButtonKhoHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonKhoHangActionPerformed

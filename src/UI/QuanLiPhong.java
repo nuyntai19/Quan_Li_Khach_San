@@ -1131,7 +1131,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
 
     private void ButtonThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThongKeActionPerformed
         dispose();
-        new ThongKe().setVisible(true);
+        try {
+            new ThongKe().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(QuanLiPhong.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_ButtonThongKeActionPerformed
 
     /**
