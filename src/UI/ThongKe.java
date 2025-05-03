@@ -21,16 +21,34 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import BLL.ThongKeBLL;
+import DTO.*;
+import BLL.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class ThongKe extends javax.swing.JFrame {
     private final ThongKeBLL thongKeBLL;
     private final DefaultTableModel model;
+    private final KhachHangBLL khachHangBLL;
+    private final QuanLiPhongBLL quanLiPhongBLL;
+    private final QuanLiDichVuBLL quanLiDichVuBLL;
+    private final NhanVienBLL nhanVienBLL;
+    private final PhieuThuePhongBLL phieuThuePhongBLL;
+    private final ChiTietPhieuThuePhongBLL chiTietPhieuThuePhongBLL;
+    private final DatDichVuBLL datDichVuBLL;
+    private final HoaDonBLL hoaDonBLL;
+    private final ChiTietHoaDonBLL chiTietHoaDonBLL;
+    private final LoaiPhongBLL loaiPhongBLL;
     
     
     
     
-    public ThongKe() {
+    public ThongKe() throws SQLException {
         initComponents();
         addEvents();
         dcNgayBatDau.setVisible(false);
@@ -43,7 +61,18 @@ public class ThongKe extends javax.swing.JFrame {
         lbNam.setVisible(false);
         
         thongKeBLL = new ThongKeBLL();
+        khachHangBLL = new KhachHangBLL();
+        quanLiPhongBLL = new QuanLiPhongBLL();
+        quanLiDichVuBLL = new QuanLiDichVuBLL();
+        nhanVienBLL = new NhanVienBLL();
+        phieuThuePhongBLL = new PhieuThuePhongBLL();
+        chiTietPhieuThuePhongBLL = new ChiTietPhieuThuePhongBLL();
+        datDichVuBLL = new DatDichVuBLL();
+        hoaDonBLL = new HoaDonBLL();
+        chiTietHoaDonBLL = new ChiTietHoaDonBLL();
+        loaiPhongBLL = new LoaiPhongBLL();
         model = (DefaultTableModel) tblDSTHONGKE.getModel();
+        
         
         
         
@@ -115,6 +144,9 @@ public class ThongKe extends javax.swing.JFrame {
         lbNam = new javax.swing.JLabel();
         txtThang = new javax.swing.JTextField();
         txtNam = new javax.swing.JTextField();
+        lbNam1 = new javax.swing.JLabel();
+        cbChonXuat = new javax.swing.JComboBox<>();
+        btnXuatExcel = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         KhachSan = new javax.swing.JButton();
         QuanLi = new javax.swing.JButton();
@@ -302,6 +334,21 @@ public class ThongKe extends javax.swing.JFrame {
         lbNam.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lbNam.setText("Nhập năm :");
 
+        lbNam1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lbNam1.setText("Xuất file Excel :");
+
+        cbChonXuat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "_", "Danh sách phiếu thuê phòng", "Danh sách đặt dịch vụ", "Danh sách hóa đơn", "Danh sách nhân viên", "Danh sách khách hàng", "Danh sách dịch vụ", "Danh sách phòng", "Danh sách loại phòng" }));
+
+        btnXuatExcel.setBackground(new java.awt.Color(52, 152, 219));
+        btnXuatExcel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnXuatExcel.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatExcel.setText("Xuất Excel");
+        btnXuatExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatExcelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -342,7 +389,13 @@ public class ThongKe extends javax.swing.JFrame {
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtThang)
                                             .addComponent(txtNam))
-                                        .addGap(707, 707, 707)))))
+                                        .addGap(707, 707, 707))
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(lbNam1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cbChonXuat, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnXuatExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -374,7 +427,12 @@ public class ThongKe extends javax.swing.JFrame {
                     .addComponent(lbNam, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbNam1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbChonXuat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXuatExcel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -679,9 +737,320 @@ public class ThongKe extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonQLNhaCUngCapActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnXuatExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatExcelActionPerformed
+        String luaChon = cbChonXuat.getSelectedItem().toString();
+
+    ArrayList<?> duLieu = null;
+    String[] tieuDe = null;
+
+    switch (luaChon) {
+        case "Danh sách khách hàng":
+            try {
+                duLieu = khachHangBLL.layDanhSachKhachHang();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"Mã KH", "Họ", "Tên", "Ngày sinh", "Giới tính", "Email", "SĐT"};
+            break;
+
+        case "Danh sách phòng":
+            try {
+                duLieu = quanLiPhongBLL.layDanhSachPhong();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"Mã phòng", "Mã loại phòng", "Số giường", "Đơn giá", "Trạng thái"};
+            break;
+
+        case "Danh sách dịch vụ":
+            try {
+                duLieu = quanLiDichVuBLL.layDanhSachDichVu();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"Mã DV", "Tên dịch vụ", "Mô tả", "Đơn giá", "Số lượng"};
+            break;
+
+        case "Danh sách nhân viên":
+            try {
+                duLieu = nhanVienBLL.layDanhSachNhanVien();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"Mã NV", "Họ", "Tên", "Ngày sinh", "Giới tính", "Email", "SĐT", "Chức vụ", "Lương"};
+            break;
+            
+        case "Danh sách đặt dịch vụ":
+            try {
+                duLieu = datDichVuBLL.layDanhSachDatDichVu();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"ID Chi tiết thuê", "Mã dịch vụ", "Số lượng", "Đơn giá", "Thành tiền"};
+            break;
+            
+        case "Danh sách loại phòng":
+            try {
+                duLieu = loaiPhongBLL.layDanhSachLoaiPhong();
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tieuDe = new String[] {"Mã loại phòng", "Tên loại phòng", "Mô tả"};
+            break;    
+        
+        case "Danh sách hóa đơn":
+            try {
+                ArrayList<HoaDonDTO> dsHoaDon = (ArrayList<HoaDonDTO>) hoaDonBLL.layDanhSachHoaDon();
+                ArrayList<ChiTietHoaDonDTO> dsChiTietHD = (ArrayList<ChiTietHoaDonDTO>) chiTietHoaDonBLL.layDanhSachChiTietHoaDon();
+                xuatHoaDonVaChiTiet(dsHoaDon, dsChiTietHD);
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Lỗi khi lấy dữ liệu hóa đơn: " + ex.getMessage());
+            }
+            return;
+            
+        case "Danh sách phiếu thuê phòng":
+            try {
+                ArrayList<PhieuThuePhongDTO> dsPhieu =
+                    phieuThuePhongBLL.layDanhSachPhieuThue();
+                ArrayList<ChiTietPhieuThuePhongDTO> dsChiTiet =
+                    chiTietPhieuThuePhongBLL.layDanhSachChiTiet();
+                xuatPhieuVaChiTiet(dsPhieu, dsChiTiet);
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName())
+                      .log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null,
+                    "Lỗi khi lấy dữ liệu phiếu thuê: " + ex.getMessage());
+            }
+            return; 
+
+        default:
+            JOptionPane.showMessageDialog(null, "Chọn danh mục cần xuất.");
+            return;
+    }
+
+    xuatExcel(luaChon, duLieu, tieuDe);
+    }//GEN-LAST:event_btnXuatExcelActionPerformed
+
+    
+    private void xuatExcel(String tenFile, ArrayList<?> duLieu, String[] tieuDe) {
+    try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+        XSSFSheet sheet = workbook.createSheet(tenFile);
+
+        // Ghi dòng tiêu đề
+        Row header = sheet.createRow(0);
+        for (int i = 0; i < tieuDe.length; i++) {
+            header.createCell(i).setCellValue(tieuDe[i]);
+        }
+
+        // Ghi dữ liệu
+        for (int i = 0; i < duLieu.size(); i++) {
+            Object obj = duLieu.get(i);
+            Row row = sheet.createRow(i + 1);
+
+            if (obj instanceof KhachHangDTO kh) {
+                row.createCell(0).setCellValue(kh.getMaKhachHang());
+                row.createCell(1).setCellValue(kh.getHo());
+                row.createCell(2).setCellValue(kh.getTen());
+                row.createCell(3).setCellValue(kh.getNgaySinh().toString());
+                row.createCell(4).setCellValue(kh.getGioiTinh());
+                row.createCell(5).setCellValue(kh.getEmail());
+                row.createCell(6).setCellValue(kh.getSoDienThoai());
+            }
+            else if (obj instanceof QuanLiPhongDTO p) {
+                row.createCell(0).setCellValue(p.getMaPhong());
+                row.createCell(1).setCellValue(p.getMaLoaiPhong());
+                row.createCell(2).setCellValue(p.getSoGiuong());
+                row.createCell(3).setCellValue(p.getDonGia());
+                row.createCell(4).setCellValue(p.getTrangThai());
+            }
+            else if (obj instanceof QuanLiDichVuDTO dv) {
+                row.createCell(0).setCellValue(dv.getMaDichVu());
+                row.createCell(1).setCellValue(dv.getTenDichVu());
+                row.createCell(2).setCellValue(dv.getMoTa());
+                row.createCell(3).setCellValue(dv.getDonGia());
+                row.createCell(4).setCellValue(dv.getSoLuong());
+            }
+            else if (obj instanceof NhanVienDTO nv) {
+                row.createCell(0).setCellValue(nv.getMaNhanVien());
+                row.createCell(1).setCellValue(nv.getHo());
+                row.createCell(2).setCellValue(nv.getTen());
+                row.createCell(3).setCellValue(nv.getNgaySinh().toString());
+                row.createCell(4).setCellValue(nv.getGioiTinh());
+                row.createCell(5).setCellValue(nv.getEmail());
+                row.createCell(6).setCellValue(nv.getSdt());
+                row.createCell(7).setCellValue(nv.getChucVu());
+                row.createCell(8).setCellValue(nv.getLuong());
+            }
+            else if (obj instanceof DatDichVuDTO dvThue) {
+                row.createCell(0).setCellValue(dvThue.getIdChiTietPhieuThue());
+                row.createCell(1).setCellValue(dvThue.getMaDichVu());
+                row.createCell(2).setCellValue(dvThue.getSoLuong());
+                row.createCell(3).setCellValue(dvThue.getDonGia());
+                row.createCell(4).setCellValue(dvThue.getThanhTien());
+            }
+            else if (obj instanceof LoaiPhongDTO lp) {
+                row.createCell(0).setCellValue(lp.getMaLoaiPhong());
+                row.createCell(1).setCellValue(lp.getTenLoaiPhong());
+                row.createCell(2).setCellValue(lp.getMoTa());
+            }
+        }
+
+        // Tự động điều chỉnh độ rộng các cột
+        for (int i = 0; i < tieuDe.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Chọn file xuất
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(tenFile + ".xlsx"));
+        int chon = fileChooser.showSaveDialog(null);
+
+        if (chon == JFileChooser.APPROVE_OPTION) {
+            try (FileOutputStream out = new FileOutputStream(fileChooser.getSelectedFile())) {
+                workbook.write(out);
+            }
+            JOptionPane.showMessageDialog(null, "Xuất Excel thành công!");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi xuất Excel: " + e.getMessage());
+    }
+}
+    
+    private void xuatHoaDonVaChiTiet(
+    ArrayList<HoaDonDTO> dsHoaDon,
+    ArrayList<ChiTietHoaDonDTO> dsChiTiet
+) {
+    try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+        // Sheet 1: Hóa đơn
+        XSSFSheet sheet1 = workbook.createSheet("Hóa đơn");
+        String[] headerHD = {"Mã hóa đơn", "Mã phiếu thuê", "Ngày lập", "Tổng tiền"};
+        Row h1 = sheet1.createRow(0);
+        for (int i = 0; i < headerHD.length; i++) {
+            h1.createCell(i).setCellValue(headerHD[i]);
+        }
+        for (int i = 0; i < dsHoaDon.size(); i++) {
+            HoaDonDTO hd = dsHoaDon.get(i);
+            Row r = sheet1.createRow(i + 1);
+            r.createCell(0).setCellValue(hd.getMaHD());
+            r.createCell(1).setCellValue(hd.getMaPTP());
+            r.createCell(2).setCellValue(hd.getNgayLap().toString());
+            r.createCell(3).setCellValue(hd.getTongTien());
+        }
+
+        // Sheet 2: Chi tiết hóa đơn
+        XSSFSheet sheet2 = workbook.createSheet("Chi tiết hóa đơn");
+        String[] headerCT = {"Mã CTHĐ", "Mã HĐ", "Mã phòng", "Mã dịch vụ", "Loại", "Số lượng", "Đơn giá", "Thành tiền"};
+        Row h2 = sheet2.createRow(0);
+        for (int i = 0; i < headerCT.length; i++) {
+            h2.createCell(i).setCellValue(headerCT[i]);
+        }
+        for (int i = 0; i < dsChiTiet.size(); i++) {
+            ChiTietHoaDonDTO ct = dsChiTiet.get(i);
+            Row r = sheet2.createRow(i + 1);
+            r.createCell(0).setCellValue(ct.getMaCTHD());
+            r.createCell(1).setCellValue(ct.getMaHD());
+            r.createCell(2).setCellValue(ct.getMaPhong());
+            r.createCell(3).setCellValue(ct.getMaDV());
+            r.createCell(4).setCellValue(ct.getLoaiChiTiet());
+            r.createCell(5).setCellValue(ct.getSoLuong());
+            r.createCell(6).setCellValue(ct.getDonGia());
+            r.createCell(7).setCellValue(ct.getThanhTien());
+        }
+
+        // Auto-size
+        for (int i = 0; i < headerHD.length; i++) sheet1.autoSizeColumn(i);
+        for (int i = 0; i < headerCT.length; i++) sheet2.autoSizeColumn(i);
+
+        // Ghi file
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(new File("HoaDon_va_ChiTiet.xlsx"));
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try (FileOutputStream out = new FileOutputStream(chooser.getSelectedFile())) {
+                workbook.write(out);
+                JOptionPane.showMessageDialog(null, "Xuất Excel thành công!");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi xuất Excel: " + e.getMessage());
+    }
+}
+
+    
+    private void xuatPhieuVaChiTiet(
+    ArrayList<PhieuThuePhongDTO> dsPhieu,
+    ArrayList<ChiTietPhieuThuePhongDTO> dsChiTiet
+) {
+    try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+        // ---- Sheet 1: Phiếu thuê phòng ----
+        XSSFSheet sheet1 = workbook.createSheet("Phiếu thuê phòng");
+        String[] headerPhieu = {
+            "Mã phiếu thuê", "Mã khách hàng", "Mã nhân viên",
+            "Ngày lập phiếu", "Tổng tiền", "Trạng thái"
+        };
+        Row h1 = sheet1.createRow(0);
+        for (int i = 0; i < headerPhieu.length; i++) {
+            h1.createCell(i).setCellValue(headerPhieu[i]);
+        }
+        for (int i = 0; i < dsPhieu.size(); i++) {
+            PhieuThuePhongDTO p = dsPhieu.get(i);
+            Row r = sheet1.createRow(i + 1);
+            r.createCell(0).setCellValue(p.getMaThuePhong());
+            r.createCell(1).setCellValue(p.getMaKhachHang());
+            r.createCell(2).setCellValue(p.getMaNhanVien());
+            r.createCell(3).setCellValue(p.getNgayLapPhieu().toString());
+            r.createCell(4).setCellValue(p.getTongTien());
+            r.createCell(5).setCellValue(p.getTrangThai());
+        }
+
+        // ---- Sheet 2: Chi tiết phiếu thuê ----
+        XSSFSheet sheet2 = workbook.createSheet("Chi tiết thuê phòng");
+        String[] headerChiTiet = {
+            "ID", "Mã phiếu thuê", "Mã phòng",
+            "Ngày đặt", "Ngày trả", "Giá phòng", "Thành tiền"
+        };
+        Row h2 = sheet2.createRow(0);
+        for (int i = 0; i < headerChiTiet.length; i++) {
+            h2.createCell(i).setCellValue(headerChiTiet[i]);
+        }
+        for (int i = 0; i < dsChiTiet.size(); i++) {
+            ChiTietPhieuThuePhongDTO c = dsChiTiet.get(i);
+            Row r = sheet2.createRow(i + 1);
+            r.createCell(0).setCellValue(c.getId());
+            r.createCell(1).setCellValue(c.getMaThuePhong());
+            r.createCell(2).setCellValue(c.getMaPhong());
+            r.createCell(3).setCellValue(c.getNgayDatPhong().toString());
+            r.createCell(4).setCellValue(c.getNgayTraPhong().toString());
+            r.createCell(5).setCellValue(c.getGiaPhong());
+            r.createCell(6).setCellValue(c.getThanhTien());
+        }
+
+        // Auto-size cả hai sheet
+        for (int i = 0; i < headerPhieu.length; i++) sheet1.autoSizeColumn(i);
+        for (int i = 0; i < headerChiTiet.length; i++) sheet2.autoSizeColumn(i);
+
+        // Chọn file để lưu
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(new File("PhieuThue_va_ChiTiet.xlsx"));
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try (FileOutputStream out = new FileOutputStream(chooser.getSelectedFile())) {
+                workbook.write(out);
+                JOptionPane.showMessageDialog(null, "Xuất Excel thành công!");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Lỗi khi xuất Excel: " + e.getMessage());
+    }
+}
+
+
+
+
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -723,7 +1092,12 @@ public class ThongKe extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            ThongKe quanLiPhong = new ThongKe(); // Tạo đối tượng QuanLiPhong
+            ThongKe quanLiPhong = null;
+            try {
+                quanLiPhong = new ThongKe(); // Tạo đối tượng QuanLiPhong
+            } catch (SQLException ex) {
+                Logger.getLogger(ThongKe.class.getName()).log(Level.SEVERE, null, ex);
+            }
             quanLiPhong.setVisible(true); // Hiển thị giao diện
         });
     }
@@ -748,8 +1122,10 @@ public class ThongKe extends javax.swing.JFrame {
     private javax.swing.JLabel Tittle;
     private javax.swing.ButtonGroup bGNam_Nu;
     private javax.swing.JButton btnThongKe;
+    private javax.swing.JButton btnXuatExcel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbChonThongKe;
+    private javax.swing.JComboBox<String> cbChonXuat;
     private com.toedter.calendar.JDateChooser dcNgayBatDau;
     private com.toedter.calendar.JDateChooser dcNgayKetThuc;
     private javax.swing.JButton jButton9;
@@ -768,6 +1144,7 @@ public class ThongKe extends javax.swing.JFrame {
     private javax.swing.JLabel lbDangNhap;
     private javax.swing.JLabel lbMaPhong2;
     private javax.swing.JLabel lbNam;
+    private javax.swing.JLabel lbNam1;
     private javax.swing.JLabel lbNgayBatDau;
     private javax.swing.JLabel lbNgayKetThuc;
     private javax.swing.JLabel lbThang;
