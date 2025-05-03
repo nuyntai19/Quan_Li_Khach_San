@@ -1,38 +1,105 @@
 package DTO;
-public class DoGiaDung_DTO extends HangHoa_DTO {
+
+import java.util.Date;
+
+public class DoGiaDung_DTO {
+    private String maHang;
+    private String tenHang;
+    private String donVi;
+    private double giaNhap;
+    private int soLuongTon;
+    private Date ngayNhap;
+    private String nhaCungCap;
     private String tinhTrang;
-    private static final String LOAI_HANG = "DoGiaDung";
-    
-    // Constructor mặc định
-    public DoGiaDung_DTO () {
-        super();
-        this.tinhTrang = "";
+    private String moTa;
+
+    public DoGiaDung_DTO() {
     }
-    
-    // Constructor có tham số
-    public DoGiaDung_DTO (int mh, String th, String dvt, double gn, String tt) {
-        super(mh, th, dvt, gn, LOAI_HANG);
-        this.tinhTrang = tt;
+
+    public DoGiaDung_DTO(String maHang, String tenHang, String donVi, double giaNhap, 
+                        int soLuongTon, Date ngayNhap, String nhaCungCap, 
+                        String tinhTrang, String moTa) {
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.donVi = donVi;
+        this.giaNhap = giaNhap;
+        this.soLuongTon = soLuongTon;
+        this.ngayNhap = ngayNhap;
+        this.nhaCungCap = nhaCungCap;
+        this.tinhTrang = tinhTrang;
+        this.moTa = moTa;
     }
-    
-    // Constructor sao chép
-    public DoGiaDung_DTO(DoGiaDung_DTO tmp) {
-        super(tmp);
-        this.tinhTrang = tmp.tinhTrang;
+
+    // Getters and Setters
+    public String getMaHang() {
+        return maHang;
     }
-    
-    // Setter
-    public void setTinhTrang(String tmp) {
-        this.tinhTrang = tmp;
+
+    public void setMaHang(String maHang) {
+        this.maHang = maHang;
     }
-    
-    // Getter
+
+    public String getTenHang() {
+        return tenHang;
+    }
+
+    public void setTenHang(String tenHang) {
+        this.tenHang = tenHang;
+    }
+
+    public String getDonVi() {
+        return donVi;
+    }
+
+    public void setDonVi(String donVi) {
+        this.donVi = donVi;
+    }
+
+    public double getGiaNhap() {
+        return giaNhap;
+    }
+
+    public void setGiaNhap(double giaNhap) {
+        this.giaNhap = giaNhap;
+    }
+
+    public int getSoLuongTon() {
+        return soLuongTon;
+    }
+
+    public void setSoLuongTon(int soLuongTon) {
+        this.soLuongTon = soLuongTon;
+    }
+
+    public Date getNgayNhap() {
+        return ngayNhap;
+    }
+
+    public void setNgayNhap(Date ngayNhap) {
+        this.ngayNhap = ngayNhap;
+    }
+
+    public String getNhaCungCap() {
+        return nhaCungCap;
+    }
+
+    public void setNhaCungCap(String nhaCungCap) {
+        this.nhaCungCap = nhaCungCap;
+    }
+
     public String getTinhTrang() {
-        return this.tinhTrang;
+        return tinhTrang;
     }
-    
-    @Override
-    public String getLoaiHang() {
-        return LOAI_HANG;
+
+    public void setTinhTrang(String tinhTrang) {
+        this.tinhTrang = tinhTrang;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 }
