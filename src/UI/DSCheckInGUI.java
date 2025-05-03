@@ -71,7 +71,6 @@ public class DSCheckInGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
-	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
 	private JButton btnHuy;
 	private JButton btnRefresh;
 
@@ -749,7 +748,7 @@ public class DSCheckInGUI extends  JFrame {
     	        CheckInOutDTO c = new CheckInOutDTO();
     	        c = checkInOutBLL.timCheckInOut(maPhong);
                 c.setTrangThai("Da check-in");
-                tempList.addCheckInOut(c);
+                CheckInOutTEMP.addCheckInOut(c);
                 
 
     	        JOptionPane.showMessageDialog(this, "Check-in thành công!");

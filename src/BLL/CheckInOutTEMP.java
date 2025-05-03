@@ -10,24 +10,22 @@ import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 
 public class CheckInOutTEMP {
-    private ArrayList<CheckInOutDTO> tempList;
-    private QuanLiPhongDAO phongDAO;
+    private static final ArrayList<CheckInOutDTO> tempList = new ArrayList<>();
+    private static final QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
 
-    public CheckInOutTEMP() {
-        tempList = new ArrayList<>();
-    }
-
-    public void addCheckInOut(CheckInOutDTO checkInOutDTO) {
+    public static void addCheckInOut(CheckInOutDTO checkInOutDTO) {
         for (CheckInOutDTO item : tempList) {
             if (item.getMaPhong() == checkInOutDTO.getMaPhong()) 
                 return;
         }
         tempList.add(checkInOutDTO);
     }
-    public ArrayList<CheckInOutDTO> getTempList() {
+
+    public static ArrayList<CheckInOutDTO> getTempList() {
         return tempList;
     }
-    public void capNhatCheckInOut(CheckInOutDTO checkInOutDTO) {
+
+    public static void capNhatCheckInOut(CheckInOutDTO checkInOutDTO) {
         for (int i = 0; i < tempList.size(); i++) {
             if (tempList.get(i).getMaPhong() == checkInOutDTO.getMaPhong()) {
                 tempList.set(i, checkInOutDTO);
@@ -36,11 +34,11 @@ public class CheckInOutTEMP {
         }
     }
 
-    public void xoaCheckInOut(int maPhong) {
+    public static void xoaCheckInOut(int maPhong) {
         tempList.removeIf(item -> item.getMaPhong() == maPhong);
     }
 
-    public CheckInOutDTO timCheckInOutTEMP(int maPhong) {
+    public static CheckInOutDTO timCheckInOutTEMP(int maPhong) {
         for (CheckInOutDTO checkInOutDTO : tempList) {
             if (checkInOutDTO.getMaPhong() == maPhong) {
                 return checkInOutDTO;
@@ -49,19 +47,15 @@ public class CheckInOutTEMP {
         return null;
     }
 
-    public void kiemTraQuaHanCheckOut(ArrayList<CheckInOutDTO> dsCheckOut) {
+    public static void kiemTraQuaHanCheckOut(ArrayList<CheckInOutDTO> dsCheckOut) {
         Date today = new Date();
     
-        for (CheckInOutDTO checkOut : dsCheckOut) 
-        {
-            if (checkOut.getNgayTraPhong().before(today) && "Dang thue".equalsIgnoreCase(checkOut.getTrangThai())) 
-            {
-                try
-                {
+        for (CheckInOutDTO checkOut : dsCheckOut) {
+            if (checkOut.getNgayTraPhong().before(today) && "Dang thue".equalsIgnoreCase(checkOut.getTrangThai())) {
+                try {
                     checkOut.setTrangThai("Qua han check-out");
                     phongDAO.capNhatTrangThaiPhong(checkOut.getMaPhong(), "Dang bao tri");
-                }
-                catch (SQLException ex) {
+                } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Lỗi cập nhật trạng thái!");
                 }
@@ -69,11 +63,10 @@ public class CheckInOutTEMP {
         }
     }
 
-    public ArrayList<CheckInOutDTO> timChiTietCheckInOutTrongTemp(String loaiTimKiem, String tuKhoa) {
+    public static ArrayList<CheckInOutDTO> timChiTietCheckInOutTrongTemp(String loaiTimKiem, String tuKhoa) {
         ArrayList<CheckInOutDTO> ketQua = new ArrayList<>();
-        ArrayList<CheckInOutDTO> danhSach = getTempList(); // Lấy danh sách từ temp
-    
-        for (CheckInOutDTO ct : danhSach) {
+
+        for (CheckInOutDTO ct : tempList) {
             switch (loaiTimKiem) {
                 case "Mã thuê phòng":
                     if (String.valueOf(ct.getMaThuePhong()).contains(tuKhoa)) {
@@ -109,6 +102,5 @@ public class CheckInOutTEMP {
         }
     
         return ketQua;
-    }    
-    
+    }
 }
