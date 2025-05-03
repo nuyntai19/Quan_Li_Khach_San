@@ -71,7 +71,6 @@ public class DSCheckOutGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
-	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
 	private DlgKTphong dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
@@ -609,8 +608,8 @@ public class DSCheckOutGUI extends  JFrame {
     
     public void loadData() {
         model.setRowCount(0);
-        danhSach = tempList.getTempList();
-        tempList.kiemTraQuaHanCheckOut(danhSach); 
+        danhSach = CheckInOutTEMP.getTempList();
+        CheckInOutTEMP.kiemTraQuaHanCheckOut(danhSach); 
 		for (CheckInOutDTO checkIn : danhSach) {
 		    if ("Da check-in".equals(checkIn.getTrangThai()) || "Qua han check-out".equals(checkIn.getTrangThai())) {  
 		      
@@ -640,7 +639,7 @@ public class DSCheckOutGUI extends  JFrame {
         String tuKhoa = textTK.getText().trim(); // Lấy từ khóa tìm
 
         try {
-            ArrayList<CheckInOutDTO> ketQua = tempList.timChiTietCheckInOutTrongTemp(loaiTim, tuKhoa);
+            ArrayList<CheckInOutDTO> ketQua = CheckInOutTEMP.timChiTietCheckInOutTrongTemp(loaiTim, tuKhoa);
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0); 
@@ -692,7 +691,7 @@ public class DSCheckOutGUI extends  JFrame {
 
     	        KTPhong(maPhong);
     	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoan thanh");
-    	        tempList.xoaCheckInOut(maPhong);
+    	        CheckInOutTEMP.xoaCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-out thành công!");
     	        // có thể kèm hoá đơn
