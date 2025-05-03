@@ -13,7 +13,7 @@ public class ChiTietPhieuNhapHangDAO {
         this.conn = conn;
     }
 
-    public boolean insert(ChiTietPhieuNhapHang ct) throws SQLException {
+    public boolean insert(ChiTietPhieuNhap_DTO ct) throws SQLException {
         String sql = "INSERT INTO ChiTietPhieuNhapHang (MaPhieuNhapHang, MaHang, SoLuong, DonGia, ThanhTien) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, ct.getMaPhieuNhapHang());

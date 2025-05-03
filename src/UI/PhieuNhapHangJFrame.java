@@ -40,7 +40,7 @@ public class PhieuNhapHangJFrame extends JFrame {
     
     private void initComponents() {
         setTitle("Quản Lý Phiếu Nhập Hàng");
-        setSize(1200, 700);
+        setSize(1500, 1200);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));

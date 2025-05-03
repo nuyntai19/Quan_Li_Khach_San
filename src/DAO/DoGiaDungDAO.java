@@ -27,7 +27,7 @@ public class DoGiaDungDAO {
                 return rs.getInt(1) > 0;
             }
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
         return false;
     }
@@ -48,7 +48,7 @@ public class DoGiaDungDAO {
             ps.setString(9, dgd.getMoTa());
             return ps.executeUpdate() > 0;
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
     }
 
@@ -68,7 +68,7 @@ public class DoGiaDungDAO {
             ps.setString(9, dgd.getMaHang());
             return ps.executeUpdate() > 0;
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
     }
 
@@ -80,7 +80,7 @@ public class DoGiaDungDAO {
             ps.setString(1, maHang);
             return ps.executeUpdate() > 0;
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
     }
 
@@ -106,7 +106,7 @@ public class DoGiaDungDAO {
                 list.add(dgd);
             }
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
         return list;
     }
@@ -132,7 +132,7 @@ public class DoGiaDungDAO {
                 );
             }
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
         return null;
     }
@@ -160,7 +160,7 @@ public class DoGiaDungDAO {
                 list.add(dgd);
             }
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
         return list;
     }
@@ -174,7 +174,7 @@ public class DoGiaDungDAO {
             ps.setString(2, maHang);
             return ps.executeUpdate() > 0;
         } finally {
-            DatabaseQLKS.closeConnection(conn, ps, rs);
+            DatabaseQLKS.close(conn, ps, rs);
         }
     }
 } 

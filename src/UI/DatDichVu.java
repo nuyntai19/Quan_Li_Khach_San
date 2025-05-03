@@ -174,6 +174,7 @@ public class DatDichVu extends javax.swing.JFrame {
         DatDichVu = new javax.swing.JButton();
         DSDatPhong = new javax.swing.JButton();
         DatDichVu1 = new javax.swing.JButton();
+        DatDichVu3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -309,11 +310,21 @@ public class DatDichVu extends javax.swing.JFrame {
         CheckIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-in.png"))); // NOI18N
         CheckIn.setText("Check In");
         CheckIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckInActionPerformed(evt);
+            }
+        });
 
         CheckOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CheckOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-out.png"))); // NOI18N
         CheckOut.setText("Check Out");
         CheckOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckOutActionPerformed(evt);
+            }
+        });
 
         HoaDonDatPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HoaDonDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
@@ -366,6 +377,16 @@ public class DatDichVu extends javax.swing.JFrame {
             }
         });
 
+        DatDichVu3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/checkTinhTrang.png"))); // NOI18N
+        DatDichVu3.setText("Kiểm tra tình trạng");
+        DatDichVu3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVu3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -381,6 +402,7 @@ public class DatDichVu extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(DatDichVu3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(DatDichVu1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(DatPhong, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(CheckIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -408,7 +430,9 @@ public class DatDichVu extends javax.swing.JFrame {
                 .addComponent(DatDichVu1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(204, 204, 204))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -802,7 +826,7 @@ public class DatDichVu extends javax.swing.JFrame {
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 689, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1019,7 +1043,8 @@ public class DatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDatDichVuActionPerformed
 
     private void DatDichVu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu1ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DanhSachDatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVu1ActionPerformed
 
     private void HoaDonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoaDonDatPhongActionPerformed
@@ -1038,8 +1063,24 @@ public class DatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_DSKhachHangActionPerformed
 
     private void DSDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSDatPhongActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
     }//GEN-LAST:event_DSDatPhongActionPerformed
+
+    private void CheckInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckInActionPerformed
+        dispose();
+        new DSCheckInGUI().setVisible(true);
+    }//GEN-LAST:event_CheckInActionPerformed
+
+    private void CheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckOutActionPerformed
+        dispose();
+        new DSCheckOutGUI().setVisible(true);
+    }//GEN-LAST:event_CheckOutActionPerformed
+
+    private void DatDichVu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu3ActionPerformed
+        dispose();
+        new KiemTraPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DatDichVu3ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1084,6 +1125,8 @@ public class DatDichVu extends javax.swing.JFrame {
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu;
     private javax.swing.JButton DatDichVu1;
+    private javax.swing.JButton DatDichVu2;
+    private javax.swing.JButton DatDichVu3;
     private javax.swing.JButton DatPhong;
     private javax.swing.JButton HoaDonDatPhong;
     private javax.swing.JButton KhachSan;

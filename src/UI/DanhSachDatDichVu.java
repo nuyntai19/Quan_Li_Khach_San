@@ -3,6 +3,7 @@ package UI;
 import BLL.DichVuBLL;
 import DTO.DichVuDTO;
 import BLL.DatDichVuBLL;
+import BLL.ThongTinNhanVienBLL;
 import DTO.DatDichVuDTO;
 import DTO.DichVuDTO;
 
@@ -118,6 +119,7 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
         DatDichVu3 = new javax.swing.JButton();
         DSDatPhong2 = new javax.swing.JButton();
         DatDichVu4 = new javax.swing.JButton();
+        DatDichVu5 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -312,12 +314,8 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(LBDSDV)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(LBDichVu)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(LBDSDV)
+                                    .addComponent(LBDichVu))
                                 .addGap(550, 550, 550)
                                 .addComponent(jButtonResert)
                                 .addGap(29, 29, 29))))
@@ -328,7 +326,7 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64)
                         .addComponent(ButtonTim, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 166, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(441, 441, 441)
@@ -338,8 +336,9 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -411,11 +410,21 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
         CheckIn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-in.png"))); // NOI18N
         CheckIn2.setText("Check In");
         CheckIn2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckIn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckIn2ActionPerformed(evt);
+            }
+        });
 
         CheckOut2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CheckOut2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-out.png"))); // NOI18N
         CheckOut2.setText("Check Out");
         CheckOut2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckOut2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckOut2ActionPerformed(evt);
+            }
+        });
 
         HoaDonDatPhong2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HoaDonDatPhong2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
@@ -451,6 +460,11 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
         DSDatPhong2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
         DSDatPhong2.setText("Danh Sách Đặt Phòng");
         DSDatPhong2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DSDatPhong2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DSDatPhong2ActionPerformed(evt);
+            }
+        });
 
         DatDichVu4.setBackground(new java.awt.Color(238, 255, 255));
         DatDichVu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -463,21 +477,27 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
             }
         });
 
+        DatDichVu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/checkTinhTrang.png"))); // NOI18N
+        DatDichVu5.setText("Kiểm tra tình trạng");
+        DatDichVu5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(DatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckIn2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HoaDonDatPhong2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckOut2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSKhachHang2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSDatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(DatDichVu5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatPhong2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CheckIn2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HoaDonDatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CheckOut2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DSKhachHang2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                    .addComponent(DatDichVu3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DSDatPhong2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -499,6 +519,8 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
                 .addComponent(DatDichVu4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -620,9 +642,14 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_TXDichVuActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
-        dispose();
-        loadData();
-        new DanhSachDatDichVu().setVisible(true);
+        ThongTinNhanVienBLL bll = new ThongTinNhanVienBLL();
+        if (bll.laAdminDangNhap()) {
+            // Mở giao diện quản lý
+            new QuanLiPhong().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        } 
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
@@ -660,6 +687,21 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
     private void DatDichVu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu4ActionPerformed
 
     }//GEN-LAST:event_DatDichVu4ActionPerformed
+
+    private void CheckIn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckIn2ActionPerformed
+        dispose();
+        new DSCheckInGUI().setVisible(true);
+    }//GEN-LAST:event_CheckIn2ActionPerformed
+
+    private void CheckOut2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckOut2ActionPerformed
+        dispose();
+        new DSCheckOutGUI().setVisible(true);
+    }//GEN-LAST:event_CheckOut2ActionPerformed
+
+    private void DSDatPhong2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSDatPhong2ActionPerformed
+        dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DSDatPhong2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -767,6 +809,7 @@ public class DanhSachDatDichVu extends javax.swing.JFrame {
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu3;
     private javax.swing.JButton DatDichVu4;
+    private javax.swing.JButton DatDichVu5;
     private javax.swing.JButton DatPhong2;
     private javax.swing.JButton HoaDonDatPhong2;
     private javax.swing.JButton KhachSan;

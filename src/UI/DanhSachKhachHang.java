@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import DTO.KhachHangDTO;
 import BLL.KhachHangBLL;
+import BLL.ThongTinNhanVienBLL;
 import java.awt.HeadlessException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,6 +145,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         DatDichVu3 = new javax.swing.JButton();
         DSDatPhong2 = new javax.swing.JButton();
         DatDichVu4 = new javax.swing.JButton();
+        DatDichVu5 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -596,11 +598,21 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         CheckIn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-in.png"))); // NOI18N
         CheckIn2.setText("Check In");
         CheckIn2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckIn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckIn2ActionPerformed(evt);
+            }
+        });
 
         CheckOut2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CheckOut2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-out.png"))); // NOI18N
         CheckOut2.setText("Check Out");
         CheckOut2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckOut2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckOut2ActionPerformed(evt);
+            }
+        });
 
         HoaDonDatPhong2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HoaDonDatPhong2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
@@ -637,6 +649,11 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         DSDatPhong2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
         DSDatPhong2.setText("Danh Sách Đặt Phòng");
         DSDatPhong2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DSDatPhong2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DSDatPhong2ActionPerformed(evt);
+            }
+        });
 
         DatDichVu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DatDichVu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reception.png"))); // NOI18N
@@ -645,6 +662,16 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
         DatDichVu4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DatDichVu4ActionPerformed(evt);
+            }
+        });
+
+        DatDichVu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/checkTinhTrang.png"))); // NOI18N
+        DatDichVu5.setText("Kiểm tra tình trạng");
+        DatDichVu5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVu5ActionPerformed(evt);
             }
         });
 
@@ -662,7 +689,8 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                     .addComponent(DSKhachHang2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DatDichVu3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DSDatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(DatDichVu4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -684,7 +712,9 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
                 .addComponent(DatDichVu4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -862,9 +892,14 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     }//GEN-LAST:event_TXHoActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
-        dispose();
-        loadData();
-        new QuanLiPhong().setVisible(true);
+        ThongTinNhanVienBLL bll = new ThongTinNhanVienBLL();
+        if (bll.laAdminDangNhap()) {
+            // Mở giao diện quản lý
+            new QuanLiPhong().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        } 
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void jButtonResertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResertActionPerformed
@@ -946,7 +981,8 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     }//GEN-LAST:event_DatDichVu3ActionPerformed
 
     private void DatDichVu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu4ActionPerformed
-        
+dispose();
+        new DanhSachDatDichVu().setVisible(true);        
     }//GEN-LAST:event_DatDichVu4ActionPerformed
 
     private void HoaDonDatPhong2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoaDonDatPhong2ActionPerformed
@@ -961,6 +997,26 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     private void DSKhachHang2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSKhachHang2ActionPerformed
         
     }//GEN-LAST:event_DSKhachHang2ActionPerformed
+
+    private void CheckIn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckIn2ActionPerformed
+        dispose();
+        new DSCheckInGUI().setVisible(true);
+    }//GEN-LAST:event_CheckIn2ActionPerformed
+
+    private void CheckOut2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckOut2ActionPerformed
+        dispose();
+        new DSCheckOutGUI().setVisible(true);
+    }//GEN-LAST:event_CheckOut2ActionPerformed
+
+    private void DSDatPhong2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSDatPhong2ActionPerformed
+        dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DSDatPhong2ActionPerformed
+
+    private void DatDichVu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu5ActionPerformed
+        dispose();
+        new KiemTraPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DatDichVu5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1039,6 +1095,7 @@ public class DanhSachKhachHang extends javax.swing.JFrame {
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu3;
     private javax.swing.JButton DatDichVu4;
+    private javax.swing.JButton DatDichVu5;
     private javax.swing.JButton DatPhong2;
     private javax.swing.JButton HoaDonDatPhong2;
     private javax.swing.JButton KhachSan;

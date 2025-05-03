@@ -630,7 +630,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
 
     private void DatPhongActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_DatPhongActionPerformed
         dispose();
-        new QuanLiPhong().setVisible(true);   
+        new PhieuThuePhong().setVisible(true);   
     }//GEN-LAST:event_DatPhongActionPerformed
 
     private void selfActionPerformed(  ActionEvent evt) {//GEN-FIRST:event_selfActionPerformed

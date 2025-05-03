@@ -977,7 +977,7 @@ public class QuanLiPhong extends javax.swing.JFrame {
                      return;
                  }
                  
-                 if(!TXTrangThai.getText().equals("Trống")) {
+                 if(!TXTrangThai.getText().equals("Trong")) {
                      JOptionPane.showMessageDialog(this, "Vui lòng nhập trạng thái là trống khi thêm Phòng.");
                      return;
                  }
@@ -1036,14 +1036,8 @@ public class QuanLiPhong extends javax.swing.JFrame {
             QuanLiPhongBLL qlPhongBLL = new QuanLiPhongBLL();
             qlPhongBLL.suaPhong(phong);  
 
-            // Cập nhật bảng
-            model.setValueAt(maPhong, selectedRow, 0);
-            model.setValueAt(maLoaiPhong, selectedRow, 1);
-            model.setValueAt(soGiuong, selectedRow, 2);
-            model.setValueAt(donGia, selectedRow, 3);
-            model.setValueAt(trangThai, selectedRow, 4);
+            loadData();
             
-
             JOptionPane.showMessageDialog(this, "Cập nhật phòng thành công!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());

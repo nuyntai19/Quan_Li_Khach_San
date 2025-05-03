@@ -27,6 +27,9 @@ import DTO.NhanVienDTO;
 import DTO.KhachHangDTO;
 import BLL.KhachHangBLL;
 import BLL.QuanLiDichVuBLL;
+import BLL.ThongTinNhanVienBLL;
+import BLL.KiemTraTinhTrangBUS;
+import DTO.KiemTraTinhTrang;
 import DTO.QuanLiDichVuDTO;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -47,6 +50,7 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
     private NhanVienBLL nhanVienBLL;
     private KhachHangBLL khachHangBLL;
     private QuanLiDichVuBLL quanLiDichVuBLL;
+    private KiemTraTinhTrangBUS kiemTraTinhTrangBUS;
     
 
 
@@ -60,6 +64,7 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         nhanVienBLL = new NhanVienBLL();
         khachHangBLL = new KhachHangBLL();
         quanLiDichVuBLL = new QuanLiDichVuBLL();
+        kiemTraTinhTrangBUS = new KiemTraTinhTrangBUS();
                 
         model = (DefaultTableModel) tblDSHOADON.getModel();
         modelChiTiet = (DefaultTableModel) tblDSCHITIETHOADON.getModel();
@@ -256,6 +261,7 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         DatDichVu3 = new javax.swing.JButton();
         DSDatPhong2 = new javax.swing.JButton();
         DatDichVu4 = new javax.swing.JButton();
+        DatDichVu5 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -638,7 +644,7 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(ButtonInHD, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -702,11 +708,21 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         CheckIn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-in.png"))); // NOI18N
         CheckIn2.setText("Check In");
         CheckIn2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckIn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckIn2ActionPerformed(evt);
+            }
+        });
 
         CheckOut2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CheckOut2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-out.png"))); // NOI18N
         CheckOut2.setText("Check Out");
         CheckOut2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckOut2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckOut2ActionPerformed(evt);
+            }
+        });
 
         HoaDonDatPhong2.setBackground(new java.awt.Color(238, 255, 255));
         HoaDonDatPhong2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -743,6 +759,11 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         DSDatPhong2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
         DSDatPhong2.setText("Danh Sách Đặt Phòng");
         DSDatPhong2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DSDatPhong2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DSDatPhong2ActionPerformed(evt);
+            }
+        });
 
         DatDichVu4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DatDichVu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reception.png"))); // NOI18N
@@ -754,21 +775,32 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
             }
         });
 
+        DatDichVu5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/checkTinhTrang.png"))); // NOI18N
+        DatDichVu5.setText("Kiểm tra tình trạng");
+        DatDichVu5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVu5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(DatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckIn2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HoaDonDatPhong2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckOut2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSKhachHang2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DSDatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(DatDichVu5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatPhong2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CheckIn2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HoaDonDatPhong2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CheckOut2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DSKhachHang2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                    .addComponent(DatDichVu3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DSDatPhong2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -790,6 +822,8 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
                 .addComponent(DatDichVu4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -841,8 +875,14 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTenLP1ActionPerformed
 
     private void QuanLiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuanLiActionPerformed
-        dispose();
-        new QuanLiPhong().setVisible(true); 
+        ThongTinNhanVienBLL bll = new ThongTinNhanVienBLL();
+        if (bll.laAdminDangNhap()) {
+            // Mở giao diện quản lý
+            new QuanLiPhong().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        } 
     }//GEN-LAST:event_QuanLiActionPerformed
 
     private void ButtonInHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonInHDActionPerformed
@@ -920,39 +960,54 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
         // --- Phân loại chi tiết ---
         StringBuilder tienPhong = new StringBuilder();
         StringBuilder tienDichVu = new StringBuilder();
-        double tongTienPhong = 0, tongTienDV = 0;
+        StringBuilder tienPhat = new StringBuilder();
+        double tongTienPhong = 0, tongTienDV = 0 , tongTienPhat = 0;
 
         for (ChiTietHoaDonDTO ct : dsChiTiet) {
             double thanhTien = ct.getThanhTien();
-            if ("Tiền Phòng".equals(ct.getLoaiChiTiet())) {
-                tienPhong.append("--Phòng ").append(ct.getMaPhong())
-                    .append(" | 1 ngày | ")
-                    .append(ct.getDonGia()).append("k/ngày | ")
-                    .append(thanhTien).append("k\n");
-                tongTienPhong += thanhTien;
-            } else if ("Tiền Dịch Vụ".equals(ct.getLoaiChiTiet())) {
-                ArrayList<QuanLiDichVuDTO> danhSachDichVu = quanLiDichVuBLL.layDanhSachDichVu();
-                QuanLiDichVuDTO tenDV = null;
-                for(QuanLiDichVuDTO dv : danhSachDichVu) {
-                    if(ct.getMaDV() == dv.getMaDichVu()) {
-                        tenDV = dv;
-                        break;
+            switch (ct.getLoaiChiTiet()) {
+                case "Tiền Phòng" -> {
+                    tienPhong.append("--Phòng ").append(ct.getMaPhong())
+                             .append(" | 1 ngày | ")
+                             .append(ct.getDonGia()).append("k/ngày | ")
+                             .append(thanhTien).append("k\n");
+                    tongTienPhong += thanhTien;
+                }
+                case "Tiền Dịch Vụ" -> {
+                    ArrayList<QuanLiDichVuDTO> danhSachDichVu = quanLiDichVuBLL.layDanhSachDichVu();
+                    QuanLiDichVuDTO tenDV = null;
+                    for (QuanLiDichVuDTO dv : danhSachDichVu) {
+                        if (ct.getMaDV() == dv.getMaDichVu()) {
+                            tenDV = dv;
+                            break;
+                        }
                     }
+                    if (tenDV == null) {
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy dịch vụ!");
+                        return;
+                    }
+                    tienDichVu.append("--Phòng ").append(ct.getMaPhong())
+                              .append(" | ").append(tenDV.getTenDichVu())
+                              .append(" | ").append(ct.getSoLuong()).append(" x ")
+                              .append(ct.getDonGia()).append("k = ")
+                              .append(thanhTien).append("k\n");
+                    tongTienDV += thanhTien;
                 }
-                if(tenDV == null) {
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy dich vụ !");
-            return;
+                case "Phạt" -> {
+                    tienPhat.append("--Phòng ").append(ct.getMaPhong())
+                            .append(" | Phạt hư hỏng | ")
+                            .append(ct.getDonGia()).append("k\n");
+                    tongTienPhat += thanhTien;
                 }
-                tienDichVu.append("--Phòng ").append(ct.getMaPhong())
-                    .append(" | ").append(tenDV.getTenDichVu())
-                    .append(" | ").append(ct.getSoLuong()).append(" x ")
-                    .append(ct.getDonGia()).append("k = ")
-                    .append(thanhTien).append("k\n");
-                tongTienDV += thanhTien;
+                default -> {
+                    JOptionPane.showMessageDialog(this, "Loại chi tiết không xác định: " + ct.getLoaiChiTiet());
+                    return;
+                }
             }
         }
 
-        double tongCong = tongTienPhong + tongTienDV;
+
+        double tongCong = tongTienPhong + tongTienDV + tongTienPhat;
 
         // --- Tạo nội dung hóa đơn ---
         String hoaDonText =
@@ -969,9 +1024,12 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
                 tienPhong.toString() + "\n" +
                 "  *** Dịch vụ đã sử dụng ***\n" +
                 tienDichVu.toString() + "\n" +
+                "  *** Chi phí phát sinh (phạt) ***\n" +
+                tienPhat.toString() + "\n" +
                 "-----------------------------------------------\n" +
                 "  Tổng tiền phòng: " + tongTienPhong + "k\n" +
                 "  Tổng tiền dịch vụ: " + tongTienDV + "k\n" +
+                "  Tổng tiền phạt: " + tongTienPhat + "k\n" +
                 "  Tổng cộng thanh toán: " + tongCong + "k\n" +
                 "-----------------------------------------------\n" +
                 "             Xin cảm ơn Quý khách!";
@@ -1052,6 +1110,21 @@ public class DanhSachHoaDon extends javax.swing.JFrame {
                 }
             }
         }
+        
+        // 2. Thêm chi phí đền bù nếu có trong bảng KiemTraTinhTrang
+        List<KiemTraTinhTrang> dsPhat = kiemTraTinhTrangBUS.getByMaThuePhong(Integer.parseInt(maPTP));
+            for (KiemTraTinhTrang kt : dsPhat) {
+                if (kt.getChiPhiDenBu().doubleValue() > 0) {
+                    String keyPhat = kt.getMaPhong() + "_null_Phạt";
+                    if (!keyChiTiet.contains(keyPhat)) {
+                        chiTietHoaDonBLL.insertChiTietHoaDon(new ChiTietHoaDonDTO(
+                            0, maHD, kt.getMaPhong(), null, "Phạt",
+                            1, kt.getChiPhiDenBu().doubleValue(), kt.getChiPhiDenBu().doubleValue()
+                        ));
+                        tongTien += kt.getChiPhiDenBu().doubleValue();
+                    }
+                }
+            }
 
 
         // Cập nhật tổng tiền vào HoaDon
@@ -1160,7 +1233,8 @@ int selectedRow = tblDSHOADON.getSelectedRow();
     }//GEN-LAST:event_DatDichVu3ActionPerformed
 
     private void DatDichVu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu4ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DanhSachDatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVu4ActionPerformed
 
     private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
@@ -1187,6 +1261,25 @@ int selectedRow = tblDSHOADON.getSelectedRow();
         dispose();
         new DanhSachKhachHang().setVisible(true);
     }//GEN-LAST:event_DSKhachHang2ActionPerformed
+
+    private void CheckIn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckIn2ActionPerformed
+        dispose();
+        new DSCheckInGUI().setVisible(true);
+    }//GEN-LAST:event_CheckIn2ActionPerformed
+
+    private void CheckOut2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckOut2ActionPerformed
+        dispose();
+        new DSCheckOutGUI().setVisible(true);
+    }//GEN-LAST:event_CheckOut2ActionPerformed
+
+    private void DSDatPhong2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSDatPhong2ActionPerformed
+        dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DSDatPhong2ActionPerformed
+
+    private void DatDichVu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DatDichVu5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1366,6 +1459,7 @@ int selectedRow = tblDSHOADON.getSelectedRow();
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu3;
     private javax.swing.JButton DatDichVu4;
+    private javax.swing.JButton DatDichVu5;
     private javax.swing.JButton DatPhong2;
     private javax.swing.JButton HoaDonDatPhong2;
     private javax.swing.JButton KhachSan;

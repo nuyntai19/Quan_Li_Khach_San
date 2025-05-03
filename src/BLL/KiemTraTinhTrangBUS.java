@@ -24,6 +24,16 @@ public class KiemTraTinhTrangBUS {
     public ArrayList<KiemTraTinhTrang> getDsKTTT() {
         return dsKTTT;
     }
+    
+    public ArrayList<KiemTraTinhTrang> getByMaThuePhong(int maThuePhong) {
+        ArrayList<KiemTraTinhTrang> result = new ArrayList<>();
+        for (KiemTraTinhTrang kt : dsKTTT) {
+            if (kt.getMaThuePhong() == maThuePhong) {
+                result.add(kt);
+            }
+        }
+        return result;
+    }
 
     public boolean themKTTT(KiemTraTinhTrang kt) throws SQLException {
         boolean success = ktttDao.themKTTT(kt);

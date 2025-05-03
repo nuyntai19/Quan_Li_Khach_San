@@ -159,6 +159,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         DatDichVu = new javax.swing.JButton();
         DSDatPhong = new javax.swing.JButton();
         DatDichVu1 = new javax.swing.JButton();
+        DatDichVu2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -348,11 +349,21 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         CheckIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-in.png"))); // NOI18N
         CheckIn.setText("Check In");
         CheckIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckInActionPerformed(evt);
+            }
+        });
 
         CheckOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CheckOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/check-out.png"))); // NOI18N
         CheckOut.setText("Check Out");
         CheckOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CheckOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckOutActionPerformed(evt);
+            }
+        });
 
         HoaDonDatPhong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HoaDonDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/bill.png"))); // NOI18N
@@ -388,6 +399,11 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         DSDatPhong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/list.png"))); // NOI18N
         DSDatPhong.setText("Danh Sách Đặt Phòng");
         DSDatPhong.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DSDatPhong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DSDatPhongActionPerformed(evt);
+            }
+        });
 
         DatDichVu1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         DatDichVu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/reception.png"))); // NOI18N
@@ -396,6 +412,16 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         DatDichVu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DatDichVu1ActionPerformed(evt);
+            }
+        });
+
+        DatDichVu2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DatDichVu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/checkTinhTrang.png"))); // NOI18N
+        DatDichVu2.setText("Kiểm tra tình trạng");
+        DatDichVu2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        DatDichVu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DatDichVu2ActionPerformed(evt);
             }
         });
 
@@ -413,7 +439,8 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     .addComponent(DSKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DatDichVu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(DSDatPhong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DatDichVu1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(DatDichVu1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DatDichVu2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -435,7 +462,9 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 .addComponent(DatDichVu1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DatDichVu, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(204, 204, 204))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DatDichVu2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -937,8 +966,8 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(LBPhongTrong, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -1003,7 +1032,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1381,7 +1410,8 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonDatPhongActionPerformed
 
     private void DatDichVu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu1ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new DanhSachDatDichVu().setVisible(true);
     }//GEN-LAST:event_DatDichVu1ActionPerformed
 
     private void HoaDonDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HoaDonDatPhongActionPerformed
@@ -1397,6 +1427,26 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         dispose();
         new DanhSachKhachHang().setVisible(true);
     }//GEN-LAST:event_DSKhachHangActionPerformed
+
+    private void DSDatPhongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSDatPhongActionPerformed
+        dispose();
+        new DanhSachDatPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DSDatPhongActionPerformed
+
+    private void CheckInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckInActionPerformed
+        dispose();
+        new DSCheckInGUI().setVisible(true);
+    }//GEN-LAST:event_CheckInActionPerformed
+
+    private void CheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckOutActionPerformed
+        dispose();
+        new DSCheckOutGUI().setVisible(true);
+    }//GEN-LAST:event_CheckOutActionPerformed
+
+    private void DatDichVu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu2ActionPerformed
+        dispose();
+        new KiemTraPhongGUI().setVisible(true);
+    }//GEN-LAST:event_DatDichVu2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1444,6 +1494,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
     private javax.swing.JButton DSPhong;
     private javax.swing.JButton DatDichVu;
     private javax.swing.JButton DatDichVu1;
+    private javax.swing.JButton DatDichVu2;
     private javax.swing.JButton DatPhong;
     private javax.swing.JButton HoaDonDatPhong;
     private javax.swing.JButton KhachSan;

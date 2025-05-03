@@ -847,7 +847,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="DatPhong2" alignment="0" max="32767" attributes="0"/>
@@ -858,6 +858,7 @@
                       <Component id="DatDichVu3" alignment="1" max="32767" attributes="0"/>
                       <Component id="DSDatPhong2" alignment="0" max="32767" attributes="0"/>
                       <Component id="DatDichVu4" alignment="0" max="32767" attributes="0"/>
+                      <Component id="DatDichVu5" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -882,7 +883,9 @@
                   <Component id="DatDichVu4" min="-2" pref="47" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="DatDichVu3" min="-2" pref="47" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="DatDichVu5" min="-2" pref="49" max="-2" attributes="0"/>
+                  <EmptySpace pref="152" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -914,6 +917,9 @@
             <Property name="text" type="java.lang.String" value="Check In"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CheckIn2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="CheckOut2">
           <Properties>
@@ -926,6 +932,9 @@
             <Property name="text" type="java.lang.String" value="Check Out"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CheckOut2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="HoaDonDatPhong2">
           <Properties>
@@ -986,6 +995,9 @@
             <Property name="text" type="java.lang.String" value="Danh S&#xe1;ch &#x110;&#x1eb7;t Ph&#xf2;ng"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DSDatPhong2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="DatDichVu4">
           <Properties>
@@ -1000,6 +1012,21 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVu4ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="DatDichVu5">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/ICON/checkTinhTrang.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ki&#x1ec3;m tra t&#xec;nh tr&#x1ea1;ng"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DatDichVu5ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
