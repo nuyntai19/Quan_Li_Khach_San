@@ -808,6 +808,11 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonKhoHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/KHOHANG.png"))); // NOI18N
         ButtonKhoHang.setText("Kho Hàng");
         ButtonKhoHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonKhoHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonKhoHangActionPerformed(evt);
+            }
+        });
 
         ButtonTaoTaiKhoan1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonTaoTaiKhoan1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/accountant.png"))); // NOI18N
@@ -1125,6 +1130,10 @@ public class QuanLiPhong extends javax.swing.JFrame {
             Logger.getLogger(QuanLiPhong.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_ButtonQLNVActionPerformed
+
+    private void ButtonKhoHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonKhoHangActionPerformed
+        new GiaoDienKhoHang().setVisible(true);
+    }//GEN-LAST:event_ButtonKhoHangActionPerformed
 
     /**
      * @param args the command line arguments
