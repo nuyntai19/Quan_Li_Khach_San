@@ -234,13 +234,13 @@ public class DlgKTTT extends JDialog {
 			            int maPhong = Integer.parseInt(maKiemTraText);
 			            int maNhanVien = Integer.parseInt(maNhanVienText);
 			            int maThuePhong = Integer.parseInt(maThuePhongText);
-			            LocalDate ngayKiemTra = LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			            Date ngayKiemTra = java.sql.Date.valueOf(LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("yyyy/mm/dd")));
 			            BigDecimal chiPhiDenBu = new BigDecimal(chiPhiText);
 			            String moTaThietHai = txtMoTa.getText().trim();
 			
 			            // 3. Kiểm tra có dòng nào được chọn không
 			            //int selectedRow = tblDSPHONG.getSelectedRow();
-			            KiemTraTinhTrang kt = new KiemTraTinhTrang(maKiemTra, maPhong, maNhanVien, maThuePhong, ngayKiemTra, moTaThietHai, chiPhiDenBu);
+			            KiemTraTinhTrang kt = new KiemTraTinhTrang(maKiemTra, maPhong, maThuePhong ,maNhanVien, ngayKiemTra, moTaThietHai, chiPhiDenBu);
 			
 			            if (selectedRow != -1) {
 			                // 4. Nếu có dòng được chọn, thực hiện sửa

@@ -1,15 +1,14 @@
 package DTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class KiemTraTinhTrang {
     private int maKiemTra;
     private int maPhong;
     private int maNhanVien;
     private int maThuePhong;
-    private LocalDate ngayKiemTra;
+    private Date ngayKiemTra;
     private String moTaThietHai;
     private BigDecimal chiPhiDenBu;
 
@@ -17,7 +16,7 @@ public class KiemTraTinhTrang {
     public KiemTraTinhTrang() {
     }
 
-    public KiemTraTinhTrang(int maKiemTra, int maPhong, int maNhanVien, int maThuePhong, LocalDate ngayKiemTra, String moTaThietHai, BigDecimal chiPhiDenBu) {
+    public KiemTraTinhTrang(int maKiemTra, int maPhong, int maNhanVien, int maThuePhong, Date ngayKiemTra, String moTaThietHai, BigDecimal chiPhiDenBu) {
         this.maKiemTra = maKiemTra;
         this.maPhong = maPhong;
         this.maNhanVien = maNhanVien;
@@ -59,12 +58,11 @@ public class KiemTraTinhTrang {
         this.maThuePhong = maThuePhong;
     }
 
-    public String getNgayKiemTra() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return ngayKiemTra.format(formatter);
+    public Date getNgayKiemTra() {
+        return ngayKiemTra;
     }
 
-    public void setNgayKiemTra(LocalDate ngayKiemTra) {
+    public void setNgayKiemTra(Date ngayKiemTra) {
         this.ngayKiemTra = ngayKiemTra;
     }
 

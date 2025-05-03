@@ -66,11 +66,12 @@ public class DSCheckOutGUI extends  JFrame {
 
 	private DefaultTableModel model;
 	private JButton btnRefresh;
+	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
 	private final KiemTraTinhTrangBUS ktttBUS = new KiemTraTinhTrangBUS();
 	private final QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
-	private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
+	//private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
 	private DlgKTphong dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
@@ -608,10 +609,15 @@ public class DSCheckOutGUI extends  JFrame {
     
     public void loadData() {
         model.setRowCount(0);
-        danhSach = CheckInOutTEMP.getTempList();
-        CheckInOutTEMP.kiemTraQuaHanCheckOut(danhSach); 
+        try {
+			danhSach = tempList.getTempList();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        tempList.kiemTraQuaHanCheckOut(danhSach); 
 		for (CheckInOutDTO checkIn : danhSach) {
-		    if ("Da check-in".equals(checkIn.getTrangThai()) || "Qua han check-out".equals(checkIn.getTrangThai())) {  
+		    {  
 		      
 		        Object[] row = new Object[]{
 		            checkIn.getMaThuePhong(),
@@ -639,7 +645,7 @@ public class DSCheckOutGUI extends  JFrame {
         String tuKhoa = textTK.getText().trim(); // Lấy từ khóa tìm
 
         try {
-            ArrayList<CheckInOutDTO> ketQua = CheckInOutTEMP.timChiTietCheckInOutTrongTemp(loaiTim, tuKhoa);
+            ArrayList<CheckInOutDTO> ketQua = tempList.timChiTietCheckInOutTrongTemp(loaiTim, tuKhoa);
 
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0); 
@@ -662,23 +668,24 @@ public class DSCheckOutGUI extends  JFrame {
     }
     private void KTPhong(int maPhong) {
     	KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
-    	String moTa = kt.getMoTaThietHai();
-        if (!moTa.equalsIgnoreCase("Khong")) {
-            JOptionPane.showMessageDialog(this, "Phòng " + maPhong + " có thiệt hại: " + moTa);
-            try {
-				phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
-				e.printStackTrace();
-			}
-        } else {
-            try {
-				phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
-				e.printStackTrace();
-			}
+    	if(kt != null ) 
+    	{
+    			kt.getMoTaThietHai().equalsIgnoreCase("Khong");
+	            JOptionPane.showMessageDialog(this, "Phòng " + maPhong + " có thiệt hại: " + kt.getMoTaThietHai());
+	            try {
+					phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
+					e.printStackTrace();
+				}
         }
+        try {
+			phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
+			e.printStackTrace();
+		}
+        
     }
 
     private void jBtCheckOutActionPerformed(ActionEvent evt) {
@@ -690,10 +697,14 @@ public class DSCheckOutGUI extends  JFrame {
     	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
 
     	        KTPhong(maPhong);
+    	        
+    	        
     	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoan thanh");
-    	        CheckInOutTEMP.xoaCheckInOut(maPhong);
+    	        tempList.xoaCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-out thành công!");
+    	        loadData();
+    	        
     	        // có thể kèm hoá đơn
 
     	    } catch (SQLException ex) {
