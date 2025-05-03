@@ -1278,7 +1278,8 @@ int selectedRow = tblDSHOADON.getSelectedRow();
     }//GEN-LAST:event_DSDatPhong2ActionPerformed
 
     private void DatDichVu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DatDichVu5ActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new KiemTraPhongGUI().setVisible(true);
     }//GEN-LAST:event_DatDichVu5ActionPerformed
 
     /**

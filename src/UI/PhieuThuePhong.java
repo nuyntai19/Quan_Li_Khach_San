@@ -1188,103 +1188,103 @@ public class PhieuThuePhong extends javax.swing.JFrame {
 
     private void ButtonChonNhieuPhongDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonChonNhieuPhongDatActionPerformed
         try {
-             // Lấy dữ liệu từ các TextField
-            String maDatPhongStr = TXDP.getText().trim();
-            String maPhongStr = TXMaPhong.getText().trim();
-            java.util.Date ngayDatPhong = DCNgayDP.getDate();
-            java.util.Date ngayTraPhong = DCNgayTP.getDate();
-            String giaPhongStr = TXGiaThue.getText().trim();
+        // Lấy dữ liệu từ các TextField
+        String maDatPhongStr = TXDP.getText().trim();
+        String maPhongStr = TXMaPhong.getText().trim();
+        Date ngayDatPhong = DCNgayDP.getDate();
+        Date ngayTraPhong = DCNgayTP.getDate();
+        String giaPhongStr = TXGiaThue.getText().trim();
 
-            // Kiểm tra dữ liệu hợp lệ
-            if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null || giaPhongStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
+        // Kiểm tra dữ liệu nhập đầy đủ
+        if (maDatPhongStr.isEmpty() || maPhongStr.isEmpty() || ngayDatPhong == null || ngayTraPhong == null || giaPhongStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin.");
+            return;
+        }
+
+        // Chuẩn hóa ngày
+        Date ngayDatPhongChuan = chuanHoaNgay(ngayDatPhong);
+        Date ngayTraPhongChuan = chuanHoaNgay(ngayTraPhong);
+        Date ngayHienTaiChuan = chuanHoaNgay(new Date());
+
+        // Kiểm tra logic ngày
+        if (ngayDatPhongChuan.before(ngayHienTaiChuan)) {
+            JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải lớn hơn hoặc bằng ngày hiện tại.");
+            return;
+        }
+
+        if (ngayDatPhongChuan.after(ngayTraPhongChuan)) {
+            JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải nhỏ hơn hoặc bằng ngày trả phòng.");
+            return;
+        }
+
+        // Parse dữ liệu
+        int maDatPhong = Integer.parseInt(maDatPhongStr);
+        int maPhong = Integer.parseInt(maPhongStr);
+        double giaPhong = Double.parseDouble(giaPhongStr);
+
+        // Lấy danh sách tạm và kiểm tra mã đặt phòng
+        List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+        if (!danhSachTam.isEmpty()) {
+            int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
+            if (maDatPhongCu != maDatPhong) {
+                JOptionPane.showMessageDialog(this, "Đây là danh sách phòng muốn đặt của mã đặt phòng " + maDatPhongCu + ". Không nên thay đổi mã đặt phòng khác.");
                 return;
             }
+        }
 
-            // Kiểm tra ngày đặt và ngày trả
-            java.util.Date ngayHienTai = new java.util.Date();
-            if (ngayDatPhong.after(ngayTraPhong)) {
-                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải nhỏ hơn hoặc bằng ngày trả phòng.");
-                return;
-            }
-            // Lấy ngày từ DateChooser và ngày hiện tại, chuẩn hóa bỏ giờ
-             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-            Date ngayDatPhongChuan = sdf.parse(sdf.format(ngayDatPhong)); // bỏ giờ
-            Date ngayHienTaiChuan = sdf.parse(sdf.format(new Date()));   // bỏ giờ
-
-            if (ngayDatPhongChuan.before(ngayHienTaiChuan)) {
-                JOptionPane.showMessageDialog(this, "Ngày đặt phòng phải lớn hơn hoặc bằng ngày hiện tại.");
-                return;
-            } 
-            int maDatPhong = Integer.parseInt(maDatPhongStr);
-            int maPhong = Integer.parseInt(maPhongStr);
-            double giaPhong = Double.parseDouble(giaPhongStr);
-
-
-            // Kiểm tra nếu mã phòng có trạng thái là "Dang su dung" mà trùng thì kiểm tra dữ liệu lưu trong ChiTietPhieuThue có cùng mã phòng xem có trùng ngày chưa
-            List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
-            QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
-            ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
-            for (QuanLiPhongDTO p : dsp) {
-                if (p.getMaPhong() == maPhong && "Dang Thue".equals(p.getTrangThai()) || "Dang cho xac nhan".equals(p.getTrangThai()) ) {
-                    ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
-                    ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
-                    for (ChiTietPhieuThuePhongDTO ct : dsct) {
-                        if (ct.getMaPhong() == maPhong) {
-                            // Kiểm tra khoảng thời gian bị trùng (giao nhau)
-                            java.util.Date daDatTuNgay = ct.getNgayDatPhong();
-                            java.util.Date daDatDenNgay = ct.getNgayTraPhong();
-                            boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
-                            if (isOverlapping) {
-                                JOptionPane.showMessageDialog(this, "Phòng này đang thuê hoặc đang chờ xác nhận và bạn đã trùng lịch đặt tiếp theo.");
-                                return;
-                            }
+        // Kiểm tra phòng trùng lịch trong dữ liệu đã lưu (trạng thái đang dùng hoặc chờ xác nhận)
+        QuanLiPhongBLL quanLiPhongBLL = new QuanLiPhongBLL();
+        ArrayList<QuanLiPhongDTO> dsp = quanLiPhongBLL.layDanhSachPhong();
+        for (QuanLiPhongDTO p : dsp) {
+            if (p.getMaPhong() == maPhong && ("Dang su dung".equals(p.getTrangThai()) || "Dang cho xac nhan".equals(p.getTrangThai()))) {
+                ChiTietPhieuThuePhongBLL ctptPhongBLL = new ChiTietPhieuThuePhongBLL();
+                ArrayList<ChiTietPhieuThuePhongDTO> dsct = ctptPhongBLL.layDanhSachChiTiet();
+                for (ChiTietPhieuThuePhongDTO ct : dsct) {
+                    if (ct.getMaPhong() == maPhong) {
+                        boolean isOverlapping = !(ngayTraPhongChuan.before(chuanHoaNgay(ct.getNgayDatPhong())) ||
+                                                  ngayDatPhongChuan.after(chuanHoaNgay(ct.getNgayTraPhong())));
+                        if (isOverlapping) {
+                            JOptionPane.showMessageDialog(this, "Phòng này đang thuê hoặc đang chờ xác nhận và bị trùng thời gian.");
+                            return;
                         }
                     }
                 }
             }
+        }
 
-            // Kiểm tra nếu danh sách tạm đã có dữ liệu
-            if (!danhSachTam.isEmpty()) {
-                int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
-                if (maDatPhongCu != maDatPhong) {
-                    JOptionPane.showMessageDialog(this, "Đây là danh sách phòng muốn đặt của mã đặt phòng " + maDatPhongCu + ". Không nên thay đổi mã đặt phòng khác.");
+        // Kiểm tra phòng trùng trong danh sách tạm
+        for (ChiTietPhieuThuePhongDTO ct : danhSachTam) {
+            if (ct.getMaPhong() == maPhong) {
+                boolean isOverlapping = !(ngayTraPhongChuan.before(chuanHoaNgay(ct.getNgayDatPhong())) ||
+                                          ngayDatPhongChuan.after(chuanHoaNgay(ct.getNgayTraPhong())));
+                if (isOverlapping) {
+                    JOptionPane.showMessageDialog(this, "Phòng này đã được chọn trước đó với thời gian bị trùng.");
                     return;
                 }
             }
-
-            // Kiểm tra xem đã chọn phòng trong danh sách tạm trùng ngày chưa
-            for (ChiTietPhieuThuePhongDTO ct : danhSachTam) {
-                if (ct.getMaPhong() == maPhong) {
-                    // Kiểm tra khoảng thời gian bị trùng (giao nhau)
-                    java.util.Date daDatTuNgay = ct.getNgayDatPhong();
-                    java.util.Date daDatDenNgay = ct.getNgayTraPhong();
-                    boolean isOverlapping = !(ngayTraPhong.before(daDatTuNgay) || ngayDatPhong.after(daDatDenNgay));
-                    if (isOverlapping) {
-                        JOptionPane.showMessageDialog(this, "Phòng này đã được chọn trước đó với thời gian bị trùng.");
-                        return;
-                    }
-                }
-            }
-            
-             // Tính Thành Tiền: Giá phòng * số ngày thuê
-            long diffInMillies = Math.abs(ngayTraPhong.getTime() - ngayDatPhong.getTime());
-            long diffInDays = diffInMillies / (24 * 60 * 60 * 1000);
-            double thanhTien = giaPhong * diffInDays;
-
-            // Lưu vào danh sách tạm
-            ChiTietPhieuThuePhongDTO chiTiet = new ChiTietPhieuThuePhongDTO(
-                maDatPhong, maPhong, ngayDatPhong, ngayTraPhong, giaPhong, thanhTien
-            );
-            BLL.PhieuThuePhongManager.addChiTiet(chiTiet);
-
-            JOptionPane.showMessageDialog(this, "Đã thêm phòng muốn đặt.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xử lý dữ liệu: " + e.getMessage());
         }
+
+        // Tính thành tiền
+        long diffInDays = (ngayTraPhongChuan.getTime() - ngayDatPhongChuan.getTime()) / (1000 * 60 * 60 * 24);
+        double thanhTien = giaPhong * diffInDays;
+
+        // Thêm vào danh sách tạm
+        ChiTietPhieuThuePhongDTO chiTiet = new ChiTietPhieuThuePhongDTO(
+            maDatPhong, maPhong, ngayDatPhongChuan, ngayTraPhongChuan, giaPhong, thanhTien
+        );
+        BLL.PhieuThuePhongManager.addChiTiet(chiTiet);
+
+        JOptionPane.showMessageDialog(this, "Đã thêm phòng muốn đặt.");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi khi xử lý dữ liệu: " + e.getMessage());
+    }
     }//GEN-LAST:event_ButtonChonNhieuPhongDatActionPerformed
 
+    
+    private Date chuanHoaNgay(Date date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(sdf.format(date));
+    }
     private void ButtonXemChiTietDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonXemChiTietDatActionPerformed
         try {
             ChiTietPhieuThuePhong chiTietFrame = new ChiTietPhieuThuePhong();

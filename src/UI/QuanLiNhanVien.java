@@ -663,6 +663,11 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
         ButtonThongKe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/THONGKE.png"))); // NOI18N
         ButtonThongKe.setText("Thống Kê");
         ButtonThongKe.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonThongKe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonThongKeActionPerformed(evt);
+            }
+        });
 
         ButtonQLNhapHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonQLNhapHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHAPHANG.png"))); // NOI18N
@@ -993,6 +998,11 @@ public class QuanLiNhanVien extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void ButtonThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThongKeActionPerformed
+        dispose();
+        new ThongKe().setVisible(true);
+    }//GEN-LAST:event_ButtonThongKeActionPerformed
 
     /**
      * @param args the command line arguments

@@ -960,11 +960,11 @@
                           <Component id="ButtonQLPhong" max="32767" attributes="0"/>
                           <Component id="ButtonQLDV" alignment="1" max="32767" attributes="0"/>
                           <Component id="ButtonQLNhaCUngCap" alignment="1" max="32767" attributes="0"/>
-                          <Component id="ButtonQLNV" alignment="1" max="32767" attributes="0"/>
                           <Component id="ButtonThongKe" alignment="0" max="32767" attributes="0"/>
                           <Component id="ButtonQLNhapHang" alignment="0" max="32767" attributes="0"/>
                           <Component id="ButtonKhoHang" alignment="0" max="32767" attributes="0"/>
-                          <Component id="ButtonTaoTaiKhoan" alignment="0" max="32767" attributes="0"/>
+                          <Component id="ButtonThongKe1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="ButtonThongKe2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -978,7 +978,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ButtonQLDV" min="-2" pref="47" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ButtonQLNV" min="-2" pref="47" max="-2" attributes="0"/>
+                      <Component id="ButtonThongKe2" min="-2" pref="47" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ButtonThongKe" min="-2" pref="47" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -988,8 +988,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ButtonKhoHang" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ButtonTaoTaiKhoan" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
+                      <Component id="ButtonThongKe1" min="-2" pref="47" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="202" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1028,21 +1028,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonQLDVActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="ButtonQLNV">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="14" style="1"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/ICON/QLNV.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xed; Nh&#xe2;n Vi&#xea;n"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonQLNVActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JButton" name="ButtonQLNhaCUngCap">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1066,6 +1051,9 @@
                 <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng K&#xea;"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonThongKeActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="ButtonQLNhapHang">
               <Properties>
@@ -1090,8 +1078,11 @@
                 <Property name="text" type="java.lang.String" value="Kho H&#xe0;ng"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonKhoHangActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="ButtonTaoTaiKhoan">
+            <Component class="javax.swing.JButton" name="ButtonThongKe1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="1"/>
@@ -1103,7 +1094,22 @@
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonTaoTaiKhoanActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonThongKe1ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="ButtonThongKe2">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="1"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/ICON/QLNV.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n li Nh&#xe2;n Vi&#xea;n"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonThongKe2ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
