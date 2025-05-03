@@ -509,12 +509,12 @@ public class DanhSachDatPhongGUI extends  JFrame {
          btnRefreshPTP.setBackground(Color.WHITE);
          
          cbDKPT = new JComboBox();
-         cbDKPT.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã Thuê Phòng", "Mã Khách Hàng",
-        		 "Mã Nhân Viên", "Ngày Lập", "Tổng Tiền", "Trạng Thái"}));
+         cbDKPT.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng", "Mã khách hàng",
+        		 "Mã nhân viên", "Ngày lập phiếu", "Tổng tiền", "Trạng thái"}));
          
          cbDKCTPT = new JComboBox();
-         cbDKCTPT.setModel(new DefaultComboBoxModel<>(new String[] { "_", "ID", "Mã Thuê Phòng", "Mã Phòng",
-        		 "Ngày Đặt", "Ngày Trả", "Giá Phòng", "Thành Tiền"}));
+         cbDKCTPT.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã đặt phòng", "Mã phòng",
+        		 "Ngày đặt", "Ngày trả", "Giá phòng", "Thành tiền"}));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -608,14 +608,14 @@ public class DanhSachDatPhongGUI extends  JFrame {
          );
          
          modelPhieuThue = new DefaultTableModel(new Object[][]{}, new String[] {
-     	        "Mã Thuê Phòng", "Mã Khách Hàng", "Mã Nhân Viên", "Ngày Lập", "Tổng Tiền", "Trạng Thái"
+        		 "Mã thuê phòng", "Mã khách hàng", "Mã nhân viên", "Ngày lập phiếu", "Tổng tiền", "Trạng thái"
      	    });
          tablePhieuThue = new JTable(modelPhieuThue);
          scrollPane_1.setViewportView(tablePhieuThue);
          loadDataPhieuThue();
         
          modelChiTietPhieuThue = new DefaultTableModel(new Object[][]{}, new String[]{
-        	        "ID","Mã Thuê Phòng", "Mã Phòng", "Ngày Đặt", "Ngày Trả", "Giá Phòng", "Thành Tiền"
+        	        "ID","Mã đặt phòng", "Mã phòng", "Ngày đặt", "Ngày trả", "Giá phòng", "Thành tiền"
         	    });
          tableCTPhieuThue = new JTable(modelChiTietPhieuThue);
          scrollPane.setViewportView(tableCTPhieuThue);

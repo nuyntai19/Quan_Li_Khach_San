@@ -71,6 +71,7 @@ public class KiemTraPhongGUI extends  JFrame {
 	private String maPhong;
 	private JTextField textFieldTK;
 	private JComboBox cbDK;
+	private DlgKTphong dlgThem;
 	public KiemTraPhongGUI() {
 	    ktttBUS = new KiemTraTinhTrangBUS();
 	   
@@ -446,6 +447,7 @@ public class KiemTraPhongGUI extends  JFrame {
          btnThem.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		jBtThemRowActionPerformed(e);
+         		
          	}
          });
          btnThem.setForeground(Color.WHITE);
@@ -500,27 +502,30 @@ public class KiemTraPhongGUI extends  JFrame {
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(65)
-         			.addComponent(textFieldTK, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-         			.addGap(18)
-         			.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-         			.addGap(463)
-         			.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-         			.addGap(20))
-         		.addGroup(gl_panel.createSequentialGroup()
          			.addContainerGap()
          			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          			.addContainerGap())
          		.addGroup(gl_panel.createSequentialGroup()
-         			.addGap(45)
-         			.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-         			.addPreferredGap(ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-         			.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-         			.addGap(33)
-         			.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-         			.addGap(770))
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(65)
+         					.addComponent(textFieldTK, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED))
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addGap(45)
+         					.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+         					.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+         					.addGap(32)))
+         			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+         				.addGroup(gl_panel.createSequentialGroup()
+         					.addComponent(cbDK, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+         					.addGap(18)
+         					.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+         					.addGap(463)
+         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
+         				.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+         			.addGap(20))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -544,11 +549,11 @@ public class KiemTraPhongGUI extends  JFrame {
          							.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))))
          			.addGap(83)
          			.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         				.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
          				.addComponent(btnThem, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-         				.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
+         				.addComponent(btnXoa, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+         				.addComponent(btnSua, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
          			.addPreferredGap(ComponentPlacement.RELATED)
-         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
          			.addContainerGap())
          );
          
@@ -651,6 +656,7 @@ public class KiemTraPhongGUI extends  JFrame {
     }
     
     private void jBtRefreshActionPerformed(  ActionEvent evt) {
+    	
     	try {
     	    ktttBUS.getdsKTTT(); 
     	    model.setRowCount(0);
@@ -673,20 +679,22 @@ public class KiemTraPhongGUI extends  JFrame {
     	}
     }
     private void jBtThemRowActionPerformed(ActionEvent e) {
-        int selectedRow = -1;
-        DlgKTTT dlg = new DlgKTTT(model, selectedRow);
-        dlg.setLocationRelativeTo(null);
-        dlg.setVisible(true);
+    	dlgThem = new DlgKTphong();
+ 		dlgThem.setLocationRelativeTo(null);
+        dlgThem.setVisible(true);
+        loadDataToModel();
     }
     private void jBtSuaActionPerformed(ActionEvent e){
     	int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            String maKiemTra = (String) table.getValueAt(selectedRow, 0);
-            String maThuePhong = (String) table.getValueAt(selectedRow, 1);
-            String maNhanVien = (String) table.getValueAt(selectedRow, 2);
-            String ngayKiemTra = (String) table.getValueAt(selectedRow, 3);
-            String moTa = (String) table.getValueAt(selectedRow, 4);
-            String chiPhi = (String) table.getValueAt(selectedRow, 5);
+        	String maKiemTra = String.valueOf(table.getValueAt(selectedRow, 0));
+        	String maPhong = String.valueOf(table.getValueAt(selectedRow, 1));
+        	String maThuePhong = String.valueOf(table.getValueAt(selectedRow, 2));
+        	String maNhanVien = String.valueOf(table.getValueAt(selectedRow, 3));
+        	String ngayKiemTra = String.valueOf(table.getValueAt(selectedRow, 4));
+        	String moTa = String.valueOf(table.getValueAt(selectedRow, 5));
+        	String chiPhi = String.valueOf(table.getValueAt(selectedRow, 6));
+
 
             // dialog
             dlg = new DlgKTTT(model, table.getSelectedRow());
@@ -701,13 +709,14 @@ public class KiemTraPhongGUI extends  JFrame {
     	if (e.getClickCount() == 2) { // Double click
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
-                String maKiemTra = (String) table.getValueAt(selectedRow, 0);
-                String maPhong = (String) table.getValueAt(selectedRow, 1);
-                String maThuePhong = (String) table.getValueAt(selectedRow, 2);
-                String maNhanVien = (String) table.getValueAt(selectedRow, 3);
-                String ngayKiemTra = (String) table.getValueAt(selectedRow, 4);
-                String moTa = (String) table.getValueAt(selectedRow, 5);
-                String chiPhi = (String) table.getValueAt(selectedRow, 6);
+            	String maKiemTra = String.valueOf(table.getValueAt(selectedRow, 0));
+            	String maPhong = String.valueOf(table.getValueAt(selectedRow, 1));
+            	String maThuePhong = String.valueOf(table.getValueAt(selectedRow, 2));
+            	String maNhanVien = String.valueOf(table.getValueAt(selectedRow, 3));
+            	String ngayKiemTra = String.valueOf(table.getValueAt(selectedRow, 4));
+            	String moTa = String.valueOf(table.getValueAt(selectedRow, 5));
+            	String chiPhi = String.valueOf(table.getValueAt(selectedRow, 6));
+
 
                 // dialog
                 dlg = new DlgKTTT(model, table.getSelectedRow());

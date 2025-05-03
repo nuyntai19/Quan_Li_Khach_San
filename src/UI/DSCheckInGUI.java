@@ -630,74 +630,106 @@ public class DSCheckInGUI extends  JFrame {
         model.setRowCount(0);
         try {
         	danhSach = checkInOutBLL.layDanhSachCheckInHopLe();
-        	checkInOutBLL.kiemTraQuaHanCheckIn(danhSach);
-			for (CheckInOutDTO c : danhSach) {
-			    model.addRow(new Object[]{
-			        c.getMaThuePhong(),
-			        c.getMaPhong(),
-			        c.getMaKhachHang(),
-			        c.getNgayDatPhong(),
-			        c.getNgayTraPhong(),
-			        c.getTrangThai()
-			    });
-			}
+        	if (danhSach != null) 
+        	{
+	        	checkInOutBLL.kiemTraQuaHanCheckIn(danhSach);
+	        	
+				for (CheckInOutDTO c : danhSach) {
+				    model.addRow(new Object[]{
+				        c.getMaThuePhong(),
+				        c.getMaPhong(),
+				        c.getMaKhachHang(),
+				        c.getNgayDatPhong(),
+				        c.getNgayTraPhong(),
+				        c.getTrangThai()
+				    });
+				}
+			} else JOptionPane.showMessageDialog(null, "danh sách CheckInOut rỗng.");	
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
     }
-    private void loadDataToModelTinhTrang() {
-        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-        for (KiemTraTinhTrang kttt : ktttBUS.getDsKTTT()) {
-            model.addRow(new Object[]{
-                kttt.getMaKiemTra(),
-                kttt.getMaPhong(),
-                kttt.getMaNhanVien(),
-                kttt.getNgayKiemTra(),
-                kttt.getMoTaThietHai(),
-                kttt.getChiPhiDenBu()
-            });
-        }
-    }
+    
     private void jBtRefreshActionPerformed(ActionEvent evt){
     	try {
             loadDataToModel();
             textTK.setText("");
+            JOptionPane.showMessageDialog(null, "Làm mới thành công.");	
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Lỗi khi làm mới dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
     private boolean KTPhong(int maPhong) {
-        KiemTraTinhTrang kiemTraTinhTrang = ktttBUS.timKiemKTTT(maPhong);
+        KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
 
-        if (kiemTraTinhTrang != null) 
+        if (kt != null) 
         {
-            String moTaThietHai = kiemTraTinhTrang.getMoTaThietHai();
-            if ("Khong".equalsIgnoreCase(moTaThietHai.trim()))
+            String moTaThietHai = kt.getMoTaThietHai();
+            if (moTaThietHai.equalsIgnoreCase("Khong"))
                 return true;
-
-            int option = JOptionPane.showConfirmDialog(null, 
-                    "Phòng gặp sự cố: " + moTaThietHai + ".\nHuỷ phòng và hoàn tiền?", 
-                    "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
-
-            if (option == JOptionPane.OK_OPTION) 
-            {
-                checkInOutBLL.xoaCheckInDTO(maPhong);
-                try {
-                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                try {
-                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                return false;
-            } else return false;
+            else {
+	            int option = JOptionPane.showConfirmDialog(null, 
+	                    "Phòng gặp sự cố: " + moTaThietHai + ".\nHuỷ phòng và hoàn tiền?", 
+	                    "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+	
+	            if (option == JOptionPane.OK_OPTION) 
+	            {
+	                checkInOutBLL.xoaCheckInDTO(maPhong);
+	                try {
+	                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+	                } catch (SQLException ex) {
+	                    ex.printStackTrace();
+	                }
+	                try {
+	                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
+	                } catch (SQLException ex) {
+	                    ex.printStackTrace();
+	                }
+	                return false;
+	            } 
+	            else return false;
+            }
         }
         return true;
     }
+    
+ // kt Mô tả thiệt hại và checkin
+    private void jBtCheckInActionPerformed(ActionEvent evt) {
+    	int selectedRow = table.getSelectedRow(); 
+    	
+    	if (selectedRow != -1) { 
+    	    try {
+    	        int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());      
+    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+
+    	        if (!KTPhong(maPhong)) {
+    	            return;
+    	        } else {
+	    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Dang su dung");
+	    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Dang thue");
+	    	        
+	    	        // add vào ds tạm
+	    	        CheckInOutDTO c = new CheckInOutDTO();
+	    	        c = checkInOutBLL.timCheckInOut(maPhong);
+	                c.setTrangThai("Da check-in");
+	    	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
+	                
+	                loadDataToModel();
+    	        }
+    	    } catch (SQLException ex) {
+    	        ex.printStackTrace();
+    	        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
+    	    } catch (NumberFormatException ex) {
+    	        JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ!");
+    	    }
+    	} else {
+    	    JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng!");
+    	}
+
+    }
+
+    
     public void huyPhongQuaHan(int maPhong) {
         KiemTraTinhTrang kiemTra = ktttBUS.timKiemKTTT(maPhong);
 
@@ -728,45 +760,7 @@ public class DSCheckInGUI extends  JFrame {
         }
     }
 
-    // kt Mô tả thiệt hại và checkin
-    private void jBtCheckInActionPerformed(ActionEvent evt) {
-    	int selectedRow = table.getSelectedRow(); 
-    	
-    	if (selectedRow != -1) { 
-    	    try {
-    	        int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());      
-    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-
-    	        if (!KTPhong(maPhong)) {
-    	            return;
-    	        }
-    	        
-    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Dang su dung");
-    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Dang thue");
-    	        
-    	        // add vào ds tạm
-    	        CheckInOutDTO c = new CheckInOutDTO();
-    	        c = checkInOutBLL.timCheckInOut(maPhong);
-                c.setTrangThai("Da check-in");
-                CheckInOutTEMP.addCheckInOut(c);
-                
-
-    	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
-                
-                loadDataToModel();
-
-    	    } catch (SQLException ex) {
-    	        ex.printStackTrace();
-    	        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
-    	    } catch (NumberFormatException ex) {
-    	        JOptionPane.showMessageDialog(this, "Giá trị không hợp lệ!");
-    	    }
-    	} else {
-    	    JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng trong bảng!");
-    	}
-
-    }
-
+    
     private void jBtHuyActionPerformed(ActionEvent evt) {
             int selectedRow = table.getSelectedRow(); 
             if (selectedRow != -1) {

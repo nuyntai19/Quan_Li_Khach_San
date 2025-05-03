@@ -199,9 +199,10 @@ public class DlgKTphong extends JDialog {
 			        	
 			            String maKiemTraText = txtMaKT.getText().trim();
 			            String maPhongText = txtMaPhong.getText().trim();
-			            String maNhanVienText = txtMaNV.getText().trim();
 			            String maThuePhongText = txtMaThuePhong.getText().trim();
+			            String maNhanVienText = txtMaNV.getText().trim();
 			            String ngayKiemTraText = txtNgayKT.getText().trim();
+			            String moTaThietHai = txtMoTa.getText().trim();
 			            String chiPhiText = txtChiPhi.getText().trim();
 			
 			            
@@ -226,9 +227,9 @@ public class DlgKTphong extends JDialog {
 			                return;
 			            }
 			
-			            if (ngayKiemTraText.isEmpty() || !ngayKiemTraText.matches("\\d{2}/\\d{2}/\\d{4}")) 
+			            if (ngayKiemTraText.isEmpty() || !ngayKiemTraText.matches("\\d{4}/\\d{2}/\\d{2}")) 
 			            {
-			                JOptionPane.showMessageDialog(null, "Ngày Kiểm Tra phải có định dạng 'dd/MM/yyyy'!");
+			                JOptionPane.showMessageDialog(null, "Ngày Kiểm Tra phải có định dạng 'yyyy/MM/dd'!");
 			                return;
 			            }
 			
@@ -239,25 +240,27 @@ public class DlgKTphong extends JDialog {
 			            }
 			            
 			            int maKiemTra = Integer.parseInt(maKiemTraText);
-			            if (ktttBLL.kiemTraTonTaiPhong(maKiemTra)){
+			            if (ktttBLL.timKiemKTTT(maKiemTra) != null){
 			            	JOptionPane.showMessageDialog(null, "Mã kiểm tra đã tồn tại!");
 			            }
-			            int maPhong = Integer.parseInt(maKiemTraText);
-			            if (phongDAO.kiemTraTonTai(maPhong)){
+			            int maPhong = Integer.parseInt(maPhongText);
+			            if (! phongDAO.kiemTraTonTai(maPhong)){
 			            	JOptionPane.showMessageDialog(null, "Mã phòng không tồn tại!");
 			            }
 			            int maThuePhong = Integer.parseInt(maThuePhongText);
-			            phieuThueBLL.kiemTraTonTaiVaThongBao(maThuePhong);
-			            
-			            int maNhanVien = Integer.parseInt(maNhanVienText);
-			            if (nvBLL.kiemTraTonTai(maPhong)){
-			            	JOptionPane.showMessageDialog(null, "Mã phòng không tồn tại!");
+			            if (! phieuThueBLL.kiemTraTonTai(maThuePhong))
+			            {
+			            	JOptionPane.showMessageDialog(null, "Mã thuê phòng không tồn tại!");
 			            }
 			            
-			            LocalDate ngayKiemTra = LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			            int maNhanVien = Integer.parseInt(maNhanVienText);
+			            if (! nvBLL.kiemTraTonTai(maNhanVien)){
+			            	JOptionPane.showMessageDialog(null, "Mã nhân viên không tồn tại!");
+			            }
+			            
+			            Date ngayKiemTra = java.sql.Date.valueOf(LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+			            // mô tả sẵn string k cần đổi
 			            BigDecimal chiPhiDenBu = new BigDecimal(chiPhiText);
-			            String moTaThietHai = txtMoTa.getText().trim();
-			
 			            
 			            KiemTraTinhTrang kt = new KiemTraTinhTrang(maKiemTra, maPhong, maThuePhong, maNhanVien, ngayKiemTra, moTaThietHai, chiPhiDenBu);
 			
@@ -269,7 +272,7 @@ public class DlgKTphong extends JDialog {
 		                    JOptionPane.showMessageDialog(null, "Thêm thất bại!");
 		                }
 		           	} catch (DateTimeParseException ex) {
-			            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng 'dd/MM/yyyy'.");
+			            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng 'yyyy/mm/dd'.");
 		           	} catch (Exception ex) {
 		           		JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi lưu: " + ex.getMessage());
 		           	}
