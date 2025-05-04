@@ -6,8 +6,8 @@ import java.util.Date;
 public class KiemTraTinhTrang {
     private int maKiemTra;
     private int maPhong;
-    private int maNhanVien;
     private int maThuePhong;
+    private int maNhanVien;
     private Date ngayKiemTra;
     private String moTaThietHai;
     private BigDecimal chiPhiDenBu;
@@ -16,7 +16,7 @@ public class KiemTraTinhTrang {
     public KiemTraTinhTrang() {
     }
 
-    public KiemTraTinhTrang(int maKiemTra, int maPhong, int maNhanVien, int maThuePhong, Date ngayKiemTra, String moTaThietHai, BigDecimal chiPhiDenBu) {
+    public KiemTraTinhTrang(int maKiemTra, int maPhong,int maThuePhong, int maNhanVien, Date ngayKiemTra, String moTaThietHai, BigDecimal chiPhiDenBu) {
         this.maKiemTra = maKiemTra;
         this.maPhong = maPhong;
         this.maNhanVien = maNhanVien;

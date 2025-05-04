@@ -40,8 +40,8 @@ public class CheckInOutBLL {
               
                 CheckInOutDTO checkIn = new CheckInOutDTO();
                 checkIn.setMaThuePhong(phieu.getMaThuePhong());
-                checkIn.setMaKhachHang(phieu.getMaKhachHang());
                 checkIn.setMaPhong(ct.getMaPhong());
+                checkIn.setMaKhachHang(phieu.getMaKhachHang());
                 checkIn.setNgayDatPhong(ct.getNgayDatPhong());
                 checkIn.setNgayTraPhong(ct.getNgayTraPhong());
                 checkIn.setTrangThai(phieu.getTrangThai());
@@ -69,11 +69,10 @@ public class CheckInOutBLL {
         {
             try 
             {
-                if (checkIn.getNgayDatPhong().before(today) && "Da dat".equalsIgnoreCase(checkIn.getTrangThai())) 
+                if (checkIn.getNgayDatPhong().before(today)) 
                 {
                     checkIn.setTrangThai("Qua han check-in");
                     phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Dang bao tri");
-                    //phieuThueDAO.capNhatTrangThaiPhieu(checkIn.getMaThuePhong(), "Đã huỷ");
                 }
             } 
             catch (SQLException ex) {
@@ -88,7 +87,7 @@ public class CheckInOutBLL {
     
         for (CheckInOutDTO checkIn : dsCheckIn) 
         {
-            if (checkIn.getNgayTraPhong().before(today) && "Dang thue".equalsIgnoreCase(checkIn.getTrangThai())) 
+            if (checkIn.getNgayTraPhong().before(today) ) 
             {
                 try
                 {
@@ -151,7 +150,5 @@ public class CheckInOutBLL {
         }
         return null;
     }
-
-
 }
 

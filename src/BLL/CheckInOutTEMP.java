@@ -19,6 +19,16 @@ public class CheckInOutTEMP {
     private PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
     private ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 
+    
+    public CheckInOutTEMP() {
+        try {
+            this.tempList = getTempList();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public void addCheckInOut(CheckInOutDTO checkInOutDTO) {
         for (CheckInOutDTO item : tempList) {
             if (item.getMaPhong() == checkInOutDTO.getMaPhong()) 
@@ -45,8 +55,8 @@ public class CheckInOutTEMP {
               
                 CheckInOutDTO checkIn = new CheckInOutDTO();
                 checkIn.setMaThuePhong(phieu.getMaThuePhong());
-                checkIn.setMaKhachHang(phieu.getMaKhachHang());
                 checkIn.setMaPhong(ct.getMaPhong());
+                checkIn.setMaKhachHang(phieu.getMaKhachHang());
                 checkIn.setNgayDatPhong(ct.getNgayDatPhong());
                 checkIn.setNgayTraPhong(ct.getNgayTraPhong());
                 checkIn.setTrangThai(phieu.getTrangThai());
@@ -80,19 +90,25 @@ public class CheckInOutTEMP {
         return null;
     }
 
-    public void kiemTraQuaHanCheckOut(ArrayList<CheckInOutDTO> dsCheckOut) {
+
+    public void kiemTraQuaHanCheckOut(ArrayList<CheckInOutDTO> dsCheckIn) {
         Date today = new Date();
     
-        for (CheckInOutDTO checkOut : dsCheckOut) {
-            if (checkOut.getNgayTraPhong().before(today) && "Dang thue".equalsIgnoreCase(checkOut.getTrangThai())) {
-                try {
-                    checkOut.setTrangThai("Qua han check-out");
-                    phongDAO.capNhatTrangThaiPhong(checkOut.getMaPhong(), "Dang bao tri");
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Lỗi cập nhật trạng thái!");
+        for (CheckInOutDTO checkIn : dsCheckIn) 
+        {
+            try
+            {
+                if (checkIn.getNgayTraPhong().before(today) ) 
+                {
+                    checkIn.setTrangThai("Qua han check-out");
+                    phongDAO.capNhatTrangThaiPhong(checkIn.getMaPhong(), "Dang bao tri");
                 }
             }
+            catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi cập nhật trạng thái!");
+            }
+            
         }
     }
 
@@ -111,6 +127,7 @@ public class CheckInOutTEMP {
                         ketQua.add(ct);
                     }
                     break;
+                
                 case "Mã khách hàng":
                     if (String.valueOf(ct.getMaKhachHang()).contains(tuKhoa)) {
                         ketQua.add(ct);

@@ -90,4 +90,27 @@ public class QuanLiPhongDAO {
             stmt.executeUpdate();
         }
     }
+
+    // tìm mã phòng trả về đt
+    public QuanLiPhongDTO timPhongTheoMa(int maPhong) throws SQLException {
+        String sql = "SELECT * FROM Phong WHERE MaPhong = ?";
+        try (Connection conn = DatabaseQLKS.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, maPhong);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new QuanLiPhongDTO(
+                        rs.getInt("MaPhong"),
+                        rs.getString("MaLoaiPhong"),
+                        rs.getInt("SoGiuong"),
+                        rs.getDouble("DonGia"),
+                        rs.getString("TrangThai")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+    
 }
