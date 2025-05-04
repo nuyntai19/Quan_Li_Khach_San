@@ -70,7 +70,7 @@ public class KiemTraTinhTrangDAO {
 
     
     public boolean kiemTraTonTai(int maPhong) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM Phong WHERE MaPhong = ?";
+        String sql = "SELECT COUNT(*) FROM KiemTraTinhTrang WHERE MaPhong = ?";
         try (Connection conn = DatabaseQLKS.getConnection();
              PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, maPhong);
