@@ -1,5 +1,6 @@
 package BLL;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -65,6 +66,9 @@ public class KiemTraTinhTrangBUS {
     public KiemTraTinhTrang timTheoMaPhong(int maPhong) throws SQLException {
         return ktttDao.timTheoMaPhong(maPhong);
     }
+    public boolean kiemTraHopLeKTTT(int maPhong, int maThuePhong, Date ngayKiemTra) {
+    	return ktttDao.kiemTraHopLeDeTaoKTTT(maPhong, maThuePhong, ngayKiemTra);
+    }
     public boolean kiemTraTonTaiPhong(int maPhong) {
         try {
             return ktttDao.kiemTraTonTai(maPhong);
@@ -120,5 +124,7 @@ public class KiemTraTinhTrangBUS {
     
         return ketQua;
     }
-    
+    public KiemTraTinhTrang timKTTT(int maPhong, int maThuePhong) throws SQLException {
+        return ktttDao.timKTTT(maPhong, maThuePhong);
+    }
 }

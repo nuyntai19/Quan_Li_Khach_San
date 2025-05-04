@@ -17,6 +17,7 @@ import DAO.PhieuThuePhongDAO;
 import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 import DTO.KiemTraTinhTrang;
+import DTO.QuanLiPhongDTO;
 import DTO.TaiKhoanDTO;
 
 import java.sql.*;
@@ -77,6 +78,8 @@ public class DSCheckInGUI extends  JFrame {
 	private ArrayList<CheckInOutDTO> danhSach;
 	private JButton KiemTraTinhTrang;
 	private JComboBox cbDK;
+
+	private DlgInOutKTTT dlg;
 
 
 	public DSCheckInGUI() {
@@ -452,6 +455,7 @@ public class DSCheckInGUI extends  JFrame {
          btnCheckIn.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		jBtCheckInActionPerformed(e);
+         		loadDataToModel();
          	}
          });
          btnCheckIn.setForeground(new Color(255, 255, 255));
@@ -461,7 +465,9 @@ public class DSCheckInGUI extends  JFrame {
          btnHuy = new JButton("HUỶ");
          btnHuy.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
-         		jBtHuyActionPerformed(e);
+         		//jBtHuyActionPerformed(e);
+         		jBtHuy2ActionPerformed(e);
+         		loadDataToModel();
          	}
          });
          btnHuy.setForeground(Color.WHITE);
@@ -482,7 +488,17 @@ public class DSCheckInGUI extends  JFrame {
          btnRefresh.setBackground(Color.WHITE);
          
          cbDK = new JComboBox();
-         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"}));
+         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng", "Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"}));
+         
+         JButton btnKTTT = new JButton("Kiểm tra tình trạng");
+         btnKTTT.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		jBtKTTTActionPerformed(e);
+         	}
+         });
+         btnKTTT.setForeground(Color.WHITE);
+         btnKTTT.setFont(new Font("Dialog", Font.BOLD, 14));
+         btnKTTT.setBackground(new Color(52, 152, 219));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -505,12 +521,14 @@ public class DSCheckInGUI extends  JFrame {
          					.addGap(32)
          					.addComponent(btnTim, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
          					.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
-         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-         					.addGap(31))
+         					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE))
          				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
          					.addGap(18)
-         					.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))))
+         					.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+         					.addPreferredGap(ComponentPlacement.RELATED, 665, Short.MAX_VALUE)
+         					.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)))
+         			.addGap(31))
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -523,10 +541,12 @@ public class DSCheckInGUI extends  JFrame {
          				.addGroup(gl_panel.createSequentialGroup()
          					.addGap(12)
          					.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-         					.addPreferredGap(ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-         					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-         						.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-         						.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)))
+         					.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+         					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+         						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+         							.addComponent(btnCheckIn, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+         							.addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
+         						.addComponent(btnKTTT, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)))
          				.addGroup(gl_panel.createSequentialGroup()
          					.addGap(18)
          					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
@@ -538,7 +558,7 @@ public class DSCheckInGUI extends  JFrame {
          			.addContainerGap())
          );
          model = new DefaultTableModel(new String[]{
- 	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
+        		 "Mã thuê phòng", "Mã phòng" , "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
  	        }, 0) {
  	            @Override
  	            public boolean isCellEditable(int row, int column) {
@@ -636,7 +656,7 @@ public class DSCheckInGUI extends  JFrame {
 	        	
 				for (CheckInOutDTO c : danhSach) {
 				    model.addRow(new Object[]{
-				        c.getMaThuePhong(),
+				    	c.getMaThuePhong(),
 				        c.getMaPhong(),
 				        c.getMaKhachHang(),
 				        c.getNgayDatPhong(),
@@ -660,8 +680,8 @@ public class DSCheckInGUI extends  JFrame {
             JOptionPane.showMessageDialog(null, "Lỗi khi làm mới dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    private boolean KTPhong(int maPhong) {
-        KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
+    private boolean KTPhong(int maPhong, int maThuePhong) throws SQLException {
+        KiemTraTinhTrang kt = ktttBUS.timKTTT(maPhong, maThuePhong);
 
         if (kt != null) 
         {
@@ -677,7 +697,7 @@ public class DSCheckInGUI extends  JFrame {
 	            {
 	                checkInOutBLL.xoaCheckInDTO(maPhong);
 	                try {
-	                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
+	                    phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Da huy");
 	                } catch (SQLException ex) {
 	                    ex.printStackTrace();
 	                }
@@ -700,19 +720,34 @@ public class DSCheckInGUI extends  JFrame {
     	
     	if (selectedRow != -1) { 
     	    try {
-    	        int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());      
-    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+    	    	int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString()); 
+    	    	int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+    	    	String tt = table.getValueAt(table.getSelectedRow(), 5).toString();
 
-    	        if (!KTPhong(maPhong)) {
+    	        
+    	        if( tt.equalsIgnoreCase("Qua han check-in")) {
+    	        	JOptionPane.showMessageDialog(this, "Phòng " + maPhong 
+    	        			+" đã quá hạn thời hạn check-in! \n\n	Vui lòng đặt phòng mới.");
+    	        	return;
+    	        }
+    	        if (phongDAO.timPhongTheoMa(maPhong).getTrangThai().equalsIgnoreCase("Dang su dung")) {
+    	        	//System.out.print(rootPaneCheckingEnabled);
+    	        	JOptionPane.showMessageDialog(this, "Phòng " + maPhong 
+    	        				+" đang được sử dụng không thể check-in");
+    	        	return;
+    	        }
+    	        // nếu phòng đó ko "Dang su dung thì moi cho check in"
+    	        if (!KTPhong(maPhong, maThuePhong)) {
     	            return;
-    	        } else {
+    	        }
+    	        else {
 	    	        phongDAO.capNhatTrangThaiPhong(maPhong, "Dang su dung");
 	    	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Dang thue");
 	    	        
 	    	        // add vào ds tạm
-	    	        CheckInOutDTO c = new CheckInOutDTO();
-	    	        c = checkInOutBLL.timCheckInOut(maPhong);
-	                c.setTrangThai("Da check-in");
+//	    	        CheckInOutDTO c = new CheckInOutDTO();
+//	    	        c = checkInOutBLL.timCheckInOut(maPhong);
+//	                c.setTrangThai("Da check-in");
 	    	        JOptionPane.showMessageDialog(this, "Check-in thành công!");
 	                
 	                loadDataToModel();
@@ -729,70 +764,95 @@ public class DSCheckInGUI extends  JFrame {
 
     }
 
-    
-    public void huyPhongQuaHan(int maPhong) {
-        KiemTraTinhTrang kiemTra = ktttBUS.timKiemKTTT(maPhong);
-
-        if (kiemTra != null) {
-            String moTa = kiemTra.getMoTaThietHai();
-            if (!"Khong".equalsIgnoreCase(moTa)) 
-            {
-                try {
-                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
-                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
-                    JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
-                }
-            } 
-            else 
-            {
-                try {
-                    phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
-                    phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
-                    JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
-                }
-            }
-        }
+   
+    private void jBtHuy2ActionPerformed(ActionEvent evt) {
+	    int selectedRow = table.getSelectedRow();
+	    if (selectedRow == -1) {
+	        JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng cần huỷ.");
+	        return;
+	    }
+	
+	    int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+	    int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
+	    String trangThai = table.getValueAt(selectedRow, 5).toString();
+	
+	    int confirm = JOptionPane.showConfirmDialog(null, 
+	        "Bạn có chắc chắn muốn huỷ phòng này?", 
+	        "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
+	
+	    if (confirm != JOptionPane.OK_OPTION) return;
+	
+	    try {
+	        if ("Qua han check-in".equalsIgnoreCase(trangThai)) {
+	            // Không cần kiểm tra tình trạng phòng vì khách chưa đến
+	            phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Da huy");
+	            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong"); // hoặc "Dang bao tri" nếu có lý do nội bộ
+	            JOptionPane.showMessageDialog(null, "Đã huỷ phòng quá hạn check-in thành công.");
+	            return;
+	        }
+	
+	        KiemTraTinhTrang kttt = ktttBUS.timKTTT(maPhong, maThuePhong);
+	        String moTa = (kttt != null) ? kttt.getMoTaThietHai() : "Khong";
+	
+	        if ("Dang cho xac nhan".equalsIgnoreCase(trangThai)) 
+	        {
+	            if (!"Khong".equalsIgnoreCase(moTa)) 
+	            {
+	                int opt = JOptionPane.showConfirmDialog(null,
+	                    "Phòng gặp sự cố: " + moTa + ".\nHuỷ phòng và hoàn tiền?",
+	                    "Xác nhận huỷ phòng", JOptionPane.YES_NO_OPTION);
+	
+	                if (opt == JOptionPane.YES_OPTION) {
+	                    phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Da huy");
+	                    phongDAO.capNhatTrangThaiPhong(maPhong, "Dang bao tri");
+	                    JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
+	                }
+	            } 
+	            else {
+	                phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Da huy");
+	                phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+	                JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
+	            }
+	        }
+	
+	        else {
+	            // Trường hợp mặc định khác trạng thái đã nêu
+	            if (!KTPhong(maPhong, maThuePhong)) return;
+	            phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Da huy");
+	            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+	            checkInOutBLL.xoaCheckInDTO(maPhong);
+	            JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
+	        }
+	
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
+	    }
     }
 
-    
-    private void jBtHuyActionPerformed(ActionEvent evt) {
-            int selectedRow = table.getSelectedRow(); 
-            if (selectedRow != -1) {
-                int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-                String trangThai = table.getValueAt(selectedRow, 5).toString();
 
-                int option = JOptionPane.showConfirmDialog(null, 
-                    "Bạn có chắc chắn muốn huỷ phòng này?", 
-                    "Xác nhận huỷ phòng", JOptionPane.OK_CANCEL_OPTION);
 
-                if (option == JOptionPane.OK_OPTION) 
-                {
-                    if ("Qua han check-in".equals(trangThai))
-                            huyPhongQuaHan(maPhong);
-                    else if(KTPhong(maPhong))
-                            try {
-                            phieuThueDAO.capNhatTrangThaiPhieu(maPhong, "Da huy");
-                            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
-                            checkInOutBLL.xoaCheckInDTO(maPhong);
-                            JOptionPane.showMessageDialog(null, "Đã huỷ phòng thành công.");
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "Lỗi khi huỷ phòng.");
-                        }
+    private void jBtKTTTActionPerformed(ActionEvent e) {
+    	int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+        	String maPhong = String.valueOf(table.getValueAt(selectedRow, 1));
+        	String maThuePhong = String.valueOf(table.getValueAt(selectedRow, 0));
 
+            // dialog
+            dlg = new DlgInOutKTTT(model, table.getSelectedRow());
+            dlg.setModelAndRow(model, selectedRow);
+            dlg.setDataAddKTTT(maPhong, maThuePhong);
+            dlg.setLocationRelativeTo(null);
+            dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                	loadDataToModel();
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng cần huỷ.");
-            }
+            });
+            dlg.setVisible(true);
+            
         }
-
-    
+    }    
 
     
     /**

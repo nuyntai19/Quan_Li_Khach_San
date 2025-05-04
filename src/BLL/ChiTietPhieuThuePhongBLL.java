@@ -51,12 +51,12 @@ public class ChiTietPhieuThuePhongBLL {
                         ketQua.add(ct);
                     }
                     break;
-                case "Ngày Đặt Phòng":
+                case "Ngày đặt phòng":
                     if (ct.getNgayDatPhong().toString().contains(tuKhoa)) {
                         ketQua.add(ct);
                     }
                     break;
-                case "Ngày Trả Phòng":
+                case "Ngày trả phòng":
                     if (ct.getNgayTraPhong().toString().contains(tuKhoa)) {
                         ketQua.add(ct);
                     }

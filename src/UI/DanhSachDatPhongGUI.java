@@ -514,7 +514,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
          
          cbDKCTPT = new JComboBox();
          cbDKCTPT.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã đặt phòng", "Mã phòng",
-        		 "Ngày đặt", "Ngày trả", "Giá phòng", "Thành tiền"}));
+        		 "Ngày đặt phòng", "Ngày trả phòng", "Giá phòng", "Thành tiền"}));
 
          GroupLayout gl_panel = new GroupLayout(panel);
          gl_panel.setHorizontalGroup(
@@ -615,7 +615,7 @@ public class DanhSachDatPhongGUI extends  JFrame {
          loadDataPhieuThue();
         
          modelChiTietPhieuThue = new DefaultTableModel(new Object[][]{}, new String[]{
-        	        "ID","Mã đặt phòng", "Mã phòng", "Ngày đặt", "Ngày trả", "Giá phòng", "Thành tiền"
+        	        "ID","Mã đặt phòng", "Mã phòng", "Ngày đặt phòng", "Ngày trả phòng", "Giá phòng", "Thành tiền"
         	    });
          tableCTPhieuThue = new JTable(modelChiTietPhieuThue);
          scrollPane.setViewportView(tableCTPhieuThue);

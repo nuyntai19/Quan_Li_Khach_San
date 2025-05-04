@@ -7,6 +7,7 @@ import java.awt.*;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import java.sql.*;
 import java.awt.event.ActionEvent;
@@ -20,15 +21,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ItemEvent;
 import com.toedter.calendar.JDateChooser;
 
+import BLL.CheckInOutTEMP;
 import BLL.KiemTraTinhTrangBUS;
 import BLL.ThongTinNhanVienBLL;
+import DAO.QuanLiPhongDAO;
 import DTO.CheckInOutDTO;
 import DTO.KiemTraTinhTrang;
 
 public class KiemTraPhongGUI extends  JFrame {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<KiemTraTinhTrang> dsKTTT = new ArrayList<>();
-	private final KiemTraTinhTrangBUS ktttBUS;
+	
 	
 	private  JButton CheckIn;
     private  JButton CheckOut;
@@ -72,10 +74,13 @@ public class KiemTraPhongGUI extends  JFrame {
 	private JTextField textFieldTK;
 	private JComboBox cbDK;
 	private DlgKTphong dlgThem;
+	private	QuanLiPhongDAO phongDAO = new QuanLiPhongDAO();
+	private ArrayList<KiemTraTinhTrang> dsKTTT = new ArrayList<>();
+	private final KiemTraTinhTrangBUS ktttBUS = new KiemTraTinhTrangBUS();
+	private final CheckInOutTEMP tempList = new CheckInOutTEMP();
+	
 	public KiemTraPhongGUI() {
-	    ktttBUS = new KiemTraTinhTrangBUS();
-	   
-
+	  
 		initComponents();
     }
     
@@ -133,7 +138,7 @@ public class KiemTraPhongGUI extends  JFrame {
         DSDatPhong.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		dispose();
-                new KiemTraPhongGUI().setVisible(true);
+                new DanhSachDatPhongGUI().setVisible(true);
         	}
         });
         DSKhachHang = new  JButton();
@@ -447,7 +452,6 @@ public class KiemTraPhongGUI extends  JFrame {
          btnThem.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		jBtThemRowActionPerformed(e);
-         		
          	}
          });
          btnThem.setForeground(Color.WHITE);
@@ -468,6 +472,7 @@ public class KiemTraPhongGUI extends  JFrame {
          btnXoa.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		jBtDeleteActionPerformed(e);
+         		loadDataToModel();
          	}
          });
          btnXoa.setForeground(Color.WHITE);
@@ -579,6 +584,9 @@ public class KiemTraPhongGUI extends  JFrame {
  	        };
  	     table.setModel(model);
 	     scrollPane.setViewportView(table);
+	     TableColumn columnMoTa = table.getColumnModel().getColumn(5); // 5 là chỉ số của cột "Mô tả thiệt hại"
+	     columnMoTa.setPreferredWidth(200); // đặt độ rộng tùy ý, ví dụ 200 pixels
+
      	 loadDataToModel();
         
          panel.setLayout(gl_panel);
@@ -658,22 +666,10 @@ public class KiemTraPhongGUI extends  JFrame {
     private void jBtRefreshActionPerformed(  ActionEvent evt) {
     	
     	try {
-    	    ktttBUS.getdsKTTT(); 
-    	    model.setRowCount(0);
-
-    	    for (KiemTraTinhTrang kttt : ktttBUS.getDsKTTT()) {
-    	        model.addRow(new Object[]{
-    	            kttt.getMaKiemTra(),
-    	            kttt.getMaPhong(),
-    	            kttt.getMaThuePhong(),
-    	            kttt.getMaNhanVien(),
-    	            kttt.getNgayKiemTra(),
-    	            kttt.getMoTaThietHai(),
-    	            kttt.getChiPhiDenBu()
-    	        });
-    	    }
+    		loadDataToModel();
     	    textFieldTK.setText("");
-    	} catch (SQLException e) {
+    	    JOptionPane.showMessageDialog(null, "Làm mới thành công.");	
+    	} catch (Exception e) {
     		JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     	    e.printStackTrace();
     	}
@@ -681,8 +677,13 @@ public class KiemTraPhongGUI extends  JFrame {
     private void jBtThemRowActionPerformed(ActionEvent e) {
     	dlgThem = new DlgKTphong();
  		dlgThem.setLocationRelativeTo(null);
+ 		dlgThem.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                loadDataToModel();
+            }
+        });
         dlgThem.setVisible(true);
-        loadDataToModel();
     }
     private void jBtSuaActionPerformed(ActionEvent e){
     	int selectedRow = table.getSelectedRow();
@@ -701,6 +702,12 @@ public class KiemTraPhongGUI extends  JFrame {
             dlg.setModelAndRow(model, selectedRow);
             dlg.setData(maKiemTra, maPhong, maThuePhong, maNhanVien, ngayKiemTra, moTa, chiPhi);
             dlg.setLocationRelativeTo(null);
+            dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    loadDataToModel();
+                }
+            });
             dlg.setVisible(true);
         }
     }
@@ -723,6 +730,12 @@ public class KiemTraPhongGUI extends  JFrame {
                 dlg.setModelAndRow(model, selectedRow);
                 dlg.setData(maKiemTra, maPhong, maThuePhong, maNhanVien, ngayKiemTra, moTa, chiPhi);
                 dlg.setLocationRelativeTo(null);
+                dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        loadDataToModel();
+                    }
+                });
                 dlg.setVisible(true);
             }
         }
@@ -731,15 +744,22 @@ public class KiemTraPhongGUI extends  JFrame {
         int selectedRow = table.getSelectedRow();
 
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần xoá.");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã kiểm tra tình trạng cần xoá.");
             return;
         }
 
         try {
             int maKiemTra = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+            int maPhong = Integer.parseInt(model.getValueAt(selectedRow, 1).toString());
+
+            // Kiểm tra trạng thái Check-out
+            if (tempList.timCheckInOutTEMP(maPhong) != null) {       
+                JOptionPane.showMessageDialog(this, "Phòng chưa được check-out. \nKhông thể xoá kiểm tra tình trạng.");
+                return;
+            }
 
             int confirm = JOptionPane.showConfirmDialog(this,
-                "Bạn có chắc chắn muốn xoá kiểm tra có mã: " + maKiemTra + "?",
+                "Bạn có chắc chắn muốn xoá kiểm tra tình trạng có mã: " + maKiemTra + " ?",
                 "Xác nhận xoá", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
@@ -748,7 +768,25 @@ public class KiemTraPhongGUI extends  JFrame {
                 if (success) {
                     model.removeRow(selectedRow);
                     JOptionPane.showMessageDialog(this, "Xoá thành công.");
-                    loadDataToModel();
+
+                    // Nếu phòng không còn kiểm tra tình trạng nào, cập nhật trạng thái về "Trong"
+//                    if (!ktttBUS.kiemTraTonTaiPhong(maPhong)) {
+//                    	CheckInOutDTO checkOut = tempList.timCheckInOutTEMP(maPhong);
+//                        if (checkOut == null) {
+//                            System.out.println("Phòng đã check-out. Đổi trạng thái về 'Trong'");
+//                            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+//                        } else {
+//                            System.out.println("Phòng chưa check-out. Không cập nhật trạng thái.");
+//                        }
+//                        //phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+//                    }
+                    if (ktttBUS.kiemTraTonTaiPhong(maPhong)) {
+                        System.out.println("Không còn KTTT nào cho phòng: " + maPhong);
+                        phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
+                        System.out.println("Đã cập nhật trạng thái phòng về Trống");
+                    }
+
+
                 } else {
                     JOptionPane.showMessageDialog(this, "Không thể xoá. Vui lòng thử lại.");
                 }
@@ -760,7 +798,15 @@ public class KiemTraPhongGUI extends  JFrame {
         }
     }
 
+
+
     private void loadDataToModel() {
+    	try {
+			ktttBUS.getdsKTTT();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         model.setRowCount(0);
         for (KiemTraTinhTrang kttt : ktttBUS.getDsKTTT()) {
             model.addRow(new Object[]{

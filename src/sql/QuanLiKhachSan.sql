@@ -102,8 +102,9 @@ CREATE TABLE KiemTraTinhTrang (
     MaThuePhong INT,
     MaNhanVien INT,
     NgayKiemTra DATE,
-    MoTaThietHai TEXT,
+    MoTaThietHai NVARCHAR(25),
     ChiPhiDenBu DECIMAL(18,2),
+    FOREIGN KEY (MaPhong) REFERENCES ChiTietPhieuThue(MaPhong),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
     FOREIGN KEY (MaThuePhong) REFERENCES PhieuThuePhong(MaThuePhong)
 );

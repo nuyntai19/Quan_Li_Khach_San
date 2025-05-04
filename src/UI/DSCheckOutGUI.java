@@ -72,7 +72,7 @@ public class DSCheckOutGUI extends  JFrame {
 	private final ChiTietPhieuThuePhongDAO chiTietDAO = new ChiTietPhieuThuePhongDAO();
 	private final PhieuThuePhongDAO phieuThueDAO = new PhieuThuePhongDAO();
 	//private final CheckInOutBLL checkInOutBLL = new CheckInOutBLL();
-	private DlgKTphong dlg;
+	private DlgInOutKTTT dlg;
 
 	private ArrayList<CheckInOutDTO> danhSach;
 	private JComboBox cbDK;
@@ -470,9 +470,7 @@ public class DSCheckOutGUI extends  JFrame {
          JButton btnKTTT = new JButton("Kiểm tra tình trạng");
          btnKTTT.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
-         		dlg = new DlgKTphong();
-         		dlg.setLocationRelativeTo(null);
-                dlg.setVisible(true);
+         		jBtKTTTActionPerformed(e);
          	}
          });
          btnKTTT.setForeground(Color.WHITE);
@@ -480,7 +478,7 @@ public class DSCheckOutGUI extends  JFrame {
          btnKTTT.setBackground(new Color(52, 152, 219));
          
          cbDK = new JComboBox();
-         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng","Mã phòng",
+         cbDK.setModel(new DefaultComboBoxModel<>(new String[] { "_", "Mã thuê phòng", "Mã phòng",
         		 	"Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"}));
          
          textTK = new JTextField();
@@ -496,9 +494,6 @@ public class DSCheckOutGUI extends  JFrame {
          				.addGroup(gl_panel.createSequentialGroup()
          					.addComponent(textField, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
          					.addContainerGap())))
-         		.addGroup(gl_panel.createSequentialGroup()
-         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1151, Short.MAX_VALUE)
-         			.addGap(12))
          		.addGroup(gl_panel.createSequentialGroup()
          			.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
          				.addGroup(gl_panel.createSequentialGroup()
@@ -520,6 +515,9 @@ public class DSCheckOutGUI extends  JFrame {
          					.addPreferredGap(ComponentPlacement.RELATED, 460, Short.MAX_VALUE)
          					.addComponent(btnRefresh)
          					.addGap(32))))
+         		.addGroup(gl_panel.createSequentialGroup()
+         			.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1157, Short.MAX_VALUE)
+         			.addContainerGap())
          );
          gl_panel.setVerticalGroup(
          	gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -543,13 +541,13 @@ public class DSCheckOutGUI extends  JFrame {
          						.addComponent(btnTìm, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)))
          				.addComponent(textTK, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
          			.addPreferredGap(ComponentPlacement.UNRELATED)
-         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 452, GroupLayout.PREFERRED_SIZE)
+         			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 446, GroupLayout.PREFERRED_SIZE)
          			.addContainerGap())
          );
          
          table = new JTable();
          model = new DefaultTableModel(new String[]{
- 	            "Mã thuê phòng","Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
+        		 "Mã thuê phòng", "Mã phòng", "Mã khách hàng", "Ngày đặt phòng", "Ngày trả phòng", "Trạng thái"
  	        }, 0) {
  	            @Override
  	            public boolean isCellEditable(int row, int column) {
@@ -604,9 +602,6 @@ public class DSCheckOutGUI extends  JFrame {
         new KiemTraPhongGUI().setVisible(true);
     }
     
-    
-    
-    
     public void loadData() {
         model.setRowCount(0);
         try {
@@ -635,8 +630,31 @@ public class DSCheckOutGUI extends  JFrame {
     	try {
     		loadData();
     		textTK.setText("");
+    		JOptionPane.showMessageDialog(null, "Làm mới thành công.");	
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Lỗi khi làm mới dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void jBtKTTTActionPerformed(ActionEvent e) {
+    	int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+        	String maPhong = String.valueOf(table.getValueAt(selectedRow, 1));
+        	String maThuePhong = String.valueOf(table.getValueAt(selectedRow, 0));
+
+            // dialog
+            dlg = new DlgInOutKTTT(model, table.getSelectedRow());
+            dlg.setModelAndRow(model, selectedRow);
+            dlg.setDataAddKTTT(maPhong, maThuePhong);
+            dlg.setLocationRelativeTo(null);
+            dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                	loadData();
+                }
+            });
+            dlg.setVisible(true);
+            
         }
     }
 
@@ -666,8 +684,8 @@ public class DSCheckOutGUI extends  JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi tìm kiếm: " + ex.getMessage());
         }
     }
-    private void KTPhong(int maPhong) {
-    	KiemTraTinhTrang kt = ktttBUS.timKiemKTTT(maPhong);
+    private void KTPhong(int maPhong, int maThuePhong) throws SQLException {
+    	KiemTraTinhTrang kt = ktttBUS.timKTTT(maPhong, maThuePhong);
     	if(kt != null ) 
     	{
     			kt.getMoTaThietHai().equalsIgnoreCase("Khong");
@@ -678,9 +696,9 @@ public class DSCheckOutGUI extends  JFrame {
 					JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
 					e.printStackTrace();
 				}
-        }
-        try {
-			phongDAO.capNhatTrangThaiPhong(maPhong, "Phong trong");
+        } 
+    	else try {
+			phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái!");
 			e.printStackTrace();
@@ -694,18 +712,14 @@ public class DSCheckOutGUI extends  JFrame {
     	if (selectedRow != -1) { 
     	    try {
     	        int maThuePhong = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());      
-    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());
-
-    	        KTPhong(maPhong);
-    	        
+    	        int maPhong = Integer.parseInt(table.getValueAt(selectedRow, 1).toString());    	        
+    	        KTPhong(maPhong, maThuePhong);
     	        
     	        phieuThueDAO.capNhatTrangThaiPhieu(maThuePhong, "Hoan thanh");
-    	        tempList.xoaCheckInOut(maPhong);
+    	        //tempList.xoaCheckInOut(maPhong);
 
     	        JOptionPane.showMessageDialog(this, "Check-out thành công!");
     	        loadData();
-    	        
-    	        // có thể kèm hoá đơn
 
     	    } catch (SQLException ex) {
     	        ex.printStackTrace();

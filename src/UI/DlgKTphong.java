@@ -227,9 +227,9 @@ public class DlgKTphong extends JDialog {
 			                return;
 			            }
 			
-			            if (ngayKiemTraText.isEmpty() || !ngayKiemTraText.matches("\\d{4}/\\d{2}/\\d{2}")) 
+			            if (ngayKiemTraText.isEmpty() || !ngayKiemTraText.matches("\\d{4}-\\d{2}-\\d{2}")) 
 			            {
-			                JOptionPane.showMessageDialog(null, "Ngày Kiểm Tra phải có định dạng 'yyyy/MM/dd'!");
+			                JOptionPane.showMessageDialog(null, "Ngày Kiểm Tra phải có định dạng 'yyyy-MM-dd'!");
 			                return;
 			            }
 			
@@ -242,37 +242,43 @@ public class DlgKTphong extends JDialog {
 			            int maKiemTra = Integer.parseInt(maKiemTraText);
 			            if (ktttBLL.timKiemKTTT(maKiemTra) != null){
 			            	JOptionPane.showMessageDialog(null, "Mã kiểm tra đã tồn tại!");
+			            	return;
 			            }
 			            int maPhong = Integer.parseInt(maPhongText);
 			            if (! phongDAO.kiemTraTonTai(maPhong)){
 			            	JOptionPane.showMessageDialog(null, "Mã phòng không tồn tại!");
+			            	return;
 			            }
 			            int maThuePhong = Integer.parseInt(maThuePhongText);
 			            if (! phieuThueBLL.kiemTraTonTai(maThuePhong))
 			            {
 			            	JOptionPane.showMessageDialog(null, "Mã thuê phòng không tồn tại!");
+			            	return;
 			            }
 			            
 			            int maNhanVien = Integer.parseInt(maNhanVienText);
 			            if (! nvBLL.kiemTraTonTai(maNhanVien)){
 			            	JOptionPane.showMessageDialog(null, "Mã nhân viên không tồn tại!");
+			            	return;
 			            }
 			            
-			            Date ngayKiemTra = java.sql.Date.valueOf(LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+			            Date ngayKiemTra = java.sql.Date.valueOf(LocalDate.parse(ngayKiemTraText, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			            // mô tả sẵn string k cần đổi
 			            BigDecimal chiPhiDenBu = new BigDecimal(chiPhiText);
 			            
 			            KiemTraTinhTrang kt = new KiemTraTinhTrang(maKiemTra, maPhong, maThuePhong, maNhanVien, ngayKiemTra, moTaThietHai, chiPhiDenBu);
 			
-		                if (ktttBLL != null && ktttBLL.themKTTT(kt)) 
+		                if (ktttBLL.kiemTraHopLeKTTT(maPhong, maThuePhong, ngayKiemTra))
 		                {
+		                	ktttBLL.themKTTT(kt);
 		                    JOptionPane.showMessageDialog(null, "Thêm thành công!");
 		                    dispose();  // Đóng dialog sau khi thêm thành công
 		                } else {
-		                    JOptionPane.showMessageDialog(null, "Thêm thất bại!");
+		                    JOptionPane.showMessageDialog(null, "Thêm kiểm tra thất bại!\n mã phòng, mã thuê phòng, ngày kiểm tra không hợp lí! "
+		                    		+ "\nVui lòng kiểm tra lại dữ liệu \".");
 		                }
 		           	} catch (DateTimeParseException ex) {
-			            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng 'yyyy/mm/dd'.");
+			            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng 'yyyy-MM-dd'.");
 		           	} catch (Exception ex) {
 		           		JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi lưu: " + ex.getMessage());
 		           	}
