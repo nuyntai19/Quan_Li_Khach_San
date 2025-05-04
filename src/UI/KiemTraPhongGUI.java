@@ -768,25 +768,9 @@ public class KiemTraPhongGUI extends  JFrame {
                 if (success) {
                     model.removeRow(selectedRow);
                     JOptionPane.showMessageDialog(this, "Xoá thành công.");
-
-                    // Nếu phòng không còn kiểm tra tình trạng nào, cập nhật trạng thái về "Trong"
-//                    if (!ktttBUS.kiemTraTonTaiPhong(maPhong)) {
-//                    	CheckInOutDTO checkOut = tempList.timCheckInOutTEMP(maPhong);
-//                        if (checkOut == null) {
-//                            System.out.println("Phòng đã check-out. Đổi trạng thái về 'Trong'");
-//                            phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
-//                        } else {
-//                            System.out.println("Phòng chưa check-out. Không cập nhật trạng thái.");
-//                        }
-//                        //phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
-//                    }
-                    if (ktttBUS.kiemTraTonTaiPhong(maPhong)) {
-                        System.out.println("Không còn KTTT nào cho phòng: " + maPhong);
+                    if (! ktttBUS.kiemTraTonTaiPhong(maPhong)) {
                         phongDAO.capNhatTrangThaiPhong(maPhong, "Trong");
-                        System.out.println("Đã cập nhật trạng thái phòng về Trống");
                     }
-
-
                 } else {
                     JOptionPane.showMessageDialog(this, "Không thể xoá. Vui lòng thử lại.");
                 }
