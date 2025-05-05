@@ -1,69 +1,55 @@
 package DTO;
 
-import java.time.LocalDate;
-import java.util.Scanner;
+import java.util.Date;
 
 public class PhieuNhapHang_DTO {
     private String maPhieuNhap;
-    private String maNhanVien;
-    private String maNhaCungCap;
-    private LocalDate ngayNhap;
+    private Date ngayNhap;
     private double tongTien;
-
-    // Constructor mặc định
+    private String maNhanVien;
+    
     public PhieuNhapHang_DTO() {
-        this.maPhieuNhap = ""; // Sinh mã tự động
-        this.maNhanVien = "";
-        this.maNhaCungCap = "";
-        this.ngayNhap = LocalDate.now();
-        this.tongTien = 0;
     }
-
-    // Constructor có tham số
-    public PhieuNhapHang_DTO(String maPhieuNhap, String maNhanVien, String maNhaCungCap, LocalDate ngayNhap, double tongTien) {
+    
+    public PhieuNhapHang_DTO(String maPhieuNhap, Date ngayNhap, double tongTien, String maNhanVien) {
         this.maPhieuNhap = maPhieuNhap;
-        this.maNhanVien = maNhanVien;
-        this.maNhaCungCap = maNhaCungCap;
         this.ngayNhap = ngayNhap;
         this.tongTien = tongTien;
-    }
-
-    // Getter & Setter
-    public String getMaPhieuNhap() {
-        return this.maPhieuNhap;
+        this.maNhanVien = maNhanVien;
     }
     
-    public String getMaNhanVien(){
-        return this.maNhanVien;
+    // Getters
+    public String getMaPhieuNhap() {
+        return maPhieuNhap;
     }
-
-    public String getMaNhaCungCap() {
-        return this.maNhaCungCap;
+    
+    public Date getNgayNhap() {
+        return ngayNhap;
     }
-
-    public LocalDate getNgayNhap() {
-        return this.ngayNhap;
-    }
-
+    
     public double getTongTien() {
-        return this.tongTien;
+        return tongTien;
     }
-
-
-    public void setMaNhaCungCap(String maNhaCungCap) {
-        this.maNhaCungCap = maNhaCungCap;
+    
+    public String getMaNhanVien() {
+        return maNhanVien;
     }
-
-    public void setNgayNhap(LocalDate ngayNhap) {
+    
+    // Setters
+    public void setMaPhieuNhap(String maPhieuNhap) {
+        this.maPhieuNhap = maPhieuNhap;
+    }
+    
+    public void setNgayNhap(Date ngayNhap) {
         this.ngayNhap = ngayNhap;
     }
     
-    public void setMaNhanVien(String maNhanVien){
-        this.maNhanVien = maNhanVien;
-    }
-
     public void setTongTien(double tongTien) {
         this.tongTien = tongTien;
+    }
+    
+    public void setMaNhanVien(String maNhanVien) {
+        this.maNhanVien = maNhanVien;
     }
 }
 
