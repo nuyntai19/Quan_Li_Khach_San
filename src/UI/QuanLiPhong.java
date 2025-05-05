@@ -808,6 +808,20 @@ public class QuanLiPhong extends javax.swing.JFrame {
         ButtonQLNhapHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHAPHANG.png"))); // NOI18N
         ButtonQLNhapHang.setText("Quản lí Nhập Hàng");
         ButtonQLNhapHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLNhapHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+                try {
+                    String url = "jdbc:sqlserver://localhost:1433;databaseName=QuanLiKhachSan;encrypt=true;trustServerCertificate=true";
+                    String username = "sa";
+                    String password = "123456";
+                    Connection conn = DriverManager.getConnection(url, username, password);
+                    new QuanLyNhapHang(conn).setVisible(true);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi kết nối: " + ex.getMessage());
+                }
+            }
+        });
 
         ButtonKhoHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonKhoHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/KHOHANG.png"))); // NOI18N
