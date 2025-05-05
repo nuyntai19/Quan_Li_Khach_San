@@ -1,304 +1,121 @@
 package DAO;
 
 import DTO.PhieuNhapHang_DTO;
-import sql.DatabaseQLKS;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.sql.Date;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PhieuNhapHang_DAO {
+    private Connection conn;
     
-    // Thêm phiếu nhập hàng mới vào database
-    public boolean themPhieuNhapHang(PhieuNhapHang_DTO phieuNhap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean result = false;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "INSERT INTO PhieuNhapHang (MaPhieuNhapHang, MaNhanVienXacNhan, MaNhaCungCap, NgayNhap, TongTien) " +
-                         "VALUES (?, ?, ?, ?, ?)";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(phieuNhap.getMaPhieuNhap()));
-            stmt.setInt(2, Integer.parseInt(phieuNhap.getMaNhanVien()));
-            stmt.setInt(3, Integer.parseInt(phieuNhap.getMaNhaCungCap()));
-            stmt.setDate(4, Date.valueOf(phieuNhap.getNgayNhap()));
-            stmt.setBigDecimal(5, java.math.BigDecimal.valueOf(phieuNhap.getTongTien()));
-            
-            int rowsAffected = stmt.executeUpdate();
-            result = rowsAffected > 0;
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
-        }
-        
-        return result;
+    public PhieuNhapHang_DAO(Connection conn) {
+        this.conn = conn;
     }
     
-    // Cập nhật thông tin phiếu nhập hàng
-    public boolean capNhatPhieuNhapHang(PhieuNhapHang_DTO phieuNhap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean result = false;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "UPDATE PhieuNhapHang SET MaNhanVienXacNhan = ?, MaNhaCungCap = ?, NgayNhap = ?, TongTien = ? " +
-                         "WHERE MaPhieuNhapHang = ?";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(phieuNhap.getMaNhanVien()));
-            stmt.setInt(2, Integer.parseInt(phieuNhap.getMaNhaCungCap()));
-            stmt.setDate(3, Date.valueOf(phieuNhap.getNgayNhap()));
-            stmt.setBigDecimal(4, java.math.BigDecimal.valueOf(phieuNhap.getTongTien()));
-            stmt.setInt(5, Integer.parseInt(phieuNhap.getMaPhieuNhap()));
-            
-            int rowsAffected = stmt.executeUpdate();
-            result = rowsAffected > 0;
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
+    // Thêm phiếu nhập hàng mới
+    public boolean themPhieuNhap(PhieuNhapHang_DTO phieuNhap) throws SQLException {
+        String sql = "INSERT INTO PhieuNhapHang (MaPhieuNhap, NgayNhap, TongTien, MaNhanVien) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, phieuNhap.getMaPhieuNhap());
+            stmt.setDate(2, new java.sql.Date(phieuNhap.getNgayNhap().getTime()));
+            stmt.setDouble(3, phieuNhap.getTongTien());
+            stmt.setString(4, phieuNhap.getMaNhanVien());
+            return stmt.executeUpdate() > 0;
         }
-        
-        return result;
+    }
+    
+    // Cập nhật phiếu nhập hàng
+    public boolean capNhatPhieuNhap(PhieuNhapHang_DTO phieuNhap) throws SQLException {
+        String sql = "UPDATE PhieuNhapHang SET NgayNhap = ?, TongTien = ?, MaNhanVien = ? WHERE MaPhieuNhap = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(phieuNhap.getNgayNhap().getTime()));
+            stmt.setDouble(2, phieuNhap.getTongTien());
+            stmt.setString(3, phieuNhap.getMaNhanVien());
+            stmt.setString(4, phieuNhap.getMaPhieuNhap());
+            return stmt.executeUpdate() > 0;
+        }
     }
     
     // Xóa phiếu nhập hàng
-    public boolean xoaPhieuNhapHang(String maPhieuNhap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        boolean result = false;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            
-            // Trước tiên phải xóa các chi tiết phiếu nhập hàng
-            String sqlDeleteDetails = "DELETE FROM ChiTietPhieuNhapHang WHERE MaPhieuNhapHang = ?";
-            stmt = conn.prepareStatement(sqlDeleteDetails);
-            stmt.setInt(1, Integer.parseInt(maPhieuNhap));
-            stmt.executeUpdate();
-            
-            // Sau đó xóa phiếu nhập hàng
-            String sqlDeleteInvoice = "DELETE FROM PhieuNhapHang WHERE MaPhieuNhapHang = ?";
-            stmt = conn.prepareStatement(sqlDeleteInvoice);
-            stmt.setInt(1, Integer.parseInt(maPhieuNhap));
-            
-            int rowsAffected = stmt.executeUpdate();
-            result = rowsAffected > 0;
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, null);
+    public boolean xoaPhieuNhap(String maPhieuNhap) throws SQLException {
+        String sql = "DELETE FROM PhieuNhapHang WHERE MaPhieuNhap = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maPhieuNhap);
+            return stmt.executeUpdate() > 0;
         }
-        
-        return result;
     }
     
-    // Lấy thông tin một phiếu nhập hàng theo mã
-    public PhieuNhapHang_DTO getPhieuNhapHang(String maPhieuNhap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        PhieuNhapHang_DTO phieuNhap = null;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM PhieuNhapHang WHERE MaPhieuNhapHang = ?";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(maPhieuNhap));
-            
-            rs = stmt.executeQuery();
-            
+    // Lấy thông tin phiếu nhập hàng theo mã
+    public PhieuNhapHang_DTO layPhieuNhapTheoMa(String maPhieuNhap) throws SQLException {
+        String sql = "SELECT * FROM PhieuNhapHang WHERE MaPhieuNhap = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maPhieuNhap);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String maNhanVien = String.valueOf(rs.getInt("MaNhanVienXacNhan"));
-                String maNhaCungCap = String.valueOf(rs.getInt("MaNhaCungCap"));
-                LocalDate ngayNhap = rs.getDate("NgayNhap").toLocalDate();
-                double tongTien = rs.getBigDecimal("TongTien").doubleValue();
-                
-                phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, maNhanVien, maNhaCungCap, ngayNhap, tongTien);
+                return new PhieuNhapHang_DTO(
+                    rs.getString("MaPhieuNhap"),
+                    rs.getDate("NgayNhap"),
+                    rs.getDouble("TongTien"),
+                    rs.getString("MaNhanVien")
+                );
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
         }
-        
-        return phieuNhap;
+        return null;
     }
     
     // Lấy danh sách tất cả phiếu nhập hàng
-    public List<PhieuNhapHang_DTO> getAllPhieuNhapHang() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<PhieuNhapHang_DTO> danhSachPhieuNhap = new ArrayList<>();
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM PhieuNhapHang ORDER BY MaPhieuNhapHang";
-            
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-            
+    public List<PhieuNhapHang_DTO> layDanhSachPhieuNhap() throws SQLException {
+        List<PhieuNhapHang_DTO> danhSach = new ArrayList<>();
+        String sql = "SELECT * FROM PhieuNhapHang";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                String maPhieuNhap = String.valueOf(rs.getInt("MaPhieuNhapHang"));
-                String maNhanVien = String.valueOf(rs.getInt("MaNhanVienXacNhan"));
-                String maNhaCungCap = String.valueOf(rs.getInt("MaNhaCungCap"));
-                LocalDate ngayNhap = rs.getDate("NgayNhap").toLocalDate();
-                double tongTien = rs.getBigDecimal("TongTien").doubleValue();
-                
-                PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, maNhanVien, maNhaCungCap, ngayNhap, tongTien);
-                danhSachPhieuNhap.add(phieuNhap);
+                danhSach.add(new PhieuNhapHang_DTO(
+                    rs.getString("MaPhieuNhap"),
+                    rs.getDate("NgayNhap"),
+                    rs.getDouble("TongTien"),
+                    rs.getString("MaNhanVien")
+                ));
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
         }
-        
-        return danhSachPhieuNhap;
+        return danhSach;
     }
     
-    // Kiểm tra mã phiếu nhập hàng đã tồn tại hay chưa
-    public boolean kiemTraMaTonTai(String maPhieuNhap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        boolean exists = false;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT COUNT(*) FROM PhieuNhapHang WHERE MaPhieuNhapHang = ?";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(maPhieuNhap));
-            
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                exists = rs.getInt(1) > 0;
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
-        }
-        
-        return exists;
-    }
-    
-    // Tạo mã phiếu nhập hàng tiếp theo
-    public String taoMaPhieuNhapHangTiepTheo() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int maxMa = 0;
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT MAX(MaPhieuNhapHang) FROM PhieuNhapHang";
-            
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                maxMa = rs.getInt(1);
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
-        }
-        
-        return String.valueOf(maxMa + 1);
-    }
-    
-    // Tìm kiếm phiếu nhập hàng theo mã nhà cung cấp
-    public List<PhieuNhapHang_DTO> timKiemTheoNhaCungCap(String maNhaCungCap) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<PhieuNhapHang_DTO> danhSachPhieuNhap = new ArrayList<>();
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM PhieuNhapHang WHERE MaNhaCungCap = ?";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(maNhaCungCap));
-            
-            rs = stmt.executeQuery();
-            
+    // Lấy danh sách phiếu nhập hàng theo ngày
+    public List<PhieuNhapHang_DTO> layPhieuNhapTheoNgay(Date ngayNhap) throws SQLException {
+        List<PhieuNhapHang_DTO> danhSach = new ArrayList<>();
+        String sql = "SELECT * FROM PhieuNhapHang WHERE NgayNhap = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(ngayNhap.getTime()));
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String maPhieuNhap = String.valueOf(rs.getInt("MaPhieuNhapHang"));
-                String maNhanVien = String.valueOf(rs.getInt("MaNhanVienXacNhan"));
-                LocalDate ngayNhap = rs.getDate("NgayNhap").toLocalDate();
-                double tongTien = rs.getBigDecimal("TongTien").doubleValue();
-                
-                PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, maNhanVien, maNhaCungCap, ngayNhap, tongTien);
-                danhSachPhieuNhap.add(phieuNhap);
+                danhSach.add(new PhieuNhapHang_DTO(
+                    rs.getString("MaPhieuNhap"),
+                    rs.getDate("NgayNhap"),
+                    rs.getDouble("TongTien"),
+                    rs.getString("MaNhanVien")
+                ));
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
         }
-        
-        return danhSachPhieuNhap;
+        return danhSach;
     }
     
-    // Tìm kiếm phiếu nhập hàng theo khoảng thời gian
-    public List<PhieuNhapHang_DTO> timKiemTheoKhoangThoiGian(LocalDate tuNgay, LocalDate denNgay) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<PhieuNhapHang_DTO> danhSachPhieuNhap = new ArrayList<>();
-        
-        try {
-            conn = DatabaseQLKS.getConnection();
-            String sql = "SELECT * FROM PhieuNhapHang WHERE NgayNhap BETWEEN ? AND ?";
-            
-            stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(tuNgay));
-            stmt.setDate(2, Date.valueOf(denNgay));
-            
-            rs = stmt.executeQuery();
-            
+    // Lấy danh sách phiếu nhập hàng theo nhân viên
+    public List<PhieuNhapHang_DTO> layPhieuNhapTheoNhanVien(String maNhanVien) throws SQLException {
+        List<PhieuNhapHang_DTO> danhSach = new ArrayList<>();
+        String sql = "SELECT * FROM PhieuNhapHang WHERE MaNhanVien = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, maNhanVien);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String maPhieuNhap = String.valueOf(rs.getInt("MaPhieuNhapHang"));
-                String maNhanVien = String.valueOf(rs.getInt("MaNhanVienXacNhan"));
-                String maNhaCungCap = String.valueOf(rs.getInt("MaNhaCungCap"));
-                LocalDate ngayNhap = rs.getDate("NgayNhap").toLocalDate();
-                double tongTien = rs.getBigDecimal("TongTien").doubleValue();
-                
-                PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, maNhanVien, maNhaCungCap, ngayNhap, tongTien);
-                danhSachPhieuNhap.add(phieuNhap);
+                danhSach.add(new PhieuNhapHang_DTO(
+                    rs.getString("MaPhieuNhap"),
+                    rs.getDate("NgayNhap"),
+                    rs.getDouble("TongTien"),
+                    rs.getString("MaNhanVien")
+                ));
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseQLKS.close(conn, stmt, rs);
         }
-        
-        return danhSachPhieuNhap;
+        return danhSach;
     }
 }
