@@ -1,61 +1,68 @@
 package DTO;
-import java.time.LocalDate;
 
-public class ChiTietPhieuNhap_DTO extends PhieuNhapHang_DTO{
+public class ChiTietPhieuNhap_DTO {
+    private String maPhieuNhap;
     private String maHang;
-    private double soLuong;
+    private int soLuong;
     private double donGia;
-    private String ghiChu;
+    private double thanhTien;
     
-    public ChiTietPhieuNhap_DTO(){
-        super();
-        this.maHang = "";
-        this.soLuong = 0;
-        this.donGia = 0;
-        this.ghiChu = "";
+    public ChiTietPhieuNhap_DTO() {
     }
     
-    public ChiTietPhieuNhap_DTO(String maPhieuNhap, String maNhanVien, String maNhaCungCap, LocalDate ngayNhap, double tongTien, String maHang,
-            double soLuong, double donGia,String ghiChu){
-        super(maPhieuNhap, maNhanVien, maNhaCungCap, ngayNhap, tongTien);
+    public ChiTietPhieuNhap_DTO(String maPhieuNhap, String maHang, int soLuong, double donGia, double thanhTien) {
+        this.maPhieuNhap = maPhieuNhap;
         this.maHang = maHang;
         this.soLuong = soLuong;
         this.donGia = donGia;
-        this.ghiChu = ghiChu;
+        this.thanhTien = thanhTien;
     }
     
-    //getter
-    public String getMaHang(){
-        return this.maHang;
+    // Getters
+    public String getMaPhieuNhap() {
+        return maPhieuNhap;
     }
     
-    public double getSoLuong(){
-        return this.soLuong;
+    public String getMaHang() {
+        return maHang;
     }
     
-    public double getDonGia(){
-        return this.donGia;
+    public int getSoLuong() {
+        return soLuong;
     }
     
-    public String getGhiChu(){
-        return this.ghiChu;
-    }
-        
-    //setter
-    public void setMaHang(String tmp){
-        this.maHang = tmp;
+    public double getDonGia() {
+        return donGia;
     }
     
-    public void setSoLuong(double tmp){ 
-        this.soLuong = tmp;
+    public double getThanhTien() {
+        return thanhTien;
     }
     
-    public void setDonGia(double tmp){
-        this.donGia = tmp;
+    // Setters
+    public void setMaPhieuNhap(String maPhieuNhap) {
+        this.maPhieuNhap = maPhieuNhap;
     }
     
-    public void setGhiChu(String tmp){
-        this.ghiChu = tmp;
+    public void setMaHang(String maHang) {
+        this.maHang = maHang;
+    }
+    
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+    
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
+    }
+    
+    public void setThanhTien(double thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+    
+    // Phương thức tính thành tiền
+    public void tinhThanhTien() {
+        this.thanhTien = this.soLuong * this.donGia;
     }
 }
 
