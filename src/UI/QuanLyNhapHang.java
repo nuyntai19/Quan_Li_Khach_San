@@ -29,7 +29,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.print.*;
 import java.text.MessageFormat;
 
-public class QuanLyNhapHang extends JFrame {
+public class QuanLyNhapHang extends javax.swing.JFrame {
     // Constants
     private static final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private static final Color SECONDARY_COLOR = new Color(52, 152, 219);
@@ -98,6 +98,7 @@ public class QuanLyNhapHang extends JFrame {
     private JButton btnBaoCao;
     private JButton btnRefresh;
     private JButton btnHelp;
+    private JButton btnThoat;
     
     // Tables
     private JTable tblPhieuNhap;
@@ -128,7 +129,10 @@ public class QuanLyNhapHang extends JFrame {
     private JLabel lblStatus;
     private JProgressBar progressBar;
     
+    private Connection conn;
+    
     public QuanLyNhapHang(Connection conn) {
+        this.conn = conn;
         quanLyNhapHangBLL = new QuanLyNhapHangBLL(conn);
         danhSachChiTiet = new ArrayList<>();
         danhSachNhaCungCap = new HashMap<>();
@@ -467,6 +471,7 @@ public class QuanLyNhapHang extends JFrame {
         btnBaoCao = createButton("Báo cáo", "report.png");
         btnRefresh = createButton("Làm mới", "refresh.png");
         btnHelp = createButton("Trợ giúp", "help.png");
+        btnThoat = createButton("Thoát", "exit.png");
         
         panel.add(btnThem);
         panel.add(btnSua);
@@ -481,6 +486,7 @@ public class QuanLyNhapHang extends JFrame {
         panel.add(btnBaoCao);
         panel.add(btnRefresh);
         panel.add(btnHelp);
+        panel.add(btnThoat);
         
         return panel;
     }
@@ -612,238 +618,258 @@ public class QuanLyNhapHang extends JFrame {
         btnXoaChiTiet.addActionListener(e -> xoaChiTiet());
         btnTimKiem.addActionListener(e -> timKiem());
         btnXuatExcel.addActionListener(e -> xuatExcel());
-        btnInPhieu.addActionListener(e -> inPhieuNhap());
-        btnThongKe.addActionListener(e -> hienThiThongKe());
-        btnBaoCao.addActionListener(e -> taoBaoCao());
-        btnRefresh.addActionListener(e -> refreshData());
+        btnInPhieu.addActionListener(e -> inPhieu());
+        btnThongKe.addActionListener(e -> thongKe());
+        btnBaoCao.addActionListener(e -> baoCao());
+        btnRefresh.addActionListener(e -> refresh());
         btnHelp.addActionListener(e -> hienThiTroGiup());
+        btnThoat.addActionListener(e -> {
+            dispose();
+            new QuanLiPhong(conn).setVisible(true);
+        });
         
         tblPhieuNhap.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 hienThiChiTietPhieuNhap();
-                capNhatThongKe();
             }
         });
-        
-        txtSoLuong.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) { tinhThanhTien(); }
-            public void removeUpdate(DocumentEvent e) { tinhThanhTien(); }
-            public void insertUpdate(DocumentEvent e) { tinhThanhTien(); }
-        });
-        
-        txtDonGia.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) { tinhThanhTien(); }
-            public void removeUpdate(DocumentEvent e) { tinhThanhTien(); }
-            public void insertUpdate(DocumentEvent e) { tinhThanhTien(); }
-        });
-        
-        cboLocTheoNgay.addActionListener(e -> locTheoNgay());
-        txtTuNgay.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) { locTheoNgay(); }
-            public void removeUpdate(DocumentEvent e) { locTheoNgay(); }
-            public void insertUpdate(DocumentEvent e) { locTheoNgay(); }
-        });
-        
-        txtDenNgay.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) { locTheoNgay(); }
-            public void removeUpdate(DocumentEvent e) { locTheoNgay(); }
-            public void insertUpdate(DocumentEvent e) { locTheoNgay(); }
-        });
-        
-        cboNhaCungCap.addActionListener(e -> capNhatThongTinNhaCungCap());
-        cboLoaiHang.addActionListener(e -> capNhatThongTinHang());
-    }
-    
-    private void tinhThanhTien() {
-        try {
-            int soLuong = Integer.parseInt(txtSoLuong.getText());
-            double donGia = Double.parseDouble(txtDonGia.getText());
-            double thanhTien = soLuong * donGia;
-            txtThanhTien.setText(CURRENCY_FORMAT.format(thanhTien));
-        } catch (NumberFormatException ex) {
-            txtThanhTien.setText("0");
-        }
-    }
-    
-    private void themChiTiet() {
-        try {
-            if (validateChiTietInput()) {
-                String maHang = txtMaHang.getText();
-                int soLuong = Integer.parseInt(txtSoLuong.getText());
-                double donGia = Double.parseDouble(txtDonGia.getText());
-                double thanhTien = Double.parseDouble(txtThanhTien.getText().replace(",", ""));
-                
-                ChiTietPhieuNhap_DTO chiTiet = new ChiTietPhieuNhap_DTO(
-                    txtMaPhieuNhap.getText(),
-                    maHang,
-                    soLuong,
-                    donGia,
-                    thanhTien
-                );
-                
-                danhSachChiTiet.add(chiTiet);
-                updateChiTietTable();
-                tinhTongTien();
-                
-                clearChiTietInput();
-                showMessage("Thêm chi tiết thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (NumberFormatException ex) {
-            showMessage("Vui lòng nhập đúng định dạng số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void xoaChiTiet() {
-        int selectedRow = tblChiTiet.getSelectedRow();
-        if (selectedRow >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                "Bạn có chắc chắn muốn xóa chi tiết này?",
-                "Xác nhận xóa",
-                JOptionPane.YES_NO_OPTION);
-                
-            if (confirm == JOptionPane.YES_OPTION) {
-                danhSachChiTiet.remove(selectedRow);
-                updateChiTietTable();
-                tinhTongTien();
-                showMessage("Xóa chi tiết thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else {
-            showMessage("Vui lòng chọn chi tiết cần xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    private void tinhTongTien() {
-        double tongTien = 0;
-        for (ChiTietPhieuNhap_DTO chiTiet : danhSachChiTiet) {
-            tongTien += chiTiet.getThanhTien();
-        }
-        txtTongTien.setText(CURRENCY_FORMAT.format(tongTien));
     }
     
     private void themPhieuNhap() {
         try {
-            if (validateInput()) {
-                PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(
-                    txtMaPhieuNhap.getText(),
-                    new SimpleDateFormat("dd/MM/yyyy").parse(txtNgayNhap.getText()),
-                    Double.parseDouble(txtTongTien.getText().replace(",", "")),
-                    txtMaNhanVien.getText()
-                );
-                
-                if (quanLyNhapHangBLL.themPhieuNhap(phieuNhap, danhSachChiTiet)) {
-                    showMessage("Thêm phiếu nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    loadData();
-                    clearForm();
-                } else {
-                    showMessage("Thêm phiếu nhập thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
+            String maPhieuNhap = txtMaPhieuNhap.getText();
+            Date ngayNhap = ((JDateChooser)txtNgayNhap.getDateEditor().getUiComponent()).getDate();
+            String maNhanVien = txtMaNhanVien.getText();
+            
+            if (maPhieuNhap.isEmpty() || ngayNhap == null || maNhanVien.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+                return;
             }
-        } catch (Exception ex) {
-            showMessage("Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            
+            PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, ngayNhap, 0, maNhanVien);
+            quanLyNhapHangBLL.themPhieuNhap(phieuNhap);
+            loadData();
+            clearForm();
+            JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
         }
     }
     
     private void suaPhieuNhap() {
         try {
-            if (validateInput()) {
-                PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(
-                    txtMaPhieuNhap.getText(),
-                    new SimpleDateFormat("dd/MM/yyyy").parse(txtNgayNhap.getText()),
-                    Double.parseDouble(txtTongTien.getText().replace(",", "")),
-                    txtMaNhanVien.getText()
-                );
-                
-                if (quanLyNhapHangBLL.capNhatPhieuNhap(phieuNhap, danhSachChiTiet)) {
-                    showMessage("Cập nhật phiếu nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    loadData();
-                    clearForm();
-                } else {
-                    showMessage("Cập nhật phiếu nhập thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
+            int row = tblPhieuNhap.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu nhập cần sửa!");
+                return;
             }
-        } catch (Exception ex) {
-            showMessage("Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            
+            String maPhieuNhap = txtMaPhieuNhap.getText();
+            Date ngayNhap = ((JDateChooser)txtNgayNhap.getDateEditor().getUiComponent()).getDate();
+            String maNhanVien = txtMaNhanVien.getText();
+            
+            if (maPhieuNhap.isEmpty() || ngayNhap == null || maNhanVien.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+            
+            PhieuNhapHang_DTO phieuNhap = new PhieuNhapHang_DTO(maPhieuNhap, ngayNhap, 0, maNhanVien);
+            quanLyNhapHangBLL.suaPhieuNhap(phieuNhap);
+            loadData();
+            clearForm();
+            JOptionPane.showMessageDialog(this, "Sửa phiếu nhập thành công!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
         }
     }
     
     private void xoaPhieuNhap() {
         try {
-            String maPhieuNhap = txtMaPhieuNhap.getText();
-            if (maPhieuNhap.isEmpty()) {
-                showMessage("Vui lòng chọn phiếu nhập cần xóa!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            int row = tblPhieuNhap.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu nhập cần xóa!");
                 return;
             }
             
-            int confirm = JOptionPane.showConfirmDialog(this,
-                "Bạn có chắc chắn muốn xóa phiếu nhập này?",
-                "Xác nhận xóa",
+            String maPhieuNhap = tblPhieuNhap.getValueAt(row, 0).toString();
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có chắc chắn muốn xóa phiếu nhập này?", 
+                "Xác nhận xóa", 
                 JOptionPane.YES_NO_OPTION);
                 
             if (confirm == JOptionPane.YES_OPTION) {
-                if (quanLyNhapHangBLL.xoaPhieuNhap(maPhieuNhap)) {
-                    showMessage("Xóa phiếu nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    loadData();
-                    clearForm();
-                } else {
-                    showMessage("Xóa phiếu nhập thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
+                quanLyNhapHangBLL.xoaPhieuNhap(maPhieuNhap);
+                loadData();
+                clearForm();
+                JOptionPane.showMessageDialog(this, "Xóa phiếu nhập thành công!");
             }
         } catch (SQLException ex) {
-            showMessage("Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
         }
-    }
-    
-    private boolean validateInput() {
-        if (txtMaPhieuNhap.getText().isEmpty()) {
-            showMessage("Vui lòng nhập mã phiếu nhập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtNgayNhap.getText().isEmpty()) {
-            showMessage("Vui lòng nhập ngày nhập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtMaNhanVien.getText().isEmpty()) {
-            showMessage("Vui lòng nhập mã nhân viên!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (danhSachChiTiet.isEmpty()) {
-            showMessage("Vui lòng thêm ít nhất một chi tiết phiếu nhập!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-    
-    private boolean validateChiTietInput() {
-        if (txtMaHang.getText().isEmpty()) {
-            showMessage("Vui lòng nhập mã hàng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtSoLuong.getText().isEmpty()) {
-            showMessage("Vui lòng nhập số lượng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtDonGia.getText().isEmpty()) {
-            showMessage("Vui lòng nhập đơn giá!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
     }
     
     private void clearForm() {
         txtMaPhieuNhap.setText("");
-        txtNgayNhap.setText("");
+        txtNgayNhap.setDate(null);
         txtMaNhanVien.setText("");
         txtTongTien.setText("");
-        clearChiTietInput();
-        danhSachChiTiet.clear();
-        updateChiTietTable();
+        modelChiTiet.setRowCount(0);
     }
     
-    private void clearChiTietInput() {
-        txtMaHang.setText("");
-        txtSoLuong.setText("");
-        txtDonGia.setText("");
-        txtThanhTien.setText("");
+    private void themChiTiet() {
+        try {
+            int row = tblPhieuNhap.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu nhập!");
+                return;
+            }
+            
+            String maPhieuNhap = txtMaPhieuNhap.getText();
+            String maHang = cboMaHang.getSelectedItem().toString();
+            int soLuong = Integer.parseInt(txtSoLuong.getText());
+            double donGia = Double.parseDouble(txtDonGia.getText());
+            
+            if (maHang.isEmpty() || soLuong <= 0 || donGia <= 0) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin chi tiết!");
+                return;
+            }
+            
+            ChiTietPhieuNhap_DTO chiTiet = new ChiTietPhieuNhap_DTO(maPhieuNhap, maHang, soLuong, donGia);
+            quanLyNhapHangBLL.themChiTietPhieuNhap(chiTiet);
+            hienThiChiTietPhieuNhap();
+            JOptionPane.showMessageDialog(this, "Thêm chi tiết thành công!");
+        } catch (SQLException | NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void xoaChiTiet() {
+        try {
+            int row = tblChiTiet.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn chi tiết cần xóa!");
+                return;
+            }
+            
+            String maPhieuNhap = txtMaPhieuNhap.getText();
+            String maHang = tblChiTiet.getValueAt(row, 0).toString();
+            
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có chắc chắn muốn xóa chi tiết này?", 
+                "Xác nhận xóa", 
+                JOptionPane.YES_NO_OPTION);
+                
+            if (confirm == JOptionPane.YES_OPTION) {
+                quanLyNhapHangBLL.xoaChiTietPhieuNhap(maPhieuNhap, maHang);
+                hienThiChiTietPhieuNhap();
+                JOptionPane.showMessageDialog(this, "Xóa chi tiết thành công!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void timKiem() {
+        String tuKhoa = txtTimKiem.getText();
+        String loaiTimKiem = cboLoaiTimKiem.getSelectedItem().toString();
+        
+        try {
+            List<PhieuNhapHang_DTO> danhSach = quanLyNhapHangBLL.timKiemPhieuNhap(tuKhoa, loaiTimKiem);
+            hienThiDanhSachPhieuNhap(danhSach);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void xuatExcel() {
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Excel Files", "xlsx"));
+            
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                    filePath += ".xlsx";
+                }
+                
+                quanLyNhapHangBLL.xuatExcel(filePath);
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            }
+        } catch (SQLException | IOException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void inPhieu() {
+        try {
+            int row = tblPhieuNhap.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn phiếu nhập cần in!");
+                return;
+            }
+            
+            String maPhieuNhap = tblPhieuNhap.getValueAt(row, 0).toString();
+            quanLyNhapHangBLL.inPhieuNhap(maPhieuNhap);
+        } catch (SQLException | PrinterException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void thongKe() {
+        try {
+            Map<String, Object> thongKe = quanLyNhapHangBLL.thongKe();
+            StringBuilder sb = new StringBuilder();
+            sb.append("Thống kê phiếu nhập:\n\n");
+            sb.append("Tổng số phiếu nhập: ").append(thongKe.get("tongSoPhieuNhap")).append("\n");
+            sb.append("Tổng tiền nhập: ").append(String.format("%,.2f", thongKe.get("tongTienNhap"))).append(" VNĐ\n");
+            sb.append("Số mặt hàng: ").append(thongKe.get("soMatHang")).append("\n");
+            sb.append("Phiếu nhập cao nhất: ").append(thongKe.get("phieuNhapCaoNhat")).append("\n");
+            
+            JOptionPane.showMessageDialog(this, sb.toString(), "Thống kê", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void baoCao() {
+        try {
+            Date tuNgay = ((JDateChooser)txtTuNgay.getDateEditor().getUiComponent()).getDate();
+            Date denNgay = ((JDateChooser)txtDenNgay.getDateEditor().getUiComponent()).getDate();
+            
+            if (tuNgay == null || denNgay == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn khoảng thời gian!");
+                return;
+            }
+            
+            List<PhieuNhapHang_DTO> danhSach = quanLyNhapHangBLL.locPhieuNhapTheoNgay(tuNgay, denNgay);
+            hienThiDanhSachPhieuNhap(danhSach);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+        }
+    }
+    
+    private void refresh() {
+        loadData();
+        clearForm();
+    }
+    
+    private void hienThiTroGiup() {
+        String help = "Hướng dẫn sử dụng:\n\n" +
+            "1. Thêm phiếu nhập: Nhập thông tin và nhấn nút Thêm\n" +
+            "2. Sửa phiếu nhập: Chọn phiếu cần sửa, sửa thông tin và nhấn nút Sửa\n" +
+            "3. Xóa phiếu nhập: Chọn phiếu cần xóa và nhấn nút Xóa\n" +
+            "4. Thêm chi tiết: Chọn phiếu nhập, nhập thông tin chi tiết và nhấn nút Thêm chi tiết\n" +
+            "5. Xóa chi tiết: Chọn chi tiết cần xóa và nhấn nút Xóa chi tiết\n" +
+            "6. Tìm kiếm: Nhập từ khóa và chọn loại tìm kiếm\n" +
+            "7. Xuất Excel: Chọn nơi lưu file Excel\n" +
+            "8. In phiếu: Chọn phiếu cần in và nhấn nút In phiếu\n" +
+            "9. Thống kê: Xem thống kê tổng quan\n" +
+            "10. Báo cáo: Chọn khoảng thời gian để xem báo cáo\n" +
+            "11. Làm mới: Cập nhật lại dữ liệu\n" +
+            "12. Thoát: Quay lại màn hình chính";
+            
+        JOptionPane.showMessageDialog(this, help, "Trợ giúp", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void loadData() {
@@ -911,282 +937,6 @@ public class QuanLyNhapHang extends JFrame {
                 CURRENCY_FORMAT.format(chiTiet.getDonGia()),
                 CURRENCY_FORMAT.format(chiTiet.getThanhTien())
             });
-        }
-    }
-    
-    private void timKiem() {
-        String tuKhoa = txtTimKiem.getText().trim();
-        String loaiTimKiem = (String) cboTimKiem.getSelectedItem();
-        
-        if (tuKhoa.isEmpty()) {
-            showMessage("Vui lòng nhập từ khóa tìm kiếm!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        try {
-            List<PhieuNhapHang_DTO> ketQua = quanLyNhapHangBLL.timKiemPhieuNhap(tuKhoa, loaiTimKiem);
-            if (ketQua.isEmpty()) {
-                showMessage("Không tìm thấy kết quả phù hợp!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                hienThiDanhSachPhieuNhap(ketQua);
-            }
-        } catch (SQLException ex) {
-            showMessage("Lỗi khi tìm kiếm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void xuatExcel() {
-        // Implement export to Excel functionality
-    }
-    
-    private void inPhieuNhap() {
-        // Implement print functionality
-    }
-    
-    private void hienThiThongKe() {
-        JDialog dialog = new JDialog(this, "Thống kê chi tiết", true);
-        dialog.setSize(600, 400);
-        dialog.setLocationRelativeTo(this);
-        
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        // Create chart panel
-        JPanel chartPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        // Add charts here using JFreeChart or other charting library
-        
-        // Create statistics panel
-        JPanel statsPanel = new JPanel(new GridLayout(4, 1, 5, 5));
-        statsPanel.add(createStatisticLabel("Tổng số phiếu: " + quanLyNhapHangBLL.demTongSoPhieuNhap()));
-        statsPanel.add(createStatisticLabel("Tổng tiền nhập: " + CURRENCY_FORMAT.format(quanLyNhapHangBLL.tinhTongTienNhap()) + " VNĐ"));
-        statsPanel.add(createStatisticLabel("Số mặt hàng: " + quanLyNhapHangBLL.demSoMatHang()));
-        statsPanel.add(createStatisticLabel("Phiếu cao nhất: " + CURRENCY_FORMAT.format(quanLyNhapHangBLL.timPhieuNhapCaoNhat()) + " VNĐ"));
-        
-        panel.add(chartPanel, BorderLayout.CENTER);
-        panel.add(statsPanel, BorderLayout.SOUTH);
-        
-        dialog.add(panel);
-        dialog.setVisible(true);
-    }
-    
-    private void taoBaoCao() {
-        JDialog dialog = new JDialog(this, "Tạo báo cáo", true);
-        dialog.setSize(400, 300);
-        dialog.setLocationRelativeTo(this);
-        
-        JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        // Add report options
-        JCheckBox chkPhieuNhap = new JCheckBox("Báo cáo phiếu nhập");
-        JCheckBox chkChiTiet = new JCheckBox("Báo cáo chi tiết");
-        JCheckBox chkThongKe = new JCheckBox("Báo cáo thống kê");
-        
-        JButton btnTaoBaoCao = new JButton("Tạo báo cáo");
-        btnTaoBaoCao.addActionListener(e -> {
-            // Implement report generation
-            dialog.dispose();
-        });
-        
-        panel.add(chkPhieuNhap);
-        panel.add(chkChiTiet);
-        panel.add(chkThongKe);
-        panel.add(btnTaoBaoCao);
-        
-        dialog.add(panel);
-        dialog.setVisible(true);
-    }
-    
-    private void hienThiTroGiup() {
-        JDialog dialog = new JDialog(this, "Trợ giúp", true);
-        dialog.setSize(500, 400);
-        dialog.setLocationRelativeTo(this);
-        
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JTextArea helpText = new JTextArea();
-        helpText.setEditable(false);
-        helpText.setFont(NORMAL_FONT);
-        helpText.setText(
-            "Hướng dẫn sử dụng:\n\n" +
-            "1. Thêm phiếu nhập:\n" +
-            "   - Nhập thông tin phiếu nhập\n" +
-            "   - Thêm chi tiết phiếu nhập\n" +
-            "   - Nhấn nút 'Thêm'\n\n" +
-            "2. Sửa phiếu nhập:\n" +
-            "   - Chọn phiếu nhập cần sửa\n" +
-            "   - Sửa thông tin\n" +
-            "   - Nhấn nút 'Sửa'\n\n" +
-            "3. Xóa phiếu nhập:\n" +
-            "   - Chọn phiếu nhập cần xóa\n" +
-            "   - Nhấn nút 'Xóa'\n\n" +
-            "4. Tìm kiếm:\n" +
-            "   - Nhập từ khóa\n" +
-            "   - Chọn loại tìm kiếm\n" +
-            "   - Nhấn nút 'Tìm kiếm'\n\n" +
-            "5. Xuất Excel:\n" +
-            "   - Nhấn nút 'Xuất Excel'\n" +
-            "   - Chọn nơi lưu file\n\n" +
-            "6. In phiếu:\n" +
-            "   - Chọn phiếu cần in\n" +
-            "   - Nhấn nút 'In phiếu'"
-        );
-        
-        JScrollPane scrollPane = new JScrollPane(helpText);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        dialog.add(panel);
-        dialog.setVisible(true);
-    }
-    
-    private void locTheoNgay() {
-        try {
-            String selectedOption = (String) cboLocTheoNgay.getSelectedItem();
-            Date tuNgay = null;
-            Date denNgay = null;
-            
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            
-            switch (selectedOption) {
-                case "Hôm nay":
-                    tuNgay = cal.getTime();
-                    denNgay = cal.getTime();
-                    break;
-                    
-                case "Tuần này":
-                    cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-                    tuNgay = cal.getTime();
-                    cal.add(Calendar.DAY_OF_WEEK, 6);
-                    denNgay = cal.getTime();
-                    break;
-                    
-                case "Tháng này":
-                    cal.set(Calendar.DAY_OF_MONTH, 1);
-                    tuNgay = cal.getTime();
-                    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-                    denNgay = cal.getTime();
-                    break;
-                    
-                case "Tùy chọn":
-                    if (!txtTuNgay.getText().isEmpty() && !txtDenNgay.getText().isEmpty()) {
-                        tuNgay = DATE_FORMAT.parse(txtTuNgay.getText());
-                        denNgay = DATE_FORMAT.parse(txtDenNgay.getText());
-                    }
-                    break;
-            }
-            
-            if (tuNgay != null && denNgay != null) {
-                List<PhieuNhapHang_DTO> danhSachLoc = quanLyNhapHangBLL.locPhieuNhapTheoNgay(tuNgay, denNgay);
-                hienThiDanhSachPhieuNhap(danhSachLoc);
-            }
-            
-        } catch (Exception ex) {
-            showMessage("Lỗi khi lọc dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void capNhatThongKe() {
-        try {
-            int tongSoPhieu = quanLyNhapHangBLL.demTongSoPhieuNhap();
-            double tongTienNhap = quanLyNhapHangBLL.tinhTongTienNhap();
-            int soMatHang = quanLyNhapHangBLL.demSoMatHang();
-            double phieuCaoNhat = quanLyNhapHangBLL.timPhieuNhapCaoNhat();
-            
-            lblTongSoPhieu.setText("Tổng số phiếu: " + tongSoPhieu);
-            lblTongTienNhap.setText("Tổng tiền nhập: " + CURRENCY_FORMAT.format(tongTienNhap) + " VNĐ");
-            lblSoMatHang.setText("Số mặt hàng: " + soMatHang);
-            lblPhieuCaoNhat.setText("Phiếu cao nhất: " + CURRENCY_FORMAT.format(phieuCaoNhat) + " VNĐ");
-            
-        } catch (SQLException ex) {
-            showMessage("Lỗi khi cập nhật thống kê: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void refreshData() {
-        loadData();
-        capNhatThongKe();
-        clearForm();
-        showMessage("Đã làm mới dữ liệu!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    private void showMessage(String message, String title, int messageType) {
-        JOptionPane.showMessageDialog(this, message, title, messageType);
-    }
-    
-    private void loadComboBoxData() {
-        try {
-            // Load NhaCungCap data
-            danhSachNhaCungCap = quanLyNhapHangBLL.layDanhSachNhaCungCap();
-            cboNhaCungCap.removeAllItems();
-            for (Map.Entry<String, String> entry : danhSachNhaCungCap.entrySet()) {
-                cboNhaCungCap.addItem(entry.getValue());
-            }
-            
-            // Load LoaiHang data
-            danhSachLoaiHang = quanLyNhapHangBLL.layDanhSachLoaiHang();
-            cboLoaiHang.removeAllItems();
-            for (Map.Entry<String, String> entry : danhSachLoaiHang.entrySet()) {
-                cboLoaiHang.addItem(entry.getValue());
-            }
-            
-        } catch (SQLException ex) {
-            showMessage("Lỗi khi tải dữ liệu combobox: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void capNhatThongTinNhaCungCap() {
-        String selectedNhaCungCap = (String) cboNhaCungCap.getSelectedItem();
-        if (selectedNhaCungCap != null) {
-            // Update supplier information
-            try {
-                Map<String, String> thongTinNhaCungCap = quanLyNhapHangBLL.layThongTinNhaCungCap(selectedNhaCungCap);
-                if (thongTinNhaCungCap != null) {
-                    // Update UI with supplier information
-                    // Add code here to update supplier details
-                }
-            } catch (SQLException ex) {
-                showMessage("Lỗi khi cập nhật thông tin nhà cung cấp: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-    
-    private void capNhatThongTinHang() {
-        String selectedLoaiHang = (String) cboLoaiHang.getSelectedItem();
-        if (selectedLoaiHang != null) {
-            // Update product information
-            try {
-                Map<String, String> thongTinHang = quanLyNhapHangBLL.layThongTinHang(selectedLoaiHang);
-                if (thongTinHang != null) {
-                    txtMaHang.setText(thongTinHang.get("maHang"));
-                    txtTenHang.setText(thongTinHang.get("tenHang"));
-                    txtDonGia.setText(thongTinHang.get("donGia"));
-                }
-            } catch (SQLException ex) {
-                showMessage("Lỗi khi cập nhật thông tin hàng: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-    
-    private boolean isValidDate(String dateStr) {
-        try {
-            Date date = DATE_FORMAT.parse(dateStr);
-            return date != null;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-    
-    private boolean isValidNumber(String numberStr) {
-        try {
-            double number = Double.parseDouble(numberStr);
-            return number > 0;
-        } catch (NumberFormatException ex) {
-            return false;
         }
     }
     
