@@ -1,6 +1,6 @@
 package UI;
 
-import BLL.PhieuThuePhongManager;
+import BLL.DanhSachTamCTPhieuThuePhong;
 import DTO.ChiTietPhieuThuePhongDTO;
 import java.awt.Font;
 import javax.swing.table.DefaultTableModel;
@@ -28,7 +28,7 @@ public class ChiTietPhieuThuePhong extends javax.swing.JFrame {
     
     private void loadData() {
         try {
-            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
+            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = DanhSachTamCTPhieuThuePhong.getDanhSachChiTiet();
             model.setRowCount(0); // Xóa bảng trước khi cập nhật
 
             for (ChiTietPhieuThuePhongDTO chiTiet : danhSachChiTiet) {
@@ -427,7 +427,7 @@ public class ChiTietPhieuThuePhong extends javax.swing.JFrame {
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa phòng cần đặt có mã phòng: " + maPhong + "?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             // Xóa khỏi danh sách tạm
-            List<ChiTietPhieuThuePhongDTO> ds = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            List<ChiTietPhieuThuePhongDTO> ds = BLL.DanhSachTamCTPhieuThuePhong.getDanhSachChiTiet();
             ds.removeIf(ct -> ct.getMaPhong() == maPhong && ct.getMaThuePhong() == maDatPhong);
 
             // Xóa khỏi bảng giao diện

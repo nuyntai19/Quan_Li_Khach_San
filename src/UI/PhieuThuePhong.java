@@ -22,9 +22,11 @@ import java.util.List;
 import DTO.KhachHangDTO;
 import BLL.KhachHangBLL;
 import DTO.PhieuThuePhongDTO;
-import BLL.PhieuThuePhongManager;
+import BLL.DanhSachTamCTPhieuThuePhong;
 import BLL.ChiTietPhieuThuePhongBLL;
 import BLL.ThongTinNhanVienBLL;
+import DAO.TaiKhoanDAO;
+import DTO.TaiKhoanDTO;
 import java.util.logging.Level;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -1223,7 +1225,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         double giaPhong = Double.parseDouble(giaPhongStr);
 
         // Lấy danh sách tạm và kiểm tra mã đặt phòng
-        List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+        List<ChiTietPhieuThuePhongDTO> danhSachTam = BLL.DanhSachTamCTPhieuThuePhong.getDanhSachChiTiet();
         if (!danhSachTam.isEmpty()) {
             int maDatPhongCu = danhSachTam.get(0).getMaThuePhong();
             if (maDatPhongCu != maDatPhong) {
@@ -1272,7 +1274,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         ChiTietPhieuThuePhongDTO chiTiet = new ChiTietPhieuThuePhongDTO(
             maDatPhong, maPhong, ngayDatPhongChuan, ngayTraPhongChuan, giaPhong, thanhTien
         );
-        BLL.PhieuThuePhongManager.addChiTiet(chiTiet);
+        BLL.DanhSachTamCTPhieuThuePhong.addChiTiet(chiTiet);
 
         JOptionPane.showMessageDialog(this, "Đã thêm phòng muốn đặt.");
     } catch (Exception e) {
@@ -1310,7 +1312,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
         try {
             double tongTien = 0.0;
 
-            List<ChiTietPhieuThuePhongDTO> ds = BLL.PhieuThuePhongManager.getDanhSachChiTiet();
+            List<ChiTietPhieuThuePhongDTO> ds = BLL.DanhSachTamCTPhieuThuePhong.getDanhSachChiTiet();
             for (ChiTietPhieuThuePhongDTO chiTiet : ds) {
                 tongTien += chiTiet.getThanhTien();
             }
@@ -1359,7 +1361,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             TaiKhoanDTO tk = tkDAO.layTaiKhoanDangNhapTuBangNhanVienDangNhap();
             int maNhanVien = tk.getMaNhanVien();
 
-            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = PhieuThuePhongManager.getDanhSachChiTiet();
+            List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = DanhSachTamCTPhieuThuePhong.getDanhSachChiTiet();
 
             if (danhSachChiTiet.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Danh sách phòng muốn đặt đang rỗng. Vui lòng chọn phòng trước khi đặt phiếu .");
@@ -1400,7 +1402,7 @@ public class PhieuThuePhong extends javax.swing.JFrame {
             }
 
             JOptionPane.showMessageDialog(this, "Đặt phiếu thuê phòng thành công! -- Vui lòng qua phần CheckIn để xác nhận !");
-            PhieuThuePhongManager.clearDanhSach(); // Xóa danh sách tạm sau khi lưu
+            DanhSachTamCTPhieuThuePhong.clearDanhSach(); // Xóa danh sách tạm sau khi lưu
             loadDataPhong();
 
         } catch (Exception e) {

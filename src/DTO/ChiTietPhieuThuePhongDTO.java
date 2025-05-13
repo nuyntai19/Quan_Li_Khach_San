@@ -3,7 +3,7 @@ package DTO;
 import java.util.Date;
 
 public class ChiTietPhieuThuePhongDTO {
-    private int id; // Thêm thuộc tính ID
+    private int id; 
     private int maThuePhong;
     private int maPhong;
     private Date ngayDatPhong;

@@ -3,26 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/DanhSachDatDichVu.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/DSCheckOutGUI.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/DSCheckInGUI.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/PhieuNhapHangJFrame.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/NhuYeuPhamDAO.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/NhaCungCap.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/sql/DatabaseQLKS.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/BLL/QuanLyHangHoaBLL.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/GiaoDienKhoHang.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/BLL/LoaiPhongBLL.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DTO/DoGiaDung_DTO.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DTO/QuanLiPhongDTO.java</file>
+            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/QuanLiDichVuDAO.java</file>
             <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/QuanLiPhongDAO.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/LoaiPhongDAO.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/QuanLiPhong.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/BLL/QuanLiPhongBLL.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/DoGiaDungDAO.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/DanhSachDatPhongGUI.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/UI/QuanLyNhaCungCap_GUI.java</file>
-            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DTO/LoaiPhongDTO.java</file>
+            <file>file:/C:/Users/ACER/OneDrive/Documents/NetBeansProjects/JavaApp/src/Quan_Li_Khach_San/Quan_Li_Khach_San/src/DAO/DatDichVuDAO.java</file>
         </group>
     </open-files>
 </project-private>

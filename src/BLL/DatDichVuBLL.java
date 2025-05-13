@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 public class DatDichVuBLL {
-    private DatDichVuDAO datDichVuDAO;
+    private final DatDichVuDAO datDichVuDAO;
 
     public DatDichVuBLL() {
         datDichVuDAO = new DatDichVuDAO();

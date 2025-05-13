@@ -1,6 +1,7 @@
 
 package UI;
 
+import BLL.TaiKhoanBLL;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 import java.util.logging.Logger;
@@ -17,6 +18,9 @@ import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import DTO.ThongTinNhanVienDTO;
 import BLL.ThongTinNhanVienBLL;
+import DAO.TaiKhoanDAO;
+import DTO.TaiKhoanDTO;
+import java.util.logging.Level;
 
 
 public final class ThongTinNhanVien extends javax.swing.JDialog {
@@ -155,7 +159,11 @@ public final class ThongTinNhanVien extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
             TaiKhoanBLL tkBLL = new TaiKhoanBLL();
-            tkBLL.xoaTatCaDangNhapBangTam(); 
+        try { 
+            tkBLL.xoaTatCaDangNhapBangTam();
+        } catch (Exception ex) {
+            Logger.getLogger(ThongTinNhanVien.class.getName()).log(Level.SEVERE, null, ex);
+        }
             for (java.awt.Window window : java.awt.Window.getWindows()) {
                 window.dispose();
             }

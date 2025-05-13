@@ -662,7 +662,6 @@ public class ThongKe extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonQLNVActionPerformed
 
     private void ButtonKhoHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonKhoHangActionPerformed
-        new GiaoDienKhoHang().setVisible(true);
     }//GEN-LAST:event_ButtonKhoHangActionPerformed
 
     private void btnThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThongKeActionPerformed

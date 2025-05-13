@@ -717,6 +717,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonQLNhaCUngCap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHACUNGCAP.png"))); // NOI18N
         ButtonQLNhaCUngCap.setText("Quản lí Nhà Cung Cấp");
         ButtonQLNhaCUngCap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLNhaCUngCap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonQLNhaCUngCapActionPerformed(evt);
+            }
+        });
 
         ButtonThongKe.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonThongKe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/THONGKE.png"))); // NOI18N
@@ -732,6 +737,11 @@ public class QuanLiDichVu extends javax.swing.JFrame {
         ButtonQLNhapHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/QLNHAPHANG.png"))); // NOI18N
         ButtonQLNhapHang.setText("Quản lí Nhập Hàng");
         ButtonQLNhapHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ButtonQLNhapHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonQLNhapHangActionPerformed(evt);
+            }
+        });
 
         ButtonKhoHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ButtonKhoHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ICON/KHOHANG.png"))); // NOI18N
@@ -1075,8 +1085,6 @@ public class QuanLiDichVu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonResertActionPerformed
 
     private void ButtonQLNhaCUngCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLNhaCUngCapActionPerformed
-        dispose();
-        new QuanLyNhaCungCap_GUI().setVisible(true);
     }//GEN-LAST:event_ButtonQLNhaCUngCapActionPerformed
 
     private void ButtonThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonThongKeActionPerformed
@@ -1105,6 +1113,10 @@ public class QuanLiDichVu extends javax.swing.JFrame {
             Logger.getLogger(QuanLiDichVu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_ButtonThongKe2ActionPerformed
+
+    private void ButtonQLNhapHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonQLNhapHangActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonQLNhapHangActionPerformed
 
     /**
      * @param args the command line arguments

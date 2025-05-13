@@ -78,8 +78,8 @@ public class PhieuThuePhongDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, p.getMaKhachHang());
             stmt.setInt(2, p.getMaNhanVien());
-            stmt.setDate(4, new java.sql.Date(p.getNgayLapPhieu().getTime()));
-            stmt.setDouble(5, p.getTongTien());
+            stmt.setDate(3, new java.sql.Date(p.getNgayLapPhieu().getTime()));
+            stmt.setDouble(4, p.getTongTien());
             stmt.setString(5, p.getTrangThai());
             stmt.setInt(6, p.getMaThuePhong());
             stmt.executeUpdate();
@@ -106,14 +106,7 @@ public class PhieuThuePhongDAO {
         }
         return null;
     }
-    // public void capNhatTrangThaiPhieuThueThanhCong(int maThuePhong) throws SQLException {
-    //     String sql = "UPDATE PhieuThuePhong SET TrangThai = 'Hoàn thành' WHERE MaThuePhong = ?";
-    //     try (Connection conn = DatabaseQLKS.getConnection();
-    //          PreparedStatement stmt = conn.prepareStatement(sql)) {
-    //         stmt.setInt(1, maThuePhong);
-    //         stmt.executeUpdate();
-    //     }
-    // }    
+        
     public void capNhatTrangThaiPhieu(int maThuePhong, String trangThaiMoi) throws SQLException {
         String sql = "UPDATE PhieuThuePhong SET TrangThai = ? WHERE MaThuePhong = ?";
         try (Connection conn = DatabaseQLKS.getConnection();

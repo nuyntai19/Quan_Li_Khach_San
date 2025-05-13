@@ -6,7 +6,7 @@ import DTO.ChiTietPhieuThuePhongDTO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhieuThuePhongManager {
+public class DanhSachTamCTPhieuThuePhong {
     private static List<ChiTietPhieuThuePhongDTO> danhSachChiTiet = new ArrayList<>();
 
     // Thêm chi tiết vào danh sách tạm
