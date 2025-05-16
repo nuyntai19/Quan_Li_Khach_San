@@ -28,6 +28,14 @@ CREATE TABLE TaiKhoan (
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
 );
 
+-- Thông tin Admin và tài khoản admin ban đầu 
+INSERT INTO NhanVien (MaNhanVien, Ho, Ten, NgaySinh, GioiTinh, Email, SoDienThoai, ChucVu, Luong)
+VALUES (1, N'Nguyen', N'Van LHQT', '2005-01-19', 'Nam', 'nguyenA123@example.com', '0901234567', N'Admin', 8000000);
+
+INSERT INTO TaiKhoan (TenDangNhap, MatKhau, MaNhanVien, VaiTro, TrangThai)
+VALUES ('nguyenVanLHQT', '123', 1, 'Admin', 'active');
+
+
 CREATE TABLE NhanVienDangNhap (
     MaTaiKhoan INT PRIMARY KEY,
     TenDangNhap NVARCHAR(50),
